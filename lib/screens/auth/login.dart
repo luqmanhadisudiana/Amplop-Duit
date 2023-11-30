@@ -76,63 +76,81 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               'Ini Halaman Login',
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Label dan Input Text untuk Password
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Username'),
-                    GestureDetector(
-                      onTap: () {
-                        // Tambahkan logika ketika "belum memiliki akun"
-                        debugPrint('belum memiliki akun');
-                      },
-                      child: const Text(
-                        'belum memiliki akun',
+            const SizedBox(height: 100.0),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Label dan Input Text untuk Password
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Username',
                         style: TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold, fontSize: 16.0),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Tambahkan logika ketika "belum memiliki akun"
+                          debugPrint('Belum memiliki akun');
+                        },
+                        child: const Text(
+                          'Belum memiliki akun',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 8.0,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const MyTextField(
-                  hintText: "Username",
-                  isPassword: true,
-                ),
-
-                const SizedBox(height: 16.0),
-                // Label dan Input Text untuk Password
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Password'),
-                    GestureDetector(
-                      onTap: () {
-                        // Tambahkan logika ketika "lupa password"
-                        debugPrint('lupa password');
-                      },
-                      child: const Text(
-                        'Lupa Password',
-                        style: TextStyle(color: Colors.black),
+                    ],
+                  ),
+                  const SizedBox(height: 10.0),
+                  const MyTextField(
+                    hintText: "Username",
+                    isPassword: true,
+                  ),
+                  const SizedBox(height: 24.0),
+                  // Label dan Input Text untuk Password
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Password',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0),
                       ),
-                    ),
-                  ],
-                ),
-                const MyTextField(
-                  hintText: "Password",
-                  isPassword: true,
-                )
-              ],
+                      GestureDetector(
+                        onTap: () {
+                          // Tambahkan logika ketika "lupa password"
+                          debugPrint('lupa password');
+                        },
+                        child: const Text(
+                          'Lupa Password?',
+                          style: TextStyle(color: Colors.black, fontSize: 8.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10.0),
+                  const MyTextField(
+                    hintText: "Password",
+                    isPassword: true,
+                  )
+                ],
+              ),
             ),
+            const SizedBox(height: 16.0),
             Center(
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () {
                   // Tambahkan logika yang ingin dilakukan saat div/button diklik
-                  debugPrint('Button diklik!');
+                  debugPrint('Google Login');
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -144,17 +162,17 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
-                            'Login dengan akun ',
+                            'Login dengan akun',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 18.0,
+                              fontSize: 10.0,
                             ),
                           ),
-                          const SizedBox(height: 8.0),
+                          const SizedBox(width: 35.0),
                           Image.asset(
-                            'assets/img/google.png', // Ganti URL dengan URL gambar Anda
-                            width: 50.0, // Sesuaikan lebar gambar
-                            height: 50.0, // Sesuaikan tinggi gambar
+                            'assets/img/google.png',
+                            width: 21.0,
+                            height: 21.0,
                           ),
                         ],
                       )
@@ -163,11 +181,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 32.0),
             ElevatedButton(
                 onPressed: () {
                   doLogin(context);
                 },
-                child: const Text("Login"))
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(200.0, 50.0),
+                  backgroundColor: const Color(0xFF5338BC),
+                ),
+                child: const Text(
+                  "Masuk",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.white),
+                ))
           ],
         ),
       ),

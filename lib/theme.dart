@@ -6,12 +6,13 @@ class MyAppTheme {
       textTheme: const TextTheme(
         bodyLarge: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 14.0,
         ),
         bodyMedium: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 12.0,
         ),
+        bodySmall: TextStyle(
+          fontFamily: 'Poppins'
+        )
       ),
     );
   }
