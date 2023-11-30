@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:amplop_duit/screens/login/login.dart';
+import 'package:amplop_duit/screens/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (!isLogin) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
       }
     });
