@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,9 +52,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
-
   void doLogin(BuildContext context) async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,20 +76,91 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               'Ini Halaman Login',
             ),
-            TextFormField(
-              controller: username,
-              decoration: InputDecoration(
-                fillColor: Colors.grey,
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Label dan Input Text untuk Password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Username'),
+                    GestureDetector(
+                      onTap: () {
+                        // Tambahkan logika ketika "belum memiliki akun"
+                        debugPrint('belum memiliki akun');
+                      },
+                      child: const Text(
+                        'belum memiliki akun',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const MyTextField(
+                  hintText: "Username",
+                  isPassword: true,
+                ),
+
+                const SizedBox(height: 16.0),
+                // Label dan Input Text untuk Password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Password'),
+                    GestureDetector(
+                      onTap: () {
+                        // Tambahkan logika ketika "lupa password"
+                        debugPrint('lupa password');
+                      },
+                      child: const Text(
+                        'Lupa Password',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+                const MyTextField(
+                  hintText: "Password",
+                  isPassword: true,
+                )
+              ],
             ),
-            TextFormField(
-              controller: password,
-              decoration: InputDecoration(
-                fillColor: Colors.grey,
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  // Tambahkan logika yang ingin dilakukan saat div/button diklik
+                  debugPrint('Button diklik!');
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Login dengan akun ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Image.asset(
+                            'assets/img/google.png', // Ganti URL dengan URL gambar Anda
+                            width: 50.0, // Sesuaikan lebar gambar
+                            height: 50.0, // Sesuaikan tinggi gambar
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
             ElevatedButton(
