@@ -91,14 +91,15 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 10.0),
               Center(
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () {
                     // Tambahkan logika yang ingin dilakukan saat div/button diklik
                     debugPrint('Google Login');
                     LoginPage.doLogin(context);
                   },
-                  child: SizedBox(
+                  child: Container(
                     width: 150.0,
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

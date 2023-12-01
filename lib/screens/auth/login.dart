@@ -1,6 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/main.dart';
+import 'package:amplop_duit/screens/auth/forgot_password.dart';
 import 'package:amplop_duit/screens/auth/register.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             // Tambahkan logika ketika "lupa password"
                             debugPrint('lupa password');
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordPage()),
+                            );
                           },
                           child: const Text(
                             'Lupa Password?',
@@ -173,14 +180,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16.0),
             Center(
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
                   // Tambahkan logika yang ingin dilakukan saat div/button diklik
                   debugPrint('Google Login');
                   LoginPage.doLogin(context);
                 },
-                child: SizedBox(
+                child: Container(
                   width: 150.0,
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
