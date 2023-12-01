@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (!isLogin) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
       }
     });
@@ -56,14 +56,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               "Homepage",
             ),
+            // For Testing, will be delete soon
+            ElevatedButton(
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.clear();
+                  loginStatus();
+                },
+                child: const Text("Reset"))
           ],
         ),
       ),
