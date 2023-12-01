@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 10.0),
                   const MyTextField(
                     hintText: "Username",
-                    isPassword: true,
+                    isPassword: false,
                   ),
                   const SizedBox(height: 24.0),
                   // Label dan Input Text untuk Password
