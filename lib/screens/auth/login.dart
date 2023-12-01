@@ -1,7 +1,11 @@
+import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/main.dart';
+import 'package:amplop_duit/screens/auth/register.dart';
+import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -9,10 +13,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Flutter App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Login',
+      theme: MyAppTheme.buildTheme(),
       home: _LoginScreen(),
     );
   }
@@ -25,18 +27,30 @@ class _LoginScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Selamat Datang, Apakah Kamu Sudah Siap Belajar?',
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: const Text(
+                'Selamat Datang, Apakah Kamu Sudah Siap Belajar?',
+                style: TextStyle(
+                    fontSize: 24.0, fontWeight: FontWeight.bold, height: 1.7),
+                textAlign: TextAlign.center,
+              ),
             ),
-            ElevatedButton(
-                onPressed: () {
+            SvgPicture.asset(
+              'assets/img/login-avatar.svg',
+              // width: 21.0,
+              // height: 21.0,
+            ),
+            MainButton(
+                buttonText: "Mulai",
+                action: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
-                },
-                child: const Text("Mulai"))
+                })
           ],
         ),
       ),
@@ -49,10 +63,8 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
-}
 
-class _LoginPageState extends State<LoginPage> {
-  void doLogin(BuildContext context) async {
+  static void doLogin(BuildContext context) async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
@@ -65,7 +77,9 @@ class _LoginPageState extends State<LoginPage> {
       );
     });
   }
+}
 
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,18 +106,26 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16.0),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // Tambahkan logika ketika "belum memiliki akun"
-                          debugPrint('Belum memiliki akun');
-                        },
-                        child: const Text(
-                          'Belum memiliki akun',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 8.0,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue,
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Tambahkan logika ketika "belum memiliki akun"
+                            debugPrint('Belum memiliki akun');
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const RegisterPage()),
+                            );
+                          },
+                          child: const Text(
+                            'Belum memiliki akun',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 8.0,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.blue,
+                            ),
                           ),
                         ),
                       ),
@@ -125,16 +147,20 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16.0),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // Tambahkan logika ketika "lupa password"
-                          debugPrint('lupa password');
-                        },
-                        child: const Text(
-                          'Lupa Password?',
-                          style: TextStyle(color: Colors.black, fontSize: 8.0),
+                      Container(
+                        padding: const EdgeInsets.all(5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Tambahkan logika ketika "lupa password"
+                            debugPrint('lupa password');
+                          },
+                          child: const Text(
+                            'Lupa Password?',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 8.0),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                   const SizedBox(height: 10.0),
@@ -151,50 +177,38 @@ class _LoginPageState extends State<LoginPage> {
                 onTap: () {
                   // Tambahkan logika yang ingin dilakukan saat div/button diklik
                   debugPrint('Google Login');
+                  LoginPage.doLogin(context);
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 20.0),
-                  child: Column(
+                child: SizedBox(
+                  width: 150.0,
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Login dengan akun',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          const SizedBox(width: 35.0),
-                          Image.asset(
-                            'assets/img/google.png',
-                            width: 21.0,
-                            height: 21.0,
-                          ),
-                        ],
-                      )
+                      const Text(
+                        'Login dengan akun',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 10.0,
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/img/google.png',
+                        width: 21.0,
+                        height: 21.0,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 32.0),
-            ElevatedButton(
-                onPressed: () {
-                  doLogin(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(200.0, 50.0),
-                  backgroundColor: const Color(0xFF5338BC),
-                ),
-                child: const Text(
-                  "Masuk",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: Colors.white),
-                ))
+            MainButton(
+                buttonText: "Masuk",
+                width: 170.0,
+                action: () {
+                  LoginPage.doLogin(context);
+                }),
           ],
         ),
       ),

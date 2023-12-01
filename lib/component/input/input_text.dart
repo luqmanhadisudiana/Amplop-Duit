@@ -22,7 +22,7 @@ class MyTextField extends StatelessWidget {
             const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
         border: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.black, // Warna border
+            color: Color(0xFF696969), // Warna border
             width: 1.0, // Lebar border
           ),
           borderRadius: BorderRadius.circular(15.0), // Radius border
