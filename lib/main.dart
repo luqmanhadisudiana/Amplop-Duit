@@ -1,3 +1,4 @@
+import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MyHomePage();
+    // return const MyHomePage();
+    return const MainLoading();
   }
 }
 

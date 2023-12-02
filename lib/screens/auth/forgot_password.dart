@@ -15,7 +15,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
+          padding: const EdgeInsets.only(top: 100, left: 40, right: 40),
           child: Column(
             children: [
               const SizedBox(height: 10.0),

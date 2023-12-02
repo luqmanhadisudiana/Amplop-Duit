@@ -7,6 +7,7 @@ import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -80,7 +81,15 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,12 +97,21 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Ini Halaman Login',
-            ),
-            const SizedBox(height: 100.0),
+            SizedBox(
+                height: 200.0,
+                child: Lottie.asset(
+                  'assets/gif/Animation-Bubu.json',
+                  fit: BoxFit.contain,
+                  controller: _controller,
+                  onLoaded: (composition) {
+                    _controller
+                      ..duration = composition.duration * 1.5
+                      ..value = 0.0
+                      ..forward();
+                  },
+                )),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
