@@ -1,8 +1,8 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
-import 'package:amplop_duit/main.dart';
 import 'package:amplop_duit/screens/auth/forgot_password.dart';
 import 'package:amplop_duit/screens/auth/register.dart';
+import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +41,7 @@ class _LoginScreen extends StatelessWidget {
               ),
             ),
             SvgPicture.asset(
-              'assets/img/login-avatar.svg',
+              'assets/img/avatar.svg',
               // width: 21.0,
               // height: 21.0,
             ),
@@ -75,7 +75,7 @@ class LoginPage extends StatefulWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MyHomePage()),
+        MaterialPageRoute(builder: (context) => const MainLoading()),
       );
     });
   }

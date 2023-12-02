@@ -1,5 +1,7 @@
+import 'package:amplop_duit/main.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainLoading extends StatefulWidget {
   const MainLoading({Key? key}) : super(key: key);
@@ -12,6 +14,13 @@ class _MainLoadingState extends State<MainLoading> {
   double progressValue = 0.0;
   bool isLoading = false;
   int duration = 3; // duration loading
+
+  @override
+  void initState() {
+    super.initState();
+    // Memeriksa nilai isLogin saat aplikasi dimulai
+    _startLoading();
+  }
 
   void _startLoading() {
     setState(() {
@@ -46,6 +55,10 @@ class _MainLoadingState extends State<MainLoading> {
           isLoading = false;
           progressValue = 0.0; // Reset nilai progress setelah loading selesai
         });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MyHomePage()),
+        );
       });
     });
   }
@@ -56,22 +69,21 @@ class _MainLoadingState extends State<MainLoading> {
       title: "Loading",
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text(
-        //     'Loading Bar Example',
-        //     style: TextStyle(fontFamily: 'Poppins'),
-        //   ),
-        // ),
         body: Center(
+            child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 47),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Hore, Selamat Datang Ayo Belajar"),
-              Image.asset("assets/img/avatar.png"),
-              ElevatedButton(
-                onPressed: _startLoading,
-                child: const Text('Mulai Loading'),
+              const Text(
+                'Hore, Selamat Datang \nAyo Belajar',
+                style: TextStyle(
+                    fontSize: 24, fontWeight: FontWeight.w700, height: 1.2),
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 40.0),
+              // Image.asset("assets/img/avatar.png"),
+              SvgPicture.asset("assets/img/avatar-hand-up.svg"),
               const SizedBox(height: 20.0),
               if (isLoading)
                 Container(
@@ -86,6 +98,7 @@ class _MainLoadingState extends State<MainLoading> {
                           minHeight: 10, // Atur tinggi progress bar
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        const SizedBox(height: 16.0),
                         const Center(
                           child: Text("Loading"),
                         )
@@ -93,7 +106,7 @@ class _MainLoadingState extends State<MainLoading> {
                     )),
             ],
           ),
-        ),
+        )),
       ),
     );
   }
