@@ -58,6 +58,12 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "Amplop Duit.apk"
+        }
+    }
 }
 
 flutter {

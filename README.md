@@ -1,6 +1,6 @@
 # amplop_duit
 
-A new Flutter project.
+Amplop Duit. [Link to APK](https://drive.google.com/drive/folders/10e1JBpmUS6Wue18EV27dm-fjVtUbplIA?usp=sharing)
 
 ## Getting Started
 
