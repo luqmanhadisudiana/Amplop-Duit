@@ -11,7 +11,7 @@ class MainLoading extends StatefulWidget {
 }
 
 class _MainLoadingState extends State<MainLoading> {
-  double progressValue = 0.0;
+  double progressValue = 0.1;
   bool isLoading = false;
   int duration = 3; // duration loading
 
@@ -25,7 +25,7 @@ class _MainLoadingState extends State<MainLoading> {
   void _startLoading() {
     setState(() {
       isLoading = true;
-      progressValue = 0.0;
+      progressValue = 0.1;
     });
 
     // Simulasi loading selama "duration"
@@ -95,7 +95,7 @@ class _MainLoadingState extends State<MainLoading> {
                           backgroundColor: Colors.grey[300],
                           valueColor: const AlwaysStoppedAnimation<Color>(
                               Color(0xFF5338BC)),
-                          minHeight: 10, // Atur tinggi progress bar
+                          minHeight: 15, // Atur tinggi progress bar
                           borderRadius: BorderRadius.circular(10),
                         ),
                         const SizedBox(height: 16.0),

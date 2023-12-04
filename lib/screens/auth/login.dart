@@ -91,6 +91,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
