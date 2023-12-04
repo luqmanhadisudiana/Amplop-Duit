@@ -1,4 +1,4 @@
-import 'package:amplop_duit/main.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,7 +57,7 @@ class _MainLoadingState extends State<MainLoading> {
         });
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
+          MaterialPageRoute(builder: (context) => const NavigationWrapper()),
         );
       });
     });
