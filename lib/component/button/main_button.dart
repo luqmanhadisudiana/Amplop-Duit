@@ -24,11 +24,6 @@ class MainButton extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             action();
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => const LoginPage()),
-            // );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
@@ -40,7 +35,10 @@ class MainButton extends StatelessWidget {
           child: Text(
             buttonText,
             style: const TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                fontFamily: "Poppins",
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600),
           )),
     );
   }

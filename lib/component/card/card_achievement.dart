@@ -43,14 +43,21 @@ class CardAchievement extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Poppins",
+              ),
             ),
             const SizedBox(
               height: 8,
             ),
             Text(
               desc,
-              style: const TextStyle(fontSize: 10),
+              style: const TextStyle(
+                fontSize: 10,
+                fontFamily: "Poppins",
+              ),
             ),
             const SizedBox(
               height: 8,
@@ -75,9 +82,15 @@ class CardAchievement extends StatelessWidget {
                   children: [
                     Text(
                       '$currentValue/',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                      ),
                     ),
-                    Text('$maxValue')
+                    Text(
+                      '$maxValue',
+                      style: const TextStyle(fontFamily: "Poppins"),
+                    )
                   ],
                 ),
               ],

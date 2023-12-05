@@ -45,6 +45,7 @@ class CardState extends StatelessWidget {
                         color: Colors.white,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
                       ),
                       textAlign: TextAlign.left),
                   Text(
@@ -52,6 +53,7 @@ class CardState extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 8.0,
+                      fontFamily: "Poppins",
                     ),
                     textAlign: TextAlign.left,
                   ),

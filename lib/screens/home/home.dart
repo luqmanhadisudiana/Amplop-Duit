@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:flutter/material.dart';
@@ -141,50 +142,95 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // section 2
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
+          padding: const EdgeInsets.only(top: 25.0, right: 15.0, left: 15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Container(
-                  // height: 130,
+                  height: 130,
                   // width: double.infinity,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/img/home/Home-MyCourse.png'),
-                        fit: BoxFit.cover,
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 25.0,
+                        offset: const Offset(0, 0),
+                        spreadRadius: 0,
                       ),
-                      color: Colors.amber),
-                  child: Center(
-                    child: Text(
-                      'HELLO WORLD PANJANG',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24.0,
-                      ),
+                    ],
+                    image: const DecorationImage(
+                      image: AssetImage('assets/img/home/Home-MyCourse.png'),
+                      fit: BoxFit.cover,
                     ),
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                  child: const Text(
+                    'Course\nSaya',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
+              const SizedBox(
+                width: 16.0,
+              ),
               Container(
-                // height: 130,
-                // width: 160,
-
+                height: 130,
+                width: 150,
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 25.0, top: 15.0, bottom: 8.0),
                 decoration: BoxDecoration(
-                  image: DecorationImage(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 25.0,
+                      offset: const Offset(0, 0),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                  image: const DecorationImage(
                     image: AssetImage('assets/img/home/Home-Level Kamu.png'),
                     fit: BoxFit.cover,
                   ),
-                  color: Colors.amber,
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 ),
-                child: Center(
-                  child: Text(
-                    'HELLO WORLD PANJANG',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Level\nKamu',
+                            style: TextStyle(
+                                // backgroundColor: Colors.black12,
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.left,
+                          ),
+                        )
+                      ],
                     ),
-                  ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '1',
+                          style: TextStyle(
+                              // backgroundColor: Colors.black12,
+                              color: Colors.white,
+                              fontSize: 42.0,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -192,13 +238,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // section 3
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
+          padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
           child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "statistik",
-                textAlign: TextAlign.left,
+                'Statistik',
+                style: TextStyle(
+                    // backgroundColor: Colors.black12,
+                    // color: Colors.white,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600),
               ),
               // decoration: BoxDecoration(color: Colors.blue),
               SizedBox(
@@ -236,7 +286,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        const Text("Pencapaian"),
+        Container(
+          padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
+          child: const Text(
+            'Pencapaian',
+            style: TextStyle(
+                // backgroundColor: Colors.black12,
+                // color: Colors.white,
+                fontSize: 24.0,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 14.0),
           margin: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
@@ -255,17 +315,26 @@ class _MyHomePageState extends State<MyHomePage> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             for (var i = 0; i < 3; i++)
-              const CardAchievement(
+              CardAchievement(
                 title: "test",
                 desc: "test",
                 imageUrl: 'assets/img/pencapaian/Group 515.svg',
                 currentValue: 4,
                 maxValue: 5,
+                bottomBorder: i == 3 - 1 ? false : true,
               ),
           ]),
         ),
-        Center(
-          child: const Text("liat lainnya"),
+        Container(
+          margin: const EdgeInsets.only(bottom: 25.0),
+          child: Center(
+            child: MainButton(
+                width: 250,
+                buttonText: "Lihat Lainnya",
+                action: () {
+                  debugPrint("test");
+                }),
+          ),
         ),
       ],
     );
