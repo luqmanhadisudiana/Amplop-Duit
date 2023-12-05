@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -191,23 +192,45 @@ class _MyHomePageState extends State<MyHomePage> {
         // section 3
         Container(
           padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                child: const Text(
-                  "statistik",
-                  textAlign: TextAlign.left,
-                ),
-                // decoration: BoxDecoration(color: Colors.blue),
+              Text(
+                "statistik",
+                textAlign: TextAlign.left,
+              ),
+              // decoration: BoxDecoration(color: Colors.blue),
+              SizedBox(
+                height: 16.0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [const Text("11"), const Text("12")],
+                children: [
+                  CardState(
+                      title: 'test',
+                      value: 'test',
+                      imageUrl: 'assets/img/home/Card-State-Day.png'),
+                  SizedBox(width: 30),
+                  CardState(
+                      title: 'test',
+                      value: 'test',
+                      imageUrl: 'assets/img/home/Card-State-Total-Point.png'),
+                ],
               ),
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [const Text("13"), const Text("14")],
+                children: [
+                  CardState(
+                      title: 'test',
+                      value: 'test',
+                      imageUrl: 'assets/img/home/Card-State-Countdown.png'),
+                  SizedBox(width: 30),
+                  CardState(
+                      title: 'test',
+                      value: 'test',
+                      imageUrl: 'assets/img/home/Card-State-Position.png'),
+                ],
               )
             ],
           ),
@@ -223,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Center(
           child: const Text("liat lainnya"),
-        )
+        ),
       ],
     );
   }
