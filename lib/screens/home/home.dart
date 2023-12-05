@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:flutter/material.dart';
 
@@ -235,14 +236,33 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+        const Text("Pencapaian"),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Pencapaian"),
-                for (var i = 0; i < 3; i++) Text((i + 15).toString())
-              ]),
+          padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 14.0),
+          margin: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 25.0,
+                offset: const Offset(0, 0),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            for (var i = 0; i < 3; i++)
+              const CardAchievement(
+                title: "test",
+                desc: "test",
+                imageUrl: 'assets/img/pencapaian/Group 515.svg',
+                currentValue: 4,
+                maxValue: 5,
+              ),
+          ]),
         ),
         Center(
           child: const Text("liat lainnya"),
