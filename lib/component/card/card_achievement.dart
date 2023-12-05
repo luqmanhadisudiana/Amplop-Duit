@@ -4,20 +4,31 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CardAchievement extends StatelessWidget {
   final String title, desc, imageUrl;
   final int currentValue, maxValue;
+  final bool? bottomBorder;
 
-  const CardAchievement({
-    super.key,
-    required this.title,
-    required this.desc,
-    required this.imageUrl,
-    required this.currentValue,
-    required this.maxValue,
-  });
+  const CardAchievement(
+      {super.key,
+      required this.title,
+      required this.desc,
+      required this.imageUrl,
+      required this.currentValue,
+      required this.maxValue,
+      this.bottomBorder = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+      decoration: BoxDecoration(
+        border: bottomBorder ?? true
+            ? const Border(
+                bottom: BorderSide(
+                  color: Color(0xFFD1D1D1),
+                  width: 1.0,
+                ),
+              )
+            : null,
+      ),
       child: Row(children: [
         SvgPicture.asset(
           imageUrl,
@@ -61,7 +72,13 @@ class CardAchievement extends StatelessWidget {
                   width: 15,
                 ),
                 Row(
-                  children: [Text('$currentValue /'), Text(' $maxValue')],
+                  children: [
+                    Text(
+                      '$currentValue/',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$maxValue')
+                  ],
                 ),
               ],
             )
