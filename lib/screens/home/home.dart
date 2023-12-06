@@ -2,7 +2,7 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
-import 'package:amplop_duit/screens/home/my_course.dart';
+import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {

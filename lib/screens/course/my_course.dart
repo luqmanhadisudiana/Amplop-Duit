@@ -2,16 +2,22 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_thumbnail.dart';
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
+import 'package:amplop_duit/screens/course/course_video.dart';
 import 'package:flutter/material.dart';
 import 'package:amplop_duit/theme.dart';
 
-class MyCoursePage extends StatelessWidget {
-  const MyCoursePage({Key? key}) : super(key: key);
+class MyCoursePage extends StatefulWidget {
+  const MyCoursePage({super.key});
 
+  @override
+  State<MyCoursePage> createState() => _MyCoursePageState();
+}
+
+class _MyCoursePageState extends State<MyCoursePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login',
+      title: 'Course',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
           appBar: AppBar(
@@ -49,24 +55,23 @@ class MyCoursePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CardThumbnail(
-                        imageUrl:
-                            "assets/img/thumbnail/Thumbnail Amplop Duit Ep 1.png"),
-                    const StepCourse(
-                      text: '1',
+                    InkWell(
+                      child: const CardThumbnail(
+                          imageUrl:
+                              "assets/img/thumbnail/Thumbnail Amplop Duit Ep 1.png"),
+                      onTap: () {
+                        debugPrint("Course Video");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CourseVideo()),
+                        );
+                      },
                     ),
-                    const StepCourse(
-                      text: '2',
-                    ),
-                    const StepCourse(
-                      text: '3',
-                    ),
-                    const StepCourse(
-                      text: '4',
-                    ),
-                    const StepCourse(
-                      text: '5',
-                    ),
+                    for (var i = 1; i <= 5; i++)
+                      StepCourse(
+                        text: i.toString(),
+                      ),
                     Center(
                       child: MainButton(
                           width: 280,
