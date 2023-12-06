@@ -195,32 +195,37 @@ class _CourseVideoState extends State<CourseVideo> {
                               child: SizedBox(
                                 height: 46,
                                 width: 46,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      60), // Setengah dari tinggi atau lebar
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 10, sigmaY: 10),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                          color: feedback == i
-                                              ? const Color(0xFF725CC8)
-                                              : const Color(0xFF696969),
-                                        ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          i.toString(),
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: feedback == i
-                                                ? const Color(0xFF725CC8)
-                                                : const Color(0xFF696969),
-                                          ),
-                                        ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: feedback == i
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    border: Border.all(
+                                      color: feedback == i
+                                          ? const Color(0xFF725CC8)
+                                          : const Color(0xFF696969),
+                                    ),
+                                    shape: BoxShape.circle,
+                                    boxShadow: feedback == i
+                                        ? [
+                                            BoxShadow(
+                                              color: const Color(0xFF725CC8)
+                                                  .withOpacity(0.1),
+                                              blurRadius: 5.0,
+                                              offset: const Offset(0, 0),
+                                              spreadRadius: 3,
+                                            )
+                                          ]
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      i.toString(),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: feedback == i
+                                            ? const Color(0xFF725CC8)
+                                            : const Color(0xFF696969),
                                       ),
                                     ),
                                   ),
