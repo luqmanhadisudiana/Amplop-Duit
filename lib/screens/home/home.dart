@@ -1,6 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
+import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -332,7 +333,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 250,
                 buttonText: "Lihat Lainnya",
                 action: () {
-                  debugPrint("test");
+                  debugPrint("Achievement");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AchievementPage()),
+                  );
                 }),
           ),
         ),
