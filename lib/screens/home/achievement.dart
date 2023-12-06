@@ -27,7 +27,6 @@ class AchievementPage extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            // Customize other properties of AppBar as needed
           ),
           body: ListView(
             children: [

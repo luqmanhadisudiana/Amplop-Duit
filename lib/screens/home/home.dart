@@ -2,6 +2,7 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
+import 'package:amplop_duit/screens/home/my_course.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -148,31 +149,42 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Container(
-                  height: 130,
-                  // width: double.infinity,
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 25.0,
-                        offset: const Offset(0, 0),
-                        spreadRadius: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    debugPrint("My Course");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MyCoursePage()),
+                    );
+                  },
+                  child: Container(
+                    height: 130,
+                    // width: double.infinity,
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 25.0,
+                          offset: const Offset(0, 0),
+                          spreadRadius: 0,
+                        ),
+                      ],
+                      image: const DecorationImage(
+                        image: AssetImage('assets/img/home/Home-MyCourse.png'),
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                    image: const DecorationImage(
-                      image: AssetImage('assets/img/home/Home-MyCourse.png'),
-                      fit: BoxFit.cover,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(5.0)),
                     ),
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                  child: const Text(
-                    'Course\nSaya',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600),
+                    child: const Text(
+                      'Course\nSaya',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),
