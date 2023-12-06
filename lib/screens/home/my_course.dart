@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_thumbnail.dart';
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
@@ -44,15 +45,38 @@ class MyCoursePage extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CardThumbnail(
+                    const CardThumbnail(
                         imageUrl:
                             "assets/img/thumbnail/Thumbnail Amplop Duit Ep 1.png"),
-                    StepCourse(
+                    const StepCourse(
                       text: '1',
+                    ),
+                    const StepCourse(
+                      text: '2',
+                    ),
+                    const StepCourse(
+                      text: '3',
+                    ),
+                    const StepCourse(
+                      text: '4',
+                    ),
+                    const StepCourse(
+                      text: '5',
+                    ),
+                    Center(
+                      child: MainButton(
+                          width: 280,
+                          buttonText: "Level Selanjutnya",
+                          action: () {
+                            debugPrint("Level Selanjutnya");
+                          }),
+                    ),
+                    const SizedBox(
+                      height: 30,
                     )
                   ],
                 ),
