@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class MainButton extends StatelessWidget {
   final String buttonText;
   final Color bgColor, textColor;
-  final Function action;
+  final Function? action;
   final double width, height, fontSize;
 
   const MainButton({
     super.key,
     required this.buttonText,
-    required this.action,
+    this.action,
     this.bgColor = const Color(0xFF5338BC),
     this.textColor = Colors.white,
     this.width = 150.0,
@@ -25,11 +25,13 @@ class MainButton extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
           color: bgColor),
-      child: ElevatedButton(
+      child: TextButton(
           onPressed: () {
-            action();
+            if (action != null) {
+              action!();
+            }
           },
-          style: ElevatedButton.styleFrom(
+          style: TextButton.styleFrom(
             backgroundColor: Colors.transparent,
             elevation: 0,
             shape: const RoundedRectangleBorder(

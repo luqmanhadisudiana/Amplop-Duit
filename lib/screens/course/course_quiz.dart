@@ -1,4 +1,5 @@
 import 'package:amplop_duit/component/answerContainer/answer_container.dart';
+import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -102,6 +103,7 @@ class _CourseQuizState extends State<CourseQuiz> {
                       index: i,
                       action: () {
                         debugPrint(itemList[i].status.toString());
+                        showCustomBottomSheet(context);
                       },
                     )
                 ],
