@@ -59,19 +59,6 @@ class CustomAlertDialog extends StatelessWidget {
       ],
     );
   }
-
-  // Fungsi untuk menampilkan AlertDialog kustom
-  void show(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomAlertDialog(
-          title: title,
-          desc: desc,
-        );
-      },
-    );
-  }
 }
 
 class DefaultCustomIcon extends StatelessWidget {

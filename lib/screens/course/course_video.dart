@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/custom_alertDialog/custom_alert_dialog.dart';
+import 'package:amplop_duit/screens/course/course_quiz.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -278,12 +277,27 @@ class _CourseVideoState extends State<CourseVideo> {
                       width: double.maxFinite,
                       margin: const EdgeInsets.symmetric(vertical: 24),
                       child: MainButton(
-                        buttonText: "Berikutnya",
-                        action: () => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                CustomAlertDialog(title: "test", desc: "test")),
-                      ),
+                          buttonText: "Berikutnya",
+                          action: () {
+                            if (feedback == 0) {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    const CustomAlertDialog(
+                                  title: "Kamu Belum Isi Feedback",
+                                  desc:
+                                      "Isi Feedback terlebih dahulu untuk kualitas yang lebih baik",
+                                ),
+                              );
+                            } else {
+                              debugPrint(feedback.toString());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const CourseQuiz()),
+                              );
+                            }
+                          }),
                     ),
                   ],
                 ),
