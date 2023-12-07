@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:amplop_duit/component/button/main_button.dart';
+import 'package:amplop_duit/component/custom_alertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -279,18 +280,9 @@ class _CourseVideoState extends State<CourseVideo> {
                       child: MainButton(
                         buttonText: "Berikutnya",
                         action: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            // title: const Text('AlertDialog Title'),
-                            content: Text('isi feedback $feedback'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'OK'),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        ),
+                            context: context,
+                            builder: (BuildContext context) =>
+                                CustomAlertDialog(title: "test", desc: "test")),
                       ),
                     ),
                   ],

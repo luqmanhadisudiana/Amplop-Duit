@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
   final String buttonText;
+  final Color bgColor, textColor;
   final Function action;
-  final double width, height;
+  final double width, height, fontSize;
 
   const MainButton({
     super.key,
     required this.buttonText,
     required this.action,
+    this.bgColor = const Color(0xFF5338BC),
+    this.textColor = Colors.white,
     this.width = 150.0,
     this.height = 50.0,
+    this.fontSize = 16.0,
   });
 
   @override
@@ -19,8 +23,8 @@ class MainButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color: const Color(0xFF5338BC)),
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+          color: bgColor),
       child: ElevatedButton(
           onPressed: () {
             action();
@@ -34,10 +38,10 @@ class MainButton extends StatelessWidget {
           ),
           child: Text(
             buttonText,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: "Poppins",
-                color: Colors.white,
-                fontSize: 16,
+                color: textColor,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w600),
           )),
     );
