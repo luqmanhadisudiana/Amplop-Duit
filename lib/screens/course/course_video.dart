@@ -1,5 +1,5 @@
 import 'package:amplop_duit/component/button/main_button.dart';
-import 'package:amplop_duit/component/custom_alertDialog/custom_alert_dialog.dart';
+import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/screens/course/course_quiz.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';

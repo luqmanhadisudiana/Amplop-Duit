@@ -31,7 +31,7 @@ class StepCourse extends StatelessWidget {
                 width: width / 2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isDone ?? true
+                  color: isDone == true
                       ? const Color(0xFFD1D1D1)
                       : const Color(0xFFD1D1D1),
                   boxShadow: [
@@ -51,7 +51,7 @@ class StepCourse extends StatelessWidget {
                 width: width / 2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isDone ?? true
+                  color: isDone == true
                       ? const Color(0xFF696969)
                       : const Color(0xFF696969),
                 ),

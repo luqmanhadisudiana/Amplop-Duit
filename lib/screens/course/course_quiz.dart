@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/answerContainer/answer_container.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -96,77 +97,13 @@ class _CourseQuizState extends State<CourseQuiz> {
                         ]),
                   ),
                   for (int i = 0; i < 4; i++)
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            debugPrint(itemList[i].status.toString());
-                            showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  height: 200,
-                                  color: Colors.amber,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        const Text('Modal BottomSheet'),
-                                        ElevatedButton(
-                                          child:
-                                              const Text('Close BottomSheet'),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(15.0),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: const Color(0xFF725CC8)),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(6.0)),
-                                color: Colors.white),
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${String.fromCharCode('A'.codeUnitAt(0) + i)}.',
-                                    style: TextStyle(
-                                        fontFamily: "Poppins",
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      itemList[i].text,
-                                      style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                      ],
-                    ),
+                    AnswerContainer(
+                      text: itemList[i].text,
+                      index: i,
+                      action: () {
+                        debugPrint(itemList[i].status.toString());
+                      },
+                    )
                 ],
               ),
             ),
