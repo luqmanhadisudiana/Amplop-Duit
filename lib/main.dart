@@ -1,6 +1,4 @@
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
-import 'package:amplop_duit/screens/course/course_quiz.dart';
-// import 'package:amplop_duit/screens/course/course_video.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +7,7 @@ void main() {
     MaterialApp(
       title: 'Amplop Duit',
       theme: MyAppTheme.buildTheme(),
-      // home: const MyApp(),
-      home: const CourseQuiz(),
+      home: const MyApp(),
     ),
   );
 }

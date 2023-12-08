@@ -2,6 +2,7 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_thumbnail.dart';
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
+import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/course/course_video.dart';
 import 'package:flutter/material.dart';
 import 'package:amplop_duit/theme.dart';
@@ -14,6 +15,17 @@ class MyCoursePage extends StatefulWidget {
 }
 
 class _MyCoursePageState extends State<MyCoursePage> {
+  late CoursePointerProvider coursePointerProvider;
+  late int selectedQuiz;
+
+  @override
+  void initState() {
+    super.initState();
+    coursePointerProvider = CoursePointerProvider();
+    selectedQuiz = coursePointerProvider.getselectedQuiz;
+    debugPrint(selectedQuiz.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
