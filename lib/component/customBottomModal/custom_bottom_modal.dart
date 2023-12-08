@@ -2,7 +2,9 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomSheet extends StatelessWidget {
-  const CustomBottomSheet({Key? key}) : super(key: key);
+  final bool status;
+
+  const CustomBottomSheet({Key? key, this.status = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,18 @@ class CustomBottomSheet extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.check_circle_rounded,
-                  color: Color(0xFF339933),
-                  size: 56,
-                ),
-                SizedBox(
+                status
+                    ? const Icon(
+                        Icons.check_circle_rounded,
+                        color: Color(0xFF339933),
+                        size: 56,
+                      )
+                    : const Icon(
+                        Icons.cancel_rounded,
+                        color: Color.fromARGB(255, 229, 28, 13),
+                        size: 56,
+                      ),
+                const SizedBox(
                   width: 16,
                 ),
                 Expanded(
@@ -36,15 +44,18 @@ class CustomBottomSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Kamu hebat!",
-                        style: TextStyle(
+                        status ? "Kamu hebat!" : "Jawaban kamu belum tepat :",
+                        style: const TextStyle(
                             fontFamily: "Poppins",
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Colors.white),
                       ),
-                      Text("Jaga semangatmu agar menjadi nomor satu!",
-                          style: TextStyle(
+                      Text(
+                          status
+                              ? "Jaga semangatmu agar menjadi nomor satu!"
+                              : "Semangat, ayo simak kembali materi dan perbaiki jawabanmu",
+                          style: const TextStyle(
                               fontFamily: "Poppins",
                               fontSize: 10,
                               fontWeight: FontWeight.w400,
@@ -76,11 +87,11 @@ class CustomBottomSheet extends StatelessWidget {
   }
 }
 
-void showCustomBottomSheet(BuildContext context) {
+void showCustomBottomSheet(BuildContext context, bool status) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
-      return const CustomBottomSheet();
+      return CustomBottomSheet(status: status);
     },
   );
 }

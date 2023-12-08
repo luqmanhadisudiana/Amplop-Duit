@@ -115,7 +115,8 @@ class _CourseQuizState extends State<CourseQuiz> {
                                 selectedIndex = i;
                                 isButtonDisable = true;
                               });
-                              showCustomBottomSheet(context);
+                              showCustomBottomSheet(
+                                  context, itemList[i].status);
                             },
                     )
                 ],
