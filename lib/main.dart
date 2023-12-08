@@ -1,5 +1,6 @@
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/provider.dart';
+import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ void main() {
     child: MaterialApp(
       title: 'Amplop Duit',
       theme: MyAppTheme.buildTheme(),
-      home: const MyApp(),
+      home: const MyCoursePage(),
     ),
   ));
 }

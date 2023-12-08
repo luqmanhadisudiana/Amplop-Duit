@@ -3,32 +3,34 @@ import 'package:flutter/material.dart';
 class StepCourse extends StatelessWidget {
   final double width;
   final double height;
+  final double offisdeY;
   final String text;
   final bool? isDone;
 
   const StepCourse(
       {super.key,
-      this.width = 150,
-      this.height = 150,
+      this.width = 105,
+      this.height = 105,
+      this.offisdeY = 50,
       required this.text,
       this.isDone = false});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
-      height: height,
+      width: width + 10,
+      height: height + 10,
       // color: Colors.black,
       child: Center(
         child: Stack(
           children: [
             // circle 1, background shape
             Positioned(
-              top: (height - height / 2) / 2 + 5,
-              left: (width - width / 2) / 2,
+              top: (height - height + 10) / 2 + 5,
+              left: (width - width + 10) / 2,
               child: Container(
-                height: height / 2,
-                width: width / 2,
+                height: height,
+                width: width,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isDone == true
@@ -47,8 +49,8 @@ class StepCourse extends StatelessWidget {
             ),
             Center(
               child: Container(
-                height: height / 2,
-                width: width / 2,
+                height: height,
+                width: width,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isDone == true
@@ -57,7 +59,7 @@ class StepCourse extends StatelessWidget {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: Transform.translate(
-                  offset: const Offset(0, 35),
+                  offset: Offset(0, offisdeY),
                   child: Container(
                     decoration: BoxDecoration(
                       color: isDone ?? true
