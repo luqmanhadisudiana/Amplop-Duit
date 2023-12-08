@@ -4,13 +4,14 @@ class AnswerContainer extends StatelessWidget {
   final String text;
   final int index;
   final Function? action;
+  final Color? bgColor;
 
-  const AnswerContainer({
-    super.key,
-    required this.text,
-    required this.index,
-    this.action,
-  });
+  const AnswerContainer(
+      {super.key,
+      required this.text,
+      required this.index,
+      this.action,
+      this.bgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class AnswerContainer extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: const Color(0xFF725CC8)),
                 borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                color: Colors.white),
+                color: bgColor),
             child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,

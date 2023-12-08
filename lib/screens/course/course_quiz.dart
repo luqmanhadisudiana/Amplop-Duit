@@ -28,6 +28,9 @@ class _CourseQuizState extends State<CourseQuiz> {
     AnswerList(text: 'Item D', status: false),
   ];
 
+  int selectedIndex = -1;
+  bool isButtonDisable = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -101,10 +104,19 @@ class _CourseQuizState extends State<CourseQuiz> {
                     AnswerContainer(
                       text: itemList[i].text,
                       index: i,
-                      action: () {
-                        debugPrint(itemList[i].status.toString());
-                        showCustomBottomSheet(context);
-                      },
+                      bgColor: i == selectedIndex
+                          ? (itemList[i].status ? Colors.blue : Colors.red)
+                          : Colors.white,
+                      action: isButtonDisable
+                          ? null
+                          : () {
+                              debugPrint(itemList[i].status.toString());
+                              setState(() {
+                                selectedIndex = i;
+                                isButtonDisable = true;
+                              });
+                              showCustomBottomSheet(context);
+                            },
                     )
                 ],
               ),
