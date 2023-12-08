@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^1.1.6
   lottie: ^1.4.2
   youtube_player_flutter: ^8.1.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

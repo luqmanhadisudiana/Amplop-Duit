@@ -42,8 +42,7 @@ class _LoginScreen extends StatelessWidget {
             ),
             SvgPicture.asset(
               'assets/img/avatar.svg',
-              // width: 21.0,
-              // height: 21.0,
+              fit: BoxFit.cover,
             ),
             MainButton(
                 buttonText: "Mulai",

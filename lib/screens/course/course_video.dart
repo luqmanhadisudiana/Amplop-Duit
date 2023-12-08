@@ -1,20 +1,32 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
-import 'package:amplop_duit/screens/course/course_quiz.dart';
+import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CourseVideo extends StatefulWidget {
-  const CourseVideo({super.key});
+  final String ytVideoID, title, description;
+  final int index, currentFeedback;
+  const CourseVideo(
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.ytVideoID,
+      required this.index,
+      required this.currentFeedback});
 
   @override
   State<CourseVideo> createState() => _CourseVideoState();
 }
 
 class _CourseVideoState extends State<CourseVideo> {
+  late CourseProvider courseProvider;
+  late CoursePointerProvider coursePointerProvider;
   late YoutubePlayerController _controller;
-  int feedback = 0;
+  late String buttonText;
+  late int feedback;
 
   void setFeedback(value) {
     setState(() {
@@ -24,18 +36,30 @@ class _CourseVideoState extends State<CourseVideo> {
 
   @override
   void initState() {
+    super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'mq8ZLUBdQHQ',
+      initialVideoId: widget.ytVideoID,
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
       ),
     );
-    super.initState();
+    feedback = widget.currentFeedback;
+    debugPrint(widget.index.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    // provider
+    courseProvider = Provider.of<CourseProvider>(context, listen: false);
+    coursePointerProvider =
+        Provider.of<CoursePointerProvider>(context, listen: false);
+
+    buttonText = courseProvider.getCourseFeedback(widget.index) == 0
+        ? "Berikutnya"
+        : "Kembali";
+
+    // feedback = courseProvider.getCourseFeedback(widget.index);
     return MaterialApp(
       title: 'Course',
       theme: MyAppTheme.buildTheme(),
@@ -84,16 +108,16 @@ class _CourseVideoState extends State<CourseVideo> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 24),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Expanded(
                             child: Text(
-                              "Level 1",
-                              style: TextStyle(
+                              "Level ${widget.index + 1}",
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 16),
                             ),
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
@@ -151,17 +175,17 @@ class _CourseVideoState extends State<CourseVideo> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 16),
-                      child: const Text(
-                        "Membuat Catatan Keuangan Pribadi",
-                        style: TextStyle(
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 24),
-                      child: const Text(
-                        "Pernah tidak sih uang kalian habis di akhir bulan, saldo atm yang kosong, celengan gak ada isinya , bahkan kalian cuman makan Mie Instan. Tanpa mengetahui uang kalian habis dimana saja.\n\nMenurut kalian kenapa sih uang kalian cepat habis? Ayo tonton video pembelajaran kali ini!",
-                        style: TextStyle(
+                      child: Text(
+                        widget.description,
+                        style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                     ),
@@ -190,6 +214,7 @@ class _CourseVideoState extends State<CourseVideo> {
                           for (var i = 1; i <= 5; i++)
                             GestureDetector(
                               onTap: () {
+                                debugPrint(widget.currentFeedback.toString());
                                 setFeedback(i);
                               },
                               child: SizedBox(
@@ -277,7 +302,7 @@ class _CourseVideoState extends State<CourseVideo> {
                       width: double.maxFinite,
                       margin: const EdgeInsets.symmetric(vertical: 24),
                       child: MainButton(
-                          buttonText: "Berikutnya",
+                          buttonText: buttonText,
                           action: () {
                             if (feedback == 0) {
                               showDialog<String>(
@@ -291,11 +316,13 @@ class _CourseVideoState extends State<CourseVideo> {
                               );
                             } else {
                               debugPrint(feedback.toString());
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CourseQuiz()),
-                              );
+                              coursePointerProvider.updateQuiz();
+                              debugPrint(coursePointerProvider.getselectedQuiz
+                                  .toString());
+                              courseProvider.updateFeedbackCourse(
+                                  widget.index, feedback);
+
+                              Navigator.pop(context);
                             }
                           }),
                     ),
