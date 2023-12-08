@@ -1,9 +1,11 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_thumbnail.dart';
+import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/provider.dart';
+import 'package:amplop_duit/screens/course/course_quiz.dart';
 import 'package:amplop_duit/screens/course/course_video.dart';
 import 'package:flutter/material.dart';
 import 'package:amplop_duit/theme.dart';
@@ -26,6 +28,20 @@ class _MyCoursePageState extends State<MyCoursePage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void navigateToQuiz(index) {
+    debugPrint("Quiz");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CourseQuiz(
+              question: course.listQuestionAnswer[index].question,
+              thumbnailUrl: course.videoThumbail,
+              listAnswer: course.listQuestionAnswer[index].answerList,
+              courseIndex: coursePointerProvider.getSelectedCourse,
+              quizIndex: coursePointerProvider.getselectedQuiz)),
+    );
   }
 
   @override
@@ -96,27 +112,63 @@ class _MyCoursePageState extends State<MyCoursePage> {
                         );
                       },
                     ),
-                    for (var i = 1; i <= 5; i++)
-                      GestureDetector(
-                        onTap: i <= selectedQuiz
-                            ? () {
-                                debugPrint("bisa ditap");
-                                coursePointerProvider.updateQuiz();
-                                debugPrint(coursePointerProvider.getselectedQuiz
-                                    .toString());
-                              }
-                            : null,
-                        child: StepCourse(
-                          text: i.toString(),
-                          isDone: i <= selectedQuiz,
-                        ),
-                      ),
+                    for (var i = 0; i < 5; i++)
+                      i % 2 == 0
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: i < selectedQuiz
+                                      ? () {
+                                          navigateToQuiz(i);
+                                        }
+                                      : null,
+                                  child: StepCourse(
+                                    text: (i + 1).toString(),
+                                    isDone: i < selectedQuiz,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: i < selectedQuiz
+                                      ? () {
+                                          navigateToQuiz(i);
+                                        }
+                                      : null,
+                                  child: StepCourse(
+                                    text: (i + 1).toString(),
+                                    isDone: i < selectedQuiz,
+                                  ),
+                                ),
+                              ],
+                            ),
                     Center(
                       child: MainButton(
+                          isDisabled: coursePointerProvider.getselectedQuiz <
+                              course.listQuestionAnswer.length,
                           width: 280,
                           buttonText: "Level Selanjutnya",
                           action: () {
-                            debugPrint("Level Selanjutnya");
+                            debugPrint(
+                                "Level Selanjutnya ${coursePointerProvider.getSelectedCourse + 1}");
+
+                            if (coursePointerProvider.getSelectedCourse ==
+                                courseProvider.getCourseList.length - 1) {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    const CustomAlertDialog(
+                                  title: "Course Telah Selasai",
+                                  desc: "",
+                                ),
+                              );
+                            } else {
+                              coursePointerProvider.nextCourse();
+                            }
                           }),
                     ),
                     const SizedBox(

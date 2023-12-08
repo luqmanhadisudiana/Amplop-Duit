@@ -316,7 +316,11 @@ class _CourseVideoState extends State<CourseVideo> {
                               );
                             } else {
                               debugPrint(feedback.toString());
-                              coursePointerProvider.updateQuiz();
+                              if (courseProvider
+                                      .getCourseFeedback(widget.index) ==
+                                  0) {
+                                coursePointerProvider.nextQuiz();
+                              }
                               debugPrint(coursePointerProvider.getselectedQuiz
                                   .toString());
                               courseProvider.updateFeedbackCourse(

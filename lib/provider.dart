@@ -44,13 +44,13 @@ class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void updateCourse() {
+  void nextCourse() {
     selectedCourse = selectedCourse + 1;
     selectedQuiz = 0;
     notifyListeners();
   }
 
-  void updateQuiz() {
+  void nextQuiz() {
     selectedQuiz = selectedQuiz + 1;
     notifyListeners();
   }

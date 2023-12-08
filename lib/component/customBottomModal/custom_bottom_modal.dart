@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final bool status;
+  final Function? action;
 
-  const CustomBottomSheet({Key? key, this.status = true}) : super(key: key);
+  const CustomBottomSheet({Key? key, this.status = true, this.action})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +14,8 @@ class CustomBottomSheet extends StatelessWidget {
       height: 170,
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF5338BC),
+      decoration: const BoxDecoration(
+        color: Color(0xFF5338BC),
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       child: Center(
@@ -76,7 +78,10 @@ class CustomBottomSheet extends StatelessWidget {
                 bgColor: Colors.white,
                 textColor: const Color(0xFF725CC8),
                 action: () {
-                  debugPrint("test");
+                  debugPrint("Bottom modal click!");
+                  if (action != null) {
+                    action!();
+                  }
                 },
               ),
             )
@@ -87,11 +92,17 @@ class CustomBottomSheet extends StatelessWidget {
   }
 }
 
-void showCustomBottomSheet(BuildContext context, bool status) {
+void showCustomBottomSheet(BuildContext context, bool status,
+    [Function? action]) {
   showModalBottomSheet<void>(
     context: context,
+    isDismissible: false,
+    enableDrag: false,
     builder: (BuildContext context) {
-      return CustomBottomSheet(status: status);
+      return CustomBottomSheet(
+        status: status,
+        action: action,
+      );
     },
   );
 }
