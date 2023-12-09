@@ -29,6 +29,7 @@ class _CourseQuizState extends State<CourseQuiz> {
   late CoursePointerProvider coursePointerProvider;
   int selectedIndex = -1;
   bool isButtonDisable = false;
+  late String buttonText;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,15 @@ class _CourseQuizState extends State<CourseQuiz> {
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
     coursePointerProvider =
         Provider.of<CoursePointerProvider>(context, listen: false);
+    debugPrint(courseProvider
+        .getQuestionStatus(widget.courseIndex, widget.quizIndex)
+        .toString());
+    debugPrint('course : ${widget.courseIndex}, quiz : ${widget.quizIndex}');
+    buttonText =
+        courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)
+            ? "Kembali"
+            : "Berikutnya";
+
     return MaterialApp(
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
@@ -115,15 +125,24 @@ class _CourseQuizState extends State<CourseQuiz> {
                       action: isButtonDisable
                           ? null
                           : () {
-                              debugPrint(
-                                  widget.listAnswer[i].status.toString());
+                              // debugPrint(
+                              //     widget.listAnswer[i].status.toString());
                               setState(() {
                                 selectedIndex = i;
                                 isButtonDisable = true;
                               });
-                              showCustomBottomSheet(
-                                  context, widget.listAnswer[i].status, () {
-                                coursePointerProvider.nextQuiz();
+                              showCustomBottomSheet(context,
+                                  widget.listAnswer[i].status, buttonText, () {
+                                if (courseProvider.getQuestionStatus(
+                                        widget.courseIndex, widget.quizIndex) ==
+                                    false) {
+                                  coursePointerProvider.nextQuiz();
+                                  courseProvider.updateQuestionStatus(
+                                      widget.courseIndex,
+                                      widget.quizIndex,
+                                      true);
+                                }
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 class CustomBottomSheet extends StatelessWidget {
   final bool status;
   final Function? action;
+  final String buttonText;
 
-  const CustomBottomSheet({Key? key, this.status = true, this.action})
+  const CustomBottomSheet(
+      {Key? key,
+      this.status = true,
+      this.action,
+      this.buttonText = "Selanjutnya"})
       : super(key: key);
 
   @override
@@ -74,7 +79,7 @@ class CustomBottomSheet extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: MainButton(
                 width: double.maxFinite,
-                buttonText: "Selanjutnya",
+                buttonText: buttonText,
                 bgColor: Colors.white,
                 textColor: const Color(0xFF725CC8),
                 action: () {
@@ -93,7 +98,7 @@ class CustomBottomSheet extends StatelessWidget {
 }
 
 void showCustomBottomSheet(BuildContext context, bool status,
-    [Function? action]) {
+    [String buttonText = "", Function? action]) {
   showModalBottomSheet<void>(
     context: context,
     isDismissible: false,
@@ -102,6 +107,7 @@ void showCustomBottomSheet(BuildContext context, bool status,
       return CustomBottomSheet(
         status: status,
         action: action,
+        buttonText: buttonText,
       );
     },
   );

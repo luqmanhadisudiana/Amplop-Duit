@@ -5,7 +5,7 @@ class StepCourse extends StatelessWidget {
   final double height;
   final double offisdeY;
   final String text;
-  final bool? isDone;
+  final bool? available;
 
   const StepCourse(
       {super.key,
@@ -13,7 +13,7 @@ class StepCourse extends StatelessWidget {
       this.height = 105,
       this.offisdeY = 50,
       required this.text,
-      this.isDone = false});
+      this.available = false});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class StepCourse extends StatelessWidget {
                 width: width,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isDone == true
+                  color: available == true
                       ? const Color(0xFFB0D8B0)
                       : const Color(0xFFD1D1D1),
                   boxShadow: [
@@ -53,7 +53,7 @@ class StepCourse extends StatelessWidget {
                 width: width,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isDone == true
+                  color: available == true
                       ? const Color(0xFF339933)
                       : const Color(0xFF696969),
                 ),
@@ -62,7 +62,7 @@ class StepCourse extends StatelessWidget {
                   offset: Offset(0, offisdeY),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isDone ?? true
+                      color: available ?? true
                           ? const Color(0xFFD9D9D9).withOpacity(0.27)
                           : const Color(0xFFD9D9D9).withOpacity(0.27),
                       shape: BoxShape.circle,

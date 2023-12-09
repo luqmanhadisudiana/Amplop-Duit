@@ -25,11 +25,15 @@ class CourseProvider with ChangeNotifier {
     listCourse[indexCourse].feedback = newFeedback;
     notifyListeners();
   }
+
+  bool getQuestionStatus(int indexCourse, int indexQuestion) {
+    return listCourse[indexCourse].listQuestionAnswer[indexQuestion].isDone;
+  }
 }
 
 class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int selectedCourse = 0;
-  int selectedQuiz = 0;
+  int selectedQuiz = -1;
 
   int get getSelectedCourse => selectedCourse;
   int get getselectedQuiz => selectedQuiz;
@@ -46,7 +50,8 @@ class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void nextCourse() {
     selectedCourse = selectedCourse + 1;
-    selectedQuiz = 0;
+    //reset quiz index
+    selectedQuiz = -1;
     notifyListeners();
   }
 

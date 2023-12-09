@@ -40,7 +40,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
               thumbnailUrl: course.videoThumbail,
               listAnswer: course.listQuestionAnswer[index].answerList,
               courseIndex: coursePointerProvider.getSelectedCourse,
-              quizIndex: coursePointerProvider.getselectedQuiz)),
+              quizIndex: index)),
     );
   }
 
@@ -118,14 +118,14 @@ class _MyCoursePageState extends State<MyCoursePage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 GestureDetector(
-                                  onTap: i < selectedQuiz
+                                  onTap: i <= selectedQuiz
                                       ? () {
                                           navigateToQuiz(i);
                                         }
                                       : null,
                                   child: StepCourse(
                                     text: (i + 1).toString(),
-                                    isDone: i < selectedQuiz,
+                                    available: i <= selectedQuiz,
                                   ),
                                 ),
                               ],
@@ -134,14 +134,14 @@ class _MyCoursePageState extends State<MyCoursePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 GestureDetector(
-                                  onTap: i < selectedQuiz
+                                  onTap: i <= selectedQuiz
                                       ? () {
                                           navigateToQuiz(i);
                                         }
                                       : null,
                                   child: StepCourse(
                                     text: (i + 1).toString(),
-                                    isDone: i < selectedQuiz,
+                                    available: i <= selectedQuiz,
                                   ),
                                 ),
                               ],
