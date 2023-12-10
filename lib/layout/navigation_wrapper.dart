@@ -1,6 +1,7 @@
 import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 
@@ -43,28 +44,12 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     });
   }
 
-  static const List<BottomNavigationBarItem> _bottomNavBarItems =
-      <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      label: 'Leaderboard',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      label: 'Smart Finance',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      label: 'History',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      label: 'Profile',
-    ),
+  final List<List<String>> _icons = [
+    ['Home Active.svg', 'Home.svg'],
+    ['Leaderboard Active.svg', 'Leaderboard.svg'],
+    ['Smart Finance Active.svg', 'Smart Finance.svg'],
+    ['History Active.svg', 'History.svg'],
+    ['Profile Active.svg', 'Profile.svg'],
   ];
 
   void reset(context) async {
@@ -87,7 +72,17 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
         body: const MyHomePage(),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          items: _bottomNavBarItems,
+          items: List.generate(
+            _icons.length,
+            (index) => BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icon/${_selectedIndex == index ? _icons[index][0] : _icons[index][1]}',
+                height: 20,
+                width: 20,
+              ),
+              label: _icons[index][0].replaceAll(' Active.svg', ''),
+            ),
+          ),
           currentIndex: _selectedIndex,
           selectedItemColor: const Color(0xFF5338BC),
           unselectedItemColor: Colors.grey,

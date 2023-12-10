@@ -19,50 +19,58 @@ class CardState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        height: height,
-        // width: width,
+      child: LayoutBuilder(builder: (context, constraints) {
+        double expandedWidth = constraints.maxWidth;
+        return Container(
+          height: height,
+          // width: width,
 
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(imageUrl),
-            fit: BoxFit.cover,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(imageUrl),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+            color: Colors.amber,
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-          color: Colors.amber,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 60),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Text(value,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "Poppins",
+                  SizedBox(
+                    width: expandedWidth * 0.5,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(value,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins",
+                          ),
+                          textAlign: TextAlign.left),
+                      Text(
+                        title.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8.0,
+                          fontFamily: "Poppins",
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left),
-                  Text(
-                    title.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8.0,
-                      fontFamily: "Poppins",
-                    ),
-                    textAlign: TextAlign.left,
+                    ],
                   ),
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -69,14 +70,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Icon(
-                      Icons.circle,
-                      color: Colors.amber,
+                    SvgPicture.asset(
+                      "assets/icon/Point.svg",
+                      // width: 60,
+                      height: 60,
                     ),
-                    SizedBox(width: 8.0),
-                    Text(
+                    const SizedBox(width: 8.0),
+                    const Text(
                       "2805",
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -100,15 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(
-                            Icons.favorite,
-                            size: 60,
-                            color: Colors.pink,
+                          SvgPicture.asset(
+                            "assets/icon/Heart.svg",
+                            // width: 60,
+                            height: 60,
                           ),
-                          SizedBox(width: 21.0),
-                          Text(
+                          const SizedBox(width: 21.0),
+                          const Text(
                             "5",
                             style: TextStyle(
                                 color: Color(0xFF3F3F3F),
@@ -120,15 +122,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(
-                            Icons.diamond,
-                            size: 60,
-                            color: Colors.blue,
+                          SvgPicture.asset(
+                            "assets/icon/Diamond.svg",
+                            // width: 60,
+                            height: 60,
                           ),
-                          SizedBox(width: 21.0),
-                          Text(
+                          const SizedBox(width: 21.0),
+                          const Text(
                             "5",
                             style: TextStyle(
                                 color: Color(0xFF3F3F3F),
@@ -271,13 +273,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CardState(
-                      title: 'test',
-                      value: 'test',
+                      title: 'Runtutan Harian',
+                      value: '5 Hari',
                       imageUrl: 'assets/img/home/Card-State-Day.png'),
                   SizedBox(width: 30),
                   CardState(
-                      title: 'test',
-                      value: 'test',
+                      title: 'Total Poin',
+                      value: '2805',
                       imageUrl: 'assets/img/home/Card-State-Total-Point.png'),
                 ],
               ),
@@ -286,13 +288,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CardState(
-                      title: 'test',
-                      value: 'test',
+                      title: 'Sisa Waktu',
+                      value: '2 Hari',
                       imageUrl: 'assets/img/home/Card-State-Countdown.png'),
                   SizedBox(width: 30),
                   CardState(
-                      title: 'test',
-                      value: 'test',
+                      title: 'Posisi Tertinggi',
+                      value: '2',
                       imageUrl: 'assets/img/home/Card-State-Position.png'),
                 ],
               )

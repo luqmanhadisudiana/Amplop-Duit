@@ -1,4 +1,5 @@
 import 'package:amplop_duit/component/answerContainer/answer_container.dart';
+import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart';
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/provider.dart';
@@ -50,28 +51,11 @@ class _CourseQuizState extends State<CourseQuiz> {
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
         home: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                const Text(
-                  "Quiz",
-                  style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const Icon(Icons.add),
-              ],
-            ),
-          ),
+          appBar: CourseAppbar(
+              title: "My Course",
+              heartCount: 5,
+              diamondCount: 5,
+              parentContext: context),
           body: ListView(children: [
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

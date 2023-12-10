@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/provider.dart';
@@ -64,28 +65,11 @@ class _CourseVideoState extends State<CourseVideo> {
       title: 'Course',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                const Text(
-                  "My Course",
-                  style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const Icon(Icons.add),
-              ],
-            ),
-          ),
+           appBar: CourseAppbar(
+              title: "My Course",
+              heartCount: 5,
+              diamondCount: 5,
+              parentContext: context),
           body: ListView(
             children: [
               Container(

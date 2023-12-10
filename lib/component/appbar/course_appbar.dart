@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -41,10 +42,10 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.favorite,
-                    size: 14,
-                    color: Colors.pink,
+                  SvgPicture.asset(
+                    "assets/icon/Heart.svg",
+                    // width: 14,
+                    height: 14,
                   ),
                   const SizedBox(
                     width: 8.0,
@@ -63,10 +64,10 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               Row(
                 children: [
-                  const Icon(
-                    Icons.diamond,
-                    size: 14,
-                    color: Colors.blue,
+                  SvgPicture.asset(
+                    "assets/icon/Diamond.svg",
+                    // width: 14,
+                    height: 14,
                   ),
                   const SizedBox(
                     width: 8.0,
