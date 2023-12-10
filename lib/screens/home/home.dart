@@ -74,8 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     SvgPicture.asset(
                       "assets/icon/Point.svg",
-                      // width: 60,
-                      height: 60,
+                      width: 16,
+                      height: 16,
                     ),
                     const SizedBox(width: 8.0),
                     const Text(

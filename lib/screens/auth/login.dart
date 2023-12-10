@@ -40,9 +40,12 @@ class _LoginScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SvgPicture.asset(
-              'assets/img/avatar.svg',
-              fit: BoxFit.cover,
+            SizedBox(
+              height: 500,
+              child: SvgPicture.asset(
+                'assets/img/avatar.svg',
+                fit: BoxFit.cover,
+              ),
             ),
             MainButton(
                 buttonText: "Mulai",

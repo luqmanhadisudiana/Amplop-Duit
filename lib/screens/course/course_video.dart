@@ -4,6 +4,7 @@ import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +66,7 @@ class _CourseVideoState extends State<CourseVideo> {
       title: 'Course',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-           appBar: CourseAppbar(
+          appBar: CourseAppbar(
               title: "My Course",
               heartCount: 5,
               diamondCount: 5,
@@ -93,6 +94,7 @@ class _CourseVideoState extends State<CourseVideo> {
                     Container(
                       margin: const EdgeInsets.only(top: 24),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Text(
@@ -101,16 +103,22 @@ class _CourseVideoState extends State<CourseVideo> {
                                   fontWeight: FontWeight.w600, fontSize: 16),
                             ),
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.share_outlined),
-                                  SizedBox(
+                                  SvgPicture.asset(
+                                    "assets/icon/Share-Outline.svg",
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                  const SizedBox(
                                     width: 6,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Bagikan",
                                     style: TextStyle(
                                         fontSize: 8,
@@ -118,16 +126,21 @@ class _CourseVideoState extends State<CourseVideo> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.thumb_up_alt_outlined),
-                                  SizedBox(
+                                  SvgPicture.asset(
+                                    "assets/icon/Like-Outline.svg",
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                  const SizedBox(
                                     width: 6,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Suka",
                                     style: TextStyle(
                                         fontSize: 8,
@@ -135,16 +148,21 @@ class _CourseVideoState extends State<CourseVideo> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.thumb_down_alt_outlined),
-                                  SizedBox(
+                                  SvgPicture.asset(
+                                    "assets/icon/Dislike-Outline.svg",
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                  const SizedBox(
                                     width: 6,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Tidak Suka",
                                     style: TextStyle(
                                         fontSize: 8,
@@ -244,33 +262,45 @@ class _CourseVideoState extends State<CourseVideo> {
                         ],
                       ),
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.flag_outlined),
-                                SizedBox(
+                                SvgPicture.asset(
+                                  "assets/icon/Flag-Outline.svg",
+                                  width: 16,
+                                  height: 16,
+                                ),
+                                const SizedBox(
                                   width: 8,
                                 ),
-                                Text(
+                                const Text(
                                   "Beri masukan",
                                   style: TextStyle(fontSize: 8),
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 16,
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.warning_outlined),
-                                SizedBox(
+                                SvgPicture.asset(
+                                  "assets/icon/Warning-Outline.svg",
+                                  width: 16,
+                                  height: 16,
+                                ),
+                                const SizedBox(
                                   width: 8,
                                 ),
-                                Text(
+                                const Text(
                                   "Laporkan masalah",
                                   style: TextStyle(
                                     fontSize: 8,
@@ -292,7 +322,15 @@ class _CourseVideoState extends State<CourseVideo> {
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) =>
-                                    const CustomAlertDialog(
+                                    CustomAlertDialog(
+                                  customIcon: Container(
+                                    padding: const EdgeInsets.all(15),
+                                    child: SvgPicture.asset(
+                                      "assets/icon/Warning-Outline.svg",
+                                      height: 45,
+                                      width: 45,
+                                    ),
+                                  ),
                                   title: "Kamu Belum Isi Feedback",
                                   desc:
                                       "Isi Feedback terlebih dahulu untuk kualitas yang lebih baik",
