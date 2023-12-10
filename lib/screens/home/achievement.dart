@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:flutter/material.dart';
 import 'package:amplop_duit/theme.dart';
@@ -11,23 +12,7 @@ class AchievementPage extends StatelessWidget {
       title: 'Login',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-          appBar: AppBar(
-            title: const Center(
-              child: Text(
-                "Pencapaian",
-                style: TextStyle(
-                    fontFamily: "Poppins",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          appBar: DefaultAppbar(title: "Pencapaian", parentContext: context),
           body: ListView(
             children: [
               Center(
