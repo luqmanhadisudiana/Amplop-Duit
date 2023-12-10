@@ -83,7 +83,10 @@ class _MainLoadingState extends State<MainLoading> {
               ),
               const SizedBox(height: 40.0),
               // Image.asset("assets/img/avatar.png"),
-              SvgPicture.asset("assets/img/avatar-hand-up.svg"),
+              SizedBox(
+                height: 370,
+                child: SvgPicture.asset("assets/img/avatar-hand-up.svg"),
+              ),
               const SizedBox(height: 20.0),
               if (isLoading)
                 Container(
