@@ -1,4 +1,5 @@
 import 'package:amplop_duit/screens/home/home.dart';
+import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,6 +53,14 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     ['Profile Active.svg', 'Profile.svg'],
   ];
 
+  final List<Widget> _pages = [
+    const MyHomePage(),
+    LeaderboardPage(),
+    const MyHomePage(),
+    const MyHomePage(),
+    const MyHomePage(),
+  ];
+
   void reset(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -69,7 +78,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
       title: 'Home',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-        body: const MyHomePage(),
+        body: _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: List.generate(
