@@ -1,5 +1,6 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
+import 'package:amplop_duit/models/achievement.dart';
 import 'package:flutter/material.dart';
 import 'package:amplop_duit/theme.dart';
 
@@ -36,14 +37,15 @@ class AchievementPage extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (var i = 0; i < 6; i++)
+                        for (var i = 0; i < achievementData.length; i++)
                           CardAchievement(
-                            title: "test",
-                            desc: "test",
-                            imageUrl: 'assets/img/pencapaian/Group 515.svg',
-                            currentValue: 4,
-                            maxValue: 5,
-                            bottomBorder: i == 6 - 1 ? false : true,
+                            title: achievementData[i].title,
+                            desc: achievementData[i].desc,
+                            imageUrl: achievementData[i].imageUrl,
+                            currentValue: achievementData[i].currentValue,
+                            maxValue: achievementData[i].maxValue,
+                            bottomBorder:
+                                i == achievementData.length - 1 ? false : true,
                           ),
                       ]),
                 ),

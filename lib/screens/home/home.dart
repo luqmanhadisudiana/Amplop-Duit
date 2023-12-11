@@ -1,6 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/card/card_state.dart';
+import 'package:amplop_duit/models/achievement.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:flutter/material.dart';
@@ -331,11 +332,11 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             for (var i = 0; i < 3; i++)
               CardAchievement(
-                title: "test",
-                desc: "test",
-                imageUrl: 'assets/img/pencapaian/Group 515.svg',
-                currentValue: 4,
-                maxValue: 5,
+                title: achievementData[i].title,
+                desc: achievementData[i].desc,
+                imageUrl: achievementData[i].imageUrl,
+                currentValue: achievementData[i].currentValue,
+                maxValue: achievementData[i].maxValue,
                 bottomBorder: i == 3 - 1 ? false : true,
               ),
           ]),
