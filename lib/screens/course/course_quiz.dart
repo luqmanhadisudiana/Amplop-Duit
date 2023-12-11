@@ -3,7 +3,6 @@ import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart';
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/provider.dart';
-import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -127,12 +126,8 @@ class _CourseQuizState extends State<CourseQuiz> {
                                       true);
                                 }
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MyCoursePage()),
-                                );
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                               });
                             },
                     )

@@ -30,12 +30,19 @@ class CardAchievement extends StatelessWidget {
             : null,
       ),
       child: Row(children: [
-        SvgPicture.asset(
-          imageUrl,
-          width: 100,
-          height: 112,
-          fit: BoxFit.contain,
-        ),
+        imageUrl.toLowerCase().endsWith('.svg')
+            ? SvgPicture.asset(
+                imageUrl,
+                width: 100,
+                height: 112,
+                fit: BoxFit.contain,
+              )
+            : Image.asset(
+                imageUrl,
+                width: 100,
+                height: 112,
+                fit: BoxFit.contain,
+              ),
         Expanded(
             child: Container(
           margin: const EdgeInsets.only(left: 15.0),
