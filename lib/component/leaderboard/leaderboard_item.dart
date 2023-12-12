@@ -38,11 +38,11 @@ class LeaderboardItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                width: 18,
+                width: 12,
               ),
               Container(
-                width: 47.0,
-                height: 47.0,
+                width: 40.0,
+                height: 40.0,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.blue,
@@ -57,7 +57,7 @@ class LeaderboardItem extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            width: 32,
+            width: 18,
           ),
           Expanded(
             child: Text(
@@ -69,9 +69,12 @@ class LeaderboardItem extends StatelessWidget {
                   fontWeight: FontWeight.w700),
             ),
           ),
-          Text(
-            '${point.toString()} XP',
-            style: const TextStyle(fontFamily: "Poppins", fontSize: 12),
+          Container(
+            padding: const EdgeInsets.only(left: 8),
+            child: Text(
+              '${point.toString()} XP',
+              style: const TextStyle(fontFamily: "Poppins", fontSize: 12),
+            ),
           ),
         ]);
   }
