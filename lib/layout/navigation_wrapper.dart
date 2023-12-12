@@ -1,5 +1,7 @@
 import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
+import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
+import 'package:amplop_duit/screens/testpage/testpage.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -55,23 +57,11 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
 
   final List<Widget> _pages = [
     const MyHomePage(),
-    LeaderboardPage(),
-    const MyHomePage(),
+    const LeaderboardPage(),
+    const SmartFinancePage(),
     const MyHomePage(),
     const MyHomePage(),
   ];
-
-  void reset(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    debugPrint("reset");
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -100,13 +90,18 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
           unselectedLabelStyle: const TextStyle(fontSize: 10),
           onTap: _onItemTapped,
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            reset(context);
-          },
-          tooltip: 'Reset',
-          child: const Icon(Icons.refresh),
-        ), // Th,
+        floatingActionButton: _selectedIndex == 2
+            ? null
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TestPage()));
+                },
+                tooltip: 'Test Page',
+                child: const Icon(Icons.refresh),
+              ), // Th,
       ),
     );
   }

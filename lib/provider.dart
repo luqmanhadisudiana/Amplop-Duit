@@ -38,6 +38,12 @@ class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int get getSelectedCourse => selectedCourse;
   int get getselectedQuiz => selectedQuiz;
 
+  void setNewValue(int courseIndex, int quizIndex) {
+    selectedCourse = courseIndex;
+    selectedQuiz = quizIndex;
+    notifyListeners();
+  }
+
   void updateSelectedCourseByID(int id) {
     selectedCourse = id;
     notifyListeners();
