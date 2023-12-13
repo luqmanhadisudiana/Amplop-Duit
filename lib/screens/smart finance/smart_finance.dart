@@ -9,6 +9,7 @@ import 'package:amplop_duit/component/table/table_row.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SmartFinancePage extends StatefulWidget {
   const SmartFinancePage({super.key});
@@ -40,6 +41,14 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
     ),
   ];
 
+  bool selectedTable = true;
+
+  void changeSelectedTable() {
+    setState(() {
+      selectedTable = !selectedTable;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,33 +60,128 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
             padding: const EdgeInsets.all(16),
             child: Column(children: [
               Center(
-                child: Container(child: Text("Smart Finance")),
+                child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 24),
+                    child: const Text(
+                      "Smart Finance",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins"),
+                    )),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AnimatedContainer(
-                    duration: Duration(seconds: 1),
-                    child: MainButton(buttonText: "Bulanan"),
+                    duration: const Duration(milliseconds: 1000),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                    ),
+                    child: MainButton(
+                      buttonText: "Bulanan",
+                      bgColor: selectedTable
+                          ? const Color(0xFF725CC8)
+                          : Colors.white,
+                      textColor: selectedTable ? Colors.white : Colors.black,
+                      boxShadow:
+                          selectedTable ? MainButton.defaultBoxShadow : [],
+                      fontSize: 12,
+                      height: 28,
+                      width: 85,
+                      fontWeight: FontWeight.w400,
+                      borderRadius: 6,
+                      action: () {
+                        changeSelectedTable();
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 80,
                   ),
                   AnimatedContainer(
-                    duration: Duration(seconds: 1),
-                    child: MainButton(buttonText: "Harian"),
+                    duration: const Duration(milliseconds: 1000),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                    ),
+                    child: MainButton(
+                      buttonText: "Harian",
+                      bgColor: selectedTable
+                          ? Colors.white
+                          : const Color(0xFF725CC8),
+                      textColor: selectedTable ? Colors.black : Colors.white,
+                      boxShadow:
+                          selectedTable ? [] : MainButton.defaultBoxShadow,
+                      fontSize: 12,
+                      height: 28,
+                      width: 85,
+                      fontWeight: FontWeight.w400,
+                      borderRadius: 6,
+                      action: () {
+                        changeSelectedTable();
+                      },
+                    ),
                   ),
                 ],
               ),
               Container(
-                child: Column(
-                  children: [
-                    const Text("Pemasukan uang bulanan"),
-                    Row(
-                      children: [
-                        Expanded(child: MyTextField(hintText: "")),
-                        MainButton(buttonText: "Hitung")
-                      ],
-                    )
-                  ],
-                ),
-              ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 105,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/img/background/Smart Finance - Pemasukan Uang Bulanan 1.svg",
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Pemasukan uang bulanan",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Poppins")),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: MyTextField(
+                                  hintText: "",
+                                  height: 32,
+                                  borderRadius: 6,
+                                  textStyle: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w400),
+                                )),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                MainButton(
+                                  buttonText: "Hitung",
+                                  bgColor: Color(0xFFFF6E30),
+                                  height: 32,
+                                  fontSize: 12,
+                                  borderRadius: 6,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
               Text("Hasil $displayText Kamu"),
               Container(
                 width: double.maxFinite,

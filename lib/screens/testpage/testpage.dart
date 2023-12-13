@@ -90,28 +90,38 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Test Page",
-        home: Scaffold(
-          appBar: DefaultAppbar(title: "Test Page", parentContext: context),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    LabelAndTextField(
-                      label: "Course Index",
-                      controller: courseIndexController,
-                    ),
-                    LabelAndTextField(
-                      label: "Quiz Index",
-                      controller: quizIndexController,
-                    )
-                  ],
-                )
-              ],
-            ),
+      title: "Test Page",
+      home: Scaffold(
+        appBar: DefaultAppbar(title: "Test Page", parentContext: context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  LabelAndTextField(
+                    label: "Course Index",
+                    controller: courseIndexController,
+                  ),
+                  LabelAndTextField(
+                    label: "Quiz Index",
+                    controller: quizIndexController,
+                  ),
+                ],
+              )
+            ],
           ),
-        ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            reset(context);
+          },
+          tooltip: 'Reset',
+          child: const Icon(Icons.refresh),
+        ),
+      ),
+    );
   }
 }
 

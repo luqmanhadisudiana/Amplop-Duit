@@ -4,30 +4,48 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool isPassword;
   final TextEditingController? controller;
+  final Color borderColor;
+  final double height, width, borderRadius;
+  final TextStyle textStyle;
 
-  const MyTextField({
-    super.key,
-    required this.hintText,
-    this.isPassword = false,
-    this.controller,
-  });
+  const MyTextField(
+      {super.key,
+      required this.hintText,
+      this.isPassword = false,
+      this.controller,
+      this.borderColor = const Color(0xFF696969),
+      this.height = 48,
+      this.width = double.maxFinite,
+      this.borderRadius = 15,
+      this.textStyle = const TextStyle(
+          fontSize: 16, fontFamily: "Poppins", fontWeight: FontWeight.w400)});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFF696969), // Warna border
-            width: 1.0, // Lebar border
+    return SizedBox(
+      height: height,
+      width: width,
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          labelStyle: textStyle,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: borderColor,
+              width: 0.5,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),
-          borderRadius: BorderRadius.circular(15.0), // Radius border
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+            borderSide: BorderSide(color: borderColor, width: 0.5),
+          ),
+          hintText: hintText,
         ),
-        hintText: hintText,
       ),
     );
   }
