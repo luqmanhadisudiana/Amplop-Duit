@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
+  static const Color defaultBoxShadowColor = Color(0xFF000000);
   final String buttonText;
   final Color bgColor, textColor, disabledColor, disabledTextColor;
   final Function? action;
-  final double width, height, fontSize;
+  final double width, height, fontSize, borderRadius;
   final bool isDisabled;
+  final FontWeight fontWeight;
+  final List<BoxShadow>? boxShadow;
 
-  const MainButton({
-    super.key,
-    required this.buttonText,
-    this.action,
-    this.bgColor = const Color(0xFF5338BC),
-    this.textColor = Colors.white,
-    this.disabledColor = const Color(0xFFCCCCCC),
-    this.disabledTextColor = const Color(0xFF888888),
-    this.width = 150.0,
-    this.height = 50.0,
-    this.fontSize = 16.0,
-    this.isDisabled = false,
-  });
+  static List<BoxShadow> defaultBoxShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.15),
+      blurRadius: 5.0,
+      spreadRadius: 2.0,
+      offset: const Offset(0, 2),
+    ),
+  ];
+
+  const MainButton(
+      {super.key,
+      required this.buttonText,
+      this.action,
+      this.bgColor = const Color(0xFF5338BC),
+      this.textColor = Colors.white,
+      this.disabledColor = const Color(0xFFCCCCCC),
+      this.disabledTextColor = const Color(0xFF888888),
+      this.width = 150.0,
+      this.height = 50.0,
+      this.fontSize = 16.0,
+      this.isDisabled = false,
+      this.fontWeight = FontWeight.w600,
+      this.borderRadius = 15,
+      this.boxShadow});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +41,9 @@ class MainButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-        color: isDisabled ? disabledColor : bgColor,
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          color: isDisabled ? disabledColor : bgColor,
+          boxShadow: boxShadow ?? defaultBoxShadow),
       child: TextButton(
         onPressed: isDisabled
             ? null
@@ -51,7 +65,7 @@ class MainButton extends StatelessWidget {
             fontFamily: "Poppins",
             color: isDisabled ? disabledTextColor : textColor,
             fontSize: fontSize,
-            fontWeight: FontWeight.w600,
+            fontWeight: fontWeight,
           ),
         ),
       ),
