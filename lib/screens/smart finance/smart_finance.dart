@@ -223,9 +223,11 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                 child: Column(
                   children: [
                     TableHeader(headerData: headTable),
-                    TableRowData(
-                      childList: childList,
-                    ),
+                    for (var i = 0; i < 3; i++)
+                      TableRowData(
+                        childList: childList,
+                        useDivider: true,
+                      ),
                   ],
                 ),
               ),
@@ -245,9 +247,11 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                 child: Column(
                   children: [
                     TableHeader(headerData: headTable2),
-                    TableRowData(
-                      childList: childList2,
-                    ),
+                    for (var i = 0; i < 5; i++)
+                      TableRowData(
+                        childList: childList2,
+                        useDivider: i % 2 == 0,
+                      ),
                   ],
                 ),
               ),
