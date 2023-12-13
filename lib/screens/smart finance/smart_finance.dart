@@ -22,22 +22,39 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   String displayText = "Bulanan";
   List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
+  static const customPadding = EdgeInsets.only(left: 16, top: 8);
   List<Widget> childList = [
-    BulanDataContainer(date: DateTime.now()),
-    RowDataContainer(text: formatToMoneyText(1200000)),
+    BulanDataContainer(
+      date: DateTime.now(),
+      padding: customPadding,
+    ),
+    RowDataContainer(
+      text: formatToMoneyText(1200000),
+      padding: customPadding,
+    ),
     WithColumnContainer(
-        topText: formatToMoneyText(1200000),
-        bottomText: 'total : ${formatToMoneyText(1200000)}')
+      topText: formatToMoneyText(1200000),
+      bottomText: 'total : ${formatToMoneyText(1200000)}',
+      padding: const EdgeInsets.only(right: 16, top: 8),
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+    )
   ];
   List<Widget> childList2 = [
-    TanggalDataContainer(date: DateTime.now()),
+    TanggalDataContainer(
+      date: DateTime.now(),
+      padding: customPadding,
+    ),
     const RowDataContainer(
       text: "Beli Makan",
       fontSize: 10,
+      padding: EdgeInsets.only(left: 16, top: 8),
     ),
     RowDataContainer(
       text: formatToMoneyText(1200000),
       fontSize: 10,
+      alignment: Alignment.center,
+      padding: customPadding,
     ),
   ];
 
@@ -182,7 +199,14 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                       )
                     ],
                   )),
-              Text("Hasil $displayText Kamu"),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Hasil $displayText Kamu",
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins")),
+              ),
               Container(
                 width: double.maxFinite,
                 decoration: BoxDecoration(

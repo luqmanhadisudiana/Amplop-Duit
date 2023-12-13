@@ -5,12 +5,14 @@ class RowDataContainer extends StatelessWidget {
   final double fontSize;
   final EdgeInsets padding;
   final EdgeInsets margin;
+  final Alignment? alignment;
   const RowDataContainer({
     super.key,
     required this.text,
     this.fontSize = 12,
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
+    this.alignment,
   });
 
   @override
@@ -18,6 +20,7 @@ class RowDataContainer extends StatelessWidget {
     return Container(
       margin: margin,
       padding: padding,
+      alignment: alignment,
       child: Text(
         text,
         style: const TextStyle(
