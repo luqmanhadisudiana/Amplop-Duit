@@ -1,7 +1,13 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
+import 'package:amplop_duit/component/table/data/bulan_data.dart';
+import 'package:amplop_duit/component/table/data/row_data.dart';
+import 'package:amplop_duit/component/table/data/tanggal_data.dart';
+import 'package:amplop_duit/component/table/data/withcolumn_data.dart';
 import 'package:amplop_duit/component/table/table_header.dart';
+import 'package:amplop_duit/component/table/table_row.dart';
 import 'package:amplop_duit/theme.dart';
+import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
 
 class SmartFinancePage extends StatefulWidget {
@@ -14,6 +20,25 @@ class SmartFinancePage extends StatefulWidget {
 class _SmartFinancePageState extends State<SmartFinancePage> {
   String displayText = "Bulanan";
   List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
+  List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
+  List<Widget> childList = [
+    BulanDataContainer(date: DateTime.now()),
+    RowDataContainer(text: formatToMoneyText(1200000)),
+    WithColumnContainer(
+        topText: formatToMoneyText(1200000),
+        bottomText: 'total : ${formatToMoneyText(1200000)}')
+  ];
+  List<Widget> childList2 = [
+    TanggalDataContainer(date: DateTime.now()),
+    const RowDataContainer(
+      text: "Beli Makan",
+      fontSize: 10,
+    ),
+    RowDataContainer(
+      text: formatToMoneyText(1200000),
+      fontSize: 10,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,17 +95,34 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                 child: Column(
                   children: [
                     TableHeader(headerData: headTable),
-                    for (var i = 0; i < 10; i++)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          for (var i = 0; i < 3; i++)
-                            Expanded(child: Text(headTable[i]))
-                        ],
-                      )
+                    TableRowData(
+                      childList: childList,
+                    ),
                   ],
                 ),
-              )
+              ),
+              Container(
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 10.0,
+                      offset: const Offset(0, 4),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    TableHeader(headerData: headTable2),
+                    TableRowData(
+                      childList: childList2,
+                    ),
+                  ],
+                ),
+              ),
             ]),
           ),
         ),
