@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CardThumbnail extends StatelessWidget {
   final String imageUrl;
+  final bool isNetwork;
 
-  const CardThumbnail({super.key, required this.imageUrl});
+  const CardThumbnail(
+      {super.key, required this.imageUrl, this.isNetwork = false});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,43 @@ class CardThumbnail extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  // "assets/img/thumbnail/Thumbnail Amplop Duit Ep 1.png",
-                  imageUrl,
-                  fit: BoxFit.cover,
-                ),
+                isNetwork
+                    ? Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) {
+                          // Menampilkan widget pengganti ketika terjadi kesalahan
+                          return Container(
+                            alignment: Alignment.center,
+                            width: 50.0,
+                            height: 50.0,
+                            color: Colors.red,
+                            child: const Icon(Icons.error, color: Colors.white),
+                          );
+                        },
+                      )
+                    : Image.asset(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 6.0),
                   child: const Icon(

@@ -64,19 +64,37 @@ class _CourseQuizState extends State<CourseQuiz> {
       selectedIndex = i;
     });
     showCustomBottomSheet(context, widget.listAnswer[i].status, buttonText, () {
+      debugPrint(courseProvider
+          .getQuestionStatus(widget.courseIndex, widget.quizIndex)
+          .toString());
       if (courseProvider.getQuestionStatus(
               widget.courseIndex, widget.quizIndex) ==
           false) {
-        coursePointerProvider.nextQuiz();
-        courseProvider.updateQuestionStatus(
-            widget.courseIndex, widget.quizIndex, true);
+        debugPrint("Valid");
+        if (widget.quizIndex != 0) {
+          if (courseProvider.getSelectedAnswer(
+                  widget.courseIndex, widget.quizIndex - 1) !=
+              -1) {
+            debugPrint("nextQuiz");
+            coursePointerProvider.nextQuiz();
+          }
+        } else {
+          debugPrint("nextQuiz");
+          coursePointerProvider.nextQuiz();
+        }
 
         debugPrint(
-            '${widget.courseIndex} ${widget.quizIndex} $selectedIndex ${widget.listAnswer[i].status}');
+            '87, Course Index : ${widget.courseIndex}, Quiz Index : ${widget.quizIndex}, Selected Index : $selectedIndex, Status : ${widget.listAnswer[i].status}');
 
         if (widget.listAnswer[i].status) {
+          debugPrint("updateQuestionStatus");
+          courseProvider.updateQuestionStatus(
+              widget.courseIndex, widget.quizIndex, true);
+          debugPrint("updateSelectedAnswer");
           courseProvider.updateSelectedAnswer(
               widget.courseIndex, widget.quizIndex, selectedIndex);
+        } else {
+          debugPrint("Not Valid");
         }
       }
 
@@ -95,7 +113,7 @@ class _CourseQuizState extends State<CourseQuiz> {
     //     courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex);
     // debugPrint(isButtonDisable.toString());
     debugPrint(
-        '${courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)} ${widget.courseIndex} ${widget.quizIndex} ${courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex)}');
+        'Question Status: ${courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)}, Course Index : ${widget.courseIndex}, Quiz Index : ${widget.quizIndex}, Saved Value : ${courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex)}');
     return MaterialApp(
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
@@ -119,9 +137,37 @@ class _CourseQuizState extends State<CourseQuiz> {
                     child: ClipRRect(
                       borderRadius:
                           const BorderRadius.all(Radius.circular(15.0)),
-                      child: Image.asset(
+                      child: Image.network(
                         widget.thumbnailUrl,
                         fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) {
+                          // Menampilkan widget pengganti ketika terjadi kesalahan
+                          return Container(
+                            alignment: Alignment.center,
+                            width: 50.0,
+                            height: 50.0,
+                            color: Colors.red,
+                            child: const Icon(Icons.error, color: Colors.white),
+                          );
+                        },
                       ),
                     ),
                   ),

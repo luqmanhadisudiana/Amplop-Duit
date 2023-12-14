@@ -51,14 +51,6 @@ class Course {
 // Eps 4 https://youtu.be/X7i1W3WVqoQ
 // Eps 5 https://youtu.be/V-vNKONcJmc
 
-var yTVideoID = [
-  "n9pFVCWKbB4",
-  "MCDKOER9b7A",
-  "NTCY5rZRcDo",
-  "X7i1W3WVqoQ",
-  "V-vNKONcJmc"
-];
-
 // Data Dummy
 var courseList = [
   // course level
@@ -70,7 +62,8 @@ var courseList = [
       title: "Membuat Catatan Keuangan Pribadi",
       description:
           "Pernah tidak sih uang kalian habis di akhir bulan, saldo atm yang kosong, celengan gak ada isinya, bahkan kalian cuman makan Mie Instan. Tanpa mengetahui uang kalian habis dimana saja.\n\nMenurut kalian kenapa sih uang kalian cepat habis? Ayo tonton video pembelajaran kali ini!",
-      videoThumbail: "assets/img/thumbnail/Thumbnail Amplop Duit Ep 1.png",
+      videoThumbail:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/thumbnail/Thumbnail%20Amplop%20Duit%20Ep%201.png",
       ytVideoID:
           "n9pFVCWKbB4", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
@@ -120,7 +113,8 @@ var courseList = [
       title: "Kakeibo",
       description:
           "Kakeibo adalah salah satu metode pencatatan keuangan yang berasal dari Jepang. diperkenalkan pada tahun 1904 oleh Makoto Hani dan dipopulerkan oleh Fumiko Chiba berjudul Kakeibo: The Japanese Art of Saving Money. \n\nDi Kakeibo terdapat 4 pertanyaan penting yang perlu kalian jawab jika ingin mengatur keuangan. Yuk, simak video Amplop Duit berikut.",
-      videoThumbail: "assets/img/thumbnail/Thumbnail Amplop Duit Ep 2.png",
+      videoThumbail:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/thumbnail/Thumbnail%20Amplop%20Duit%20Ep%202.png",
       ytVideoID:
           "MCDKOER9b7A", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
@@ -170,7 +164,8 @@ var courseList = [
       title: "Kondisi Keuangan",
       description:
           "Buat kalian yang pernah belajar ekonomi mungkin kalian tahu dalam perusahaan aset = modal + hutang. (tahu ngga hubungannya dengan kondisi keuangan kalian?) Sama halnya dengan perusahaan, kalian harus mengetahui kondisi keuangan kalian sendiri. Kalian bisa mengetahui jumlah utang, jumlah aset kalian dengan cara menghitungnya sehingga kalian bisa tahu apa yang bisa dikurangi atau ditambah dari diri kalian dan juga uangnya.",
-      videoThumbail: "assets/img/thumbnail/Thumbnail Amplop Duit Ep 3.png",
+      videoThumbail:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/thumbnail/Thumbnail%20Amplop%20Duit%20Ep%203.png",
       ytVideoID:
           "NTCY5rZRcDo", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
@@ -220,7 +215,8 @@ var courseList = [
       title: "Asset",
       description:
           "Kalian pasti punya tempat tinggal, kendaraan bermotor, hp, saham, emas, uang rupiah atau mata uang asing kan. \nNah itu semua termasuk bagian dari  aset. \n\nTrus apa sih asset? \n\nYuk, nonton video Amplop Duit untuk mendapatkan ilmu lebih dalam.",
-      videoThumbail: "assets/img/thumbnail/Thumbnail Amplop Duit Ep 4.png",
+      videoThumbail:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/thumbnail/Thumbnail%20Amplop%20Duit%20Ep%204.png",
       ytVideoID:
           "X7i1W3WVqoQ", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
@@ -269,7 +265,8 @@ var courseList = [
       title: "Modal",
       description:
           "Kalian pasti punya mobil, rumah, surat berharga,investasi atau tabungan kan?\nIni semua adalah networth kalian. Buat kalian yang sudah menonton video tentang asset pasti sama dong barang-barangnya Trus apa sih bedanya modal dengan Aset? Mari saksikan videonya.\n\nNetworth adalah keseluruhan asset yang telah dikurangin oleh nilai kredit atau sewa. Networth menjadi tolak ukur kesehatan finansial seseorang. Dari sini kalian bisa tahu jika modal lebih besar ketimbang hutang maka finansial bisa dikatakan sehat. Sedangkan jika hutang kalian lebih besar ketimbang modal maka finansial tidak sehat.\n\nTonton video berikut agar kamu lebih pintar dalam pengetahuan soal modal.",
-      videoThumbail: "assets/img/thumbnail/Thumbnail Amplop Duit Ep 5.png",
+      videoThumbail:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/thumbnail/Thumbnail%20Amplop%20Duit%20Ep%205.png",
       ytVideoID:
           "V-vNKONcJmc", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,

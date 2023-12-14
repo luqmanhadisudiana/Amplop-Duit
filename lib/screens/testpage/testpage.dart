@@ -21,14 +21,13 @@ class _TestPageState extends State<TestPage> {
   @override
   void initState() {
     super.initState();
-
-    // Set initial values from the provider
     coursePointerProvider =
         Provider.of<CoursePointerProvider>(context, listen: false);
 
     courseIndexController.text =
-        coursePointerProvider.getSelectedCourse.toString();
-    quizIndexController.text = coursePointerProvider.getselectedQuiz.toString();
+        (coursePointerProvider.getSelectedCourse + 1).toString();
+    quizIndexController.text =
+        (coursePointerProvider.getselectedQuiz + 1).toString();
 
     courseIndexController.addListener(() {
       onValueChanged("course");
@@ -45,20 +44,20 @@ class _TestPageState extends State<TestPage> {
     CourseProvider courseProvider =
         Provider.of<CourseProvider>(context, listen: false);
 
-    int courseIndex = int.tryParse(courseIndexController.text) ?? 0;
-    int quizIndex = int.tryParse(quizIndexController.text) ?? -1;
+    int courseIndex = int.tryParse(courseIndexController.text) ?? 1;
+    int quizIndex = int.tryParse(quizIndexController.text) ?? 0;
 
     if (courseIndex < courseProvider.getCourseList.length) {
-      coursePointerProvider.setNewValue(courseIndex, quizIndex);
+      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
     } else {
       warning();
     }
 
-    if (quizIndex == -1) {
-      coursePointerProvider.setNewValue(courseIndex, quizIndex);
+    if (quizIndex == 0) {
+      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
     } else if (quizIndex <
-        courseProvider.getCourseList[quizIndex].listQuestionAnswer.length) {
-      coursePointerProvider.setNewValue(courseIndex, quizIndex);
+        courseProvider.getCourseList[courseIndex].listQuestionAnswer.length) {
+      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
     } else {
       warning();
     }
@@ -71,8 +70,8 @@ class _TestPageState extends State<TestPage> {
         title: "Index Out Bound",
         desc: "Reseting value to default",
         action: () {
-          courseIndexController.text = (0).toString();
-          quizIndexController.text = (-1).toString();
+          courseIndexController.text = (1).toString();
+          quizIndexController.text = (0).toString();
 
           Navigator.of(context).pop();
           FocusManager.instance.primaryFocus?.unfocus(); // Unfocus TextField

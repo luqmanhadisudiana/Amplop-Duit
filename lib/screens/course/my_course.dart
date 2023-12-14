@@ -80,7 +80,10 @@ class _MyCoursePageState extends State<MyCoursePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
-                      child: CardThumbnail(imageUrl: thumbailUrl),
+                      child: CardThumbnail(
+                        imageUrl: thumbailUrl,
+                        isNetwork: true,
+                      ),
                       onTap: () {
                         debugPrint("Course Video");
                         Navigator.push(
