@@ -12,12 +12,13 @@ class QuestionAnswer {
   final String question;
   final List<Answer> answerList;
   bool isDone;
+  int selectedAnswer;
 
-  QuestionAnswer({
-    required this.question,
-    required this.answerList,
-    this.isDone = false,
-  });
+  QuestionAnswer(
+      {required this.question,
+      required this.answerList,
+      this.isDone = false,
+      this.selectedAnswer = -1});
 }
 
 class Headline {

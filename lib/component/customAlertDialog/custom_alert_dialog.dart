@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 class CustomAlertDialog extends StatelessWidget {
   final String title, desc;
   final Widget customIcon;
+  final Function? action;
 
-  const CustomAlertDialog({
-    Key? key,
-    required this.title,
-    required this.desc,
-    this.customIcon = const DefaultCustomIcon(),
-  }) : super(key: key);
+  const CustomAlertDialog(
+      {Key? key,
+      required this.title,
+      required this.desc,
+      this.customIcon = const DefaultCustomIcon(),
+      this.action})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,12 @@ class CustomAlertDialog extends StatelessWidget {
             buttonText: "Oke",
             bgColor: const Color(0xFFFF6E30),
             action: () {
-              Navigator.of(context).pop();
+              debugPrint("Bottom modal click!");
+              if (action != null) {
+                action!();
+              } else {
+                Navigator.of(context).pop();
+              }
             },
           ),
         ),

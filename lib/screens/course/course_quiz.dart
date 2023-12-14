@@ -28,11 +28,13 @@ class _CourseQuizState extends State<CourseQuiz> {
   late CourseProvider courseProvider;
   late CoursePointerProvider coursePointerProvider;
   int selectedIndex = -1;
-  bool isButtonDisable = false;
+  late int currentIndex;
+  // late bool isButtonDisable;
   late String buttonText;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     // provider
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
     coursePointerProvider =
@@ -46,6 +48,54 @@ class _CourseQuizState extends State<CourseQuiz> {
             ? "Kembali"
             : "Berikutnya";
 
+    currentIndex =
+        courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex);
+
+    if (currentIndex != -1) {
+      selectedIndex = currentIndex;
+    }
+
+    // isButtonDisable =
+    //     courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex);
+  }
+
+  void modalAction(i) {
+    setState(() {
+      selectedIndex = i;
+    });
+    showCustomBottomSheet(context, widget.listAnswer[i].status, buttonText, () {
+      if (courseProvider.getQuestionStatus(
+              widget.courseIndex, widget.quizIndex) ==
+          false) {
+        coursePointerProvider.nextQuiz();
+        courseProvider.updateQuestionStatus(
+            widget.courseIndex, widget.quizIndex, true);
+
+        debugPrint(
+            '${widget.courseIndex} ${widget.quizIndex} $selectedIndex ${widget.listAnswer[i].status}');
+
+        if (widget.listAnswer[i].status) {
+          courseProvider.updateSelectedAnswer(
+              widget.courseIndex, widget.quizIndex, selectedIndex);
+        }
+      }
+
+      Navigator.pop(context);
+      Navigator.pop(context);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // selectedIndex =
+    // courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex);
+    // debugPrint(selectedIndex.toString());
+
+    // isButtonDisable =
+    //     courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex);
+    // debugPrint(isButtonDisable.toString());
+    debugPrint(
+        '${courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)} ${widget.courseIndex} ${widget.quizIndex} ${courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex)}');
     return MaterialApp(
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
@@ -105,31 +155,13 @@ class _CourseQuizState extends State<CourseQuiz> {
                               ? Colors.blue
                               : Colors.red)
                           : Colors.white,
-                      action: isButtonDisable
-                          ? null
-                          : () {
-                              // debugPrint(
-                              //     widget.listAnswer[i].status.toString());
-                              setState(() {
-                                selectedIndex = i;
-                                isButtonDisable = true;
-                              });
-                              showCustomBottomSheet(context,
-                                  widget.listAnswer[i].status, buttonText, () {
-                                if (courseProvider.getQuestionStatus(
-                                        widget.courseIndex, widget.quizIndex) ==
-                                    false) {
-                                  coursePointerProvider.nextQuiz();
-                                  courseProvider.updateQuestionStatus(
-                                      widget.courseIndex,
-                                      widget.quizIndex,
-                                      true);
-                                }
-
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              });
-                            },
+                      action:
+                          // isButtonDisable
+                          //     ? null
+                          //     :
+                          () {
+                        modalAction(i);
+                      },
                     )
                 ],
               ),

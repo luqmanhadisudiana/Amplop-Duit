@@ -30,48 +30,66 @@ class _TestPageState extends State<TestPage> {
         coursePointerProvider.getSelectedCourse.toString();
     quizIndexController.text = coursePointerProvider.getselectedQuiz.toString();
 
-    courseIndexController.addListener(onValueChanged);
-    quizIndexController.addListener(onValueChanged);
+    courseIndexController.addListener(() {
+      onValueChanged("course");
+    });
+    quizIndexController.addListener(() {
+      onValueChanged("quiz");
+    });
   }
 
-  void onValueChanged() {
+  void onValueChanged(String text) {
+    debugPrint(text);
     CoursePointerProvider coursePointerProvider =
         Provider.of<CoursePointerProvider>(context, listen: false);
     CourseProvider courseProvider =
         Provider.of<CourseProvider>(context, listen: false);
 
-    if ((int.tryParse(courseIndexController.text) ?? 0) <
-        courseProvider.getCourseList.length) {
-      coursePointerProvider.setNewValue(
-          int.tryParse(courseIndexController.text) ?? 0,
-          int.tryParse(quizIndexController.text) ?? -1);
+    int courseIndex = int.tryParse(courseIndexController.text) ?? 0;
+    int quizIndex = int.tryParse(quizIndexController.text) ?? -1;
+
+    if (courseIndex < courseProvider.getCourseList.length) {
+      coursePointerProvider.setNewValue(courseIndex, quizIndex);
     } else {
-      warning("Index Out Bound");
+      warning();
     }
 
-    if ((int.tryParse(quizIndexController.text) ?? 0) <
-        courseProvider
-            .getCourseList[int.tryParse(quizIndexController.text) ?? 0]
-            .listQuestionAnswer
-            .length) {
-      coursePointerProvider.setNewValue(
-          int.tryParse(courseIndexController.text) ?? 0,
-          int.tryParse(quizIndexController.text) ?? -1);
+    if (quizIndex == -1) {
+      coursePointerProvider.setNewValue(courseIndex, quizIndex);
+    } else if (quizIndex <
+        courseProvider.getCourseList[quizIndex].listQuestionAnswer.length) {
+      coursePointerProvider.setNewValue(courseIndex, quizIndex);
     } else {
-      warning("Index Out Bound");
+      warning();
     }
   }
 
-  void warning(String message) {
-    CustomAlertDialog(
-        title: message, desc: "Coba ganti dengan value yang lebih rendah");
+  void warning() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CustomAlertDialog(
+        title: "Index Out Bound",
+        desc: "Reseting value to default",
+        action: () {
+          courseIndexController.text = (0).toString();
+          quizIndexController.text = (-1).toString();
+
+          Navigator.of(context).pop();
+          FocusManager.instance.primaryFocus?.unfocus(); // Unfocus TextField
+        },
+      ),
+    );
   }
 
   @override
   void dispose() {
-    courseIndexController.removeListener(onValueChanged);
+    courseIndexController.removeListener(() {
+      onValueChanged("course");
+    });
     courseIndexController.dispose();
-    quizIndexController.removeListener(onValueChanged);
+    quizIndexController.removeListener(() {
+      onValueChanged("quiz");
+    });
     quizIndexController.dispose();
     super.dispose();
   }

@@ -26,6 +26,19 @@ class CourseProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSelectedAnswer(
+      int indexCourse, int indexQuestion, int indexOfAnswer) {
+    listCourse[indexCourse].listQuestionAnswer[indexQuestion].selectedAnswer =
+        indexOfAnswer;
+    notifyListeners();
+  }
+
+  int getSelectedAnswer(int indexCourse, int indexQuestion) {
+    return listCourse[indexCourse]
+        .listQuestionAnswer[indexQuestion]
+        .selectedAnswer;
+  }
+
   bool getQuestionStatus(int indexCourse, int indexQuestion) {
     return listCourse[indexCourse].listQuestionAnswer[indexQuestion].isDone;
   }
