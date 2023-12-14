@@ -18,7 +18,7 @@ class SmartFinancePage extends StatefulWidget {
 }
 
 class _SmartFinancePageState extends State<SmartFinancePage> {
-  String displayText = "Bulanan";
+  String displayText = "";
   List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
   static const customPadding = EdgeInsets.only(left: 16, top: 8);
@@ -67,6 +67,7 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
 
   @override
   Widget build(BuildContext context) {
+    displayText = selectedTable ? "Bulanan" : "Harian";
     return MaterialApp(
       title: "Smart Finace",
       theme: MyAppTheme.buildTheme(),
