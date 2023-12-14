@@ -4,8 +4,7 @@ import 'package:amplop_duit/component/table/data/bulan_data.dart';
 import 'package:amplop_duit/component/table/data/row_data.dart';
 import 'package:amplop_duit/component/table/data/tanggal_data.dart';
 import 'package:amplop_duit/component/table/data/withcolumn_data.dart';
-import 'package:amplop_duit/component/table/table_header.dart';
-import 'package:amplop_duit/component/table/table_row.dart';
+import 'package:amplop_duit/component/table/table_view.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
@@ -207,54 +206,9 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins")),
               ),
-              Container(
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 10.0,
-                      offset: const Offset(0, 4),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    TableHeader(headerData: headTable),
-                    for (var i = 0; i < 3; i++)
-                      TableRowData(
-                        childList: childList,
-                        useDivider: true,
-                      ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 10.0,
-                      offset: const Offset(0, 4),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    TableHeader(headerData: headTable2),
-                    for (var i = 0; i < 5; i++)
-                      TableRowData(
-                        childList: childList2,
-                        useDivider: i % 2 == 0,
-                      ),
-                  ],
-                ),
-              ),
+              selectedTable // Table
+                  ? MyTableView(headerData: headTable, childList: childList)
+                  : MyTableView(headerData: headTable2, childList: childList2)
             ]),
           ),
         ),
