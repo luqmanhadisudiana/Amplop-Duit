@@ -1,5 +1,6 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
+import 'package:amplop_duit/component/switchSection/switch_section.dart';
 import 'package:amplop_duit/component/table/data/bulan_data.dart';
 import 'package:amplop_duit/component/table/data/row_data.dart';
 import 'package:amplop_duit/component/table/data/tanggal_data.dart';
@@ -67,13 +68,13 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   }
 
   bool selectedTable = true;
-
   void changeSelectedTable() {
     setState(() {
       selectedTable = !selectedTable;
     });
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     displayText = selectedTable ? "Bulanan" : "Harian";
@@ -97,60 +98,13 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                           fontFamily: "Poppins"),
                     )),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 1000),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                    ),
-                    child: MainButton(
-                      buttonText: "Bulanan",
-                      bgColor: selectedTable
-                          ? const Color(0xFF725CC8)
-                          : Colors.white,
-                      textColor: selectedTable ? Colors.white : Colors.black,
-                      boxShadow:
-                          selectedTable ? MainButton.defaultBoxShadow : [],
-                      fontSize: 12,
-                      height: 28,
-                      width: 85,
-                      fontWeight: FontWeight.w400,
-                      borderRadius: 6,
-                      action: () {
-                        changeSelectedTable();
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 80,
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 1000),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                    ),
-                    child: MainButton(
-                      buttonText: "Harian",
-                      bgColor: selectedTable
-                          ? Colors.white
-                          : const Color(0xFF725CC8),
-                      textColor: selectedTable ? Colors.black : Colors.white,
-                      boxShadow:
-                          selectedTable ? [] : MainButton.defaultBoxShadow,
-                      fontSize: 12,
-                      height: 28,
-                      width: 85,
-                      fontWeight: FontWeight.w400,
-                      borderRadius: 6,
-                      action: () {
-                        changeSelectedTable();
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              SwitchSection(
+                  leftLabel: "Bulanan",
+                  rightLabel: "Harian",
+                  selected: selectedTable,
+                  action: () {
+                    changeSelectedTable();
+                  }),
               Container(
                   width: MediaQuery.of(context).size.width,
                   height: 105,
