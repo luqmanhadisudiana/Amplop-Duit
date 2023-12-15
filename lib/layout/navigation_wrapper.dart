@@ -16,7 +16,7 @@ class NavigationWrapper extends StatefulWidget {
 }
 
 class _NavigationWrapperState extends State<NavigationWrapper> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {

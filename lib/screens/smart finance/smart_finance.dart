@@ -5,6 +5,7 @@ import 'package:amplop_duit/component/table/data/row_data.dart';
 import 'package:amplop_duit/component/table/data/tanggal_data.dart';
 import 'package:amplop_duit/component/table/data/withcolumn_data.dart';
 import 'package:amplop_duit/component/table/table_view.dart';
+import 'package:amplop_duit/screens/smart%20finance/pendapatan.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,14 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
     ),
   ];
 
+  TextEditingController tempController = TextEditingController();
+  int tempNumber = 0;
+  void changeTempNumber(int number) {
+    setState(() {
+      tempNumber = number;
+    });
+  }
+
   bool selectedTable = true;
 
   void changeSelectedTable() {
@@ -68,6 +77,7 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   @override
   Widget build(BuildContext context) {
     displayText = selectedTable ? "Bulanan" : "Harian";
+    debugPrint(tempNumber.toString());
     return MaterialApp(
       title: "Smart Finace",
       theme: MyAppTheme.buildTheme(),
@@ -157,46 +167,215 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(16),
-                        child: const Column(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Pemasukan uang bulanan",
+                            const Text("Pemasukan uang bulanan",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: "Poppins")),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Row(
                               children: [
                                 Expanded(
                                     child: MyTextField(
+                                  controller: tempController,
+                                  textInputType: TextInputType.number,
                                   hintText: "",
                                   height: 32,
                                   borderRadius: 6,
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                       fontSize: 12,
                                       fontFamily: "Poppins",
                                       fontWeight: FontWeight.w400),
                                 )),
-                                SizedBox(
+                                const SizedBox(
                                   width: 16,
                                 ),
                                 MainButton(
                                   buttonText: "Hitung",
-                                  bgColor: Color(0xFFFF6E30),
+                                  bgColor: const Color(0xFFFF6E30),
                                   height: 32,
                                   fontSize: 12,
                                   borderRadius: 6,
+                                  action: () {
+                                    debugPrint("Change number");
+                                    changeTempNumber(
+                                        int.tryParse(tempController.text) ?? 0);
+                                  },
                                 )
                               ],
                             )
                           ],
                         ),
-                      )
+                      ),
+                    ],
+                  )),
+              // Container Hasil
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 94,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/img/background/Smart Finance - Pemasukan Uang Bulanan Output.svg",
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 16, bottom: 16, right: 16, top: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Pemasukan Bulanan",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Poppins")),
+                                InkWell(
+                                  onTap: () {
+                                    debugPrint("Ubah Pemasukan");
+                                    changeTempNumber(0);
+                                    tempController.text = '';
+                                  },
+                                  child: const Text("Ubah pemasukan",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 8,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Poppins")),
+                                )
+                              ],
+                            ),
+                            Text(formatToMoneyText(tempNumber.toDouble()),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: "Poppins")),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              // Hasil Hitung Metode
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 208,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/img/background/Smart Finance - Pemasukan Uang Bulanan 2.svg",
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Hasil Hitung Dengan Metode",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Poppins")),
+                                const Text("50/30/20",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Poppins")),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("Kebutuhan pokok (50%)",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins")),
+                                    Text(formatToMoneyText(tempNumber * 0.5),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "Poppins")),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("Keinginan (30%)",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins")),
+                                    Text(formatToMoneyText(tempNumber * 0.3),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "Poppins")),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Yang harus ditabung (20%)",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Poppins")),
+                                Text(formatToMoneyText(tempNumber * 0.2),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Poppins")),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   )),
               Align(
@@ -216,6 +395,10 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             debugPrint("Smart Finace");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PendapatanPage()),
+            );
           },
           tooltip: 'Test',
           child: const Icon(Icons.add),

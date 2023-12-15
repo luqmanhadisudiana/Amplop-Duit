@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 
-String formatToMoneyText(int number) {
-  return NumberFormat('Rp #,##0.00', 'id_ID').format(number);
+String formatToMoneyText(double number) {
+  return NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 2)
+      .format(number);
 }

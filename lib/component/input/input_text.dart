@@ -7,6 +7,7 @@ class MyTextField extends StatelessWidget {
   final Color borderColor;
   final double height, width, borderRadius;
   final TextStyle textStyle;
+  final TextInputType? textInputType;
 
   const MyTextField(
       {super.key,
@@ -17,6 +18,7 @@ class MyTextField extends StatelessWidget {
       this.height = 48,
       this.width = double.maxFinite,
       this.borderRadius = 15,
+      this.textInputType,
       this.textStyle = const TextStyle(
           fontSize: 16, fontFamily: "Poppins", fontWeight: FontWeight.w400)});
 
@@ -28,6 +30,7 @@ class MyTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: isPassword,
+        keyboardType: textInputType,
         decoration: InputDecoration(
           labelStyle: textStyle,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
