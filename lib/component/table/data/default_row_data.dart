@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RowDataContainer extends StatelessWidget {
+class DefaultRowData extends StatelessWidget {
   final String text;
   final double fontSize;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Alignment? alignment;
-  const RowDataContainer({
+  const DefaultRowData({
     super.key,
     required this.text,
     this.fontSize = 12,

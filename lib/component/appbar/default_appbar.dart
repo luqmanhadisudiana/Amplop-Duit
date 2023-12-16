@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class DefaultAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final BuildContext parentContext;
+  final Function? action;
 
-  const DefaultAppbar({
-    super.key,
-    required this.title,
-    required this.parentContext,
-  });
+  const DefaultAppbar(
+      {super.key,
+      required this.title,
+      required this.parentContext,
+      this.action});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -25,7 +26,11 @@ class DefaultAppbar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          Navigator.pop(parentContext);
+          if (action != null) {
+            action!();
+          } else {
+            Navigator.pop(parentContext);
+          }
         },
       ),
     );

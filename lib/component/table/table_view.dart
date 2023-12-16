@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class MyTableView extends StatelessWidget {
   final List<String> headerData;
-  final List<Widget> childList;
+  final List<List<Widget>> listOfRowData;
   const MyTableView(
-      {super.key, required this.headerData, required this.childList});
+      {super.key, required this.headerData, required this.listOfRowData});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,31 @@ class MyTableView extends StatelessWidget {
       child: Column(
         children: [
           TableHeader(headerData: headerData),
-          for (var i = 0; i < 3; i++) // will change to childList.length
-            TableRowData(
-              childList: childList,
-              useDivider: true,
-            ),
+          listOfRowData.isEmpty
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  height: 400,
+                  width: double.maxFinite,
+                  color: const Color(0xFFEDEDED),
+                  child: const Center(
+                    child: Text(
+                      "Kamu belum menghitung uangmu",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFFD1D1D1)),
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (var i = 0; i < listOfRowData.length; i++)
+                      TableRowData(
+                        childList: listOfRowData[i],
+                        useDivider: true,
+                      ),
+                  ],
+                )
         ],
       ),
     );

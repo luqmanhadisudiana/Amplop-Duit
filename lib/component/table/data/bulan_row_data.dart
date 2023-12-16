@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class BulanDataContainer extends StatelessWidget {
+class BulanRowData extends StatelessWidget {
   final DateTime date;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
   final EdgeInsets padding;
   final EdgeInsets margin;
-  const BulanDataContainer({
+  const BulanRowData({
     super.key,
     required this.date,
     this.crossAxisAlignment = CrossAxisAlignment.start,

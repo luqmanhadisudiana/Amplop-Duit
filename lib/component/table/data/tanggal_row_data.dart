@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class TanggalDataContainer extends StatelessWidget {
+class TanggalRowData extends StatelessWidget {
   final DateTime date;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
-  const TanggalDataContainer({
+  const TanggalRowData({
     super.key,
     required this.date,
     this.crossAxisAlignment = CrossAxisAlignment.start,

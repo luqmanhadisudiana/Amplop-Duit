@@ -2,6 +2,8 @@ import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/row_label_input.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
+import 'package:amplop_duit/models/finance.dart';
+import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
@@ -12,17 +14,16 @@ import 'package:intl/intl.dart';
 class PendapatanPage extends StatefulWidget {
   const PendapatanPage({super.key});
 
-  // final String? restorationId;
-
   @override
   State<PendapatanPage> createState() => _PendapatanPageState();
 }
 
 class _PendapatanPageState extends State<PendapatanPage> {
   TextEditingController dateInput = TextEditingController();
-  TextEditingController nominal = TextEditingController();
+  TextEditingController nominalController = TextEditingController();
   TextEditingController deskripsi = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  int nominal = 0;
 
   bool selected = true;
 
@@ -43,9 +44,9 @@ class _PendapatanPageState extends State<PendapatanPage> {
     DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(1950),
+        firstDate: DateTime(2000),
         //DateTime.now() - not to allow to choose before today.
-        lastDate: DateTime(2100));
+        lastDate: DateTime.now());
 
     if (pickedDate != null) {
       debugPrint(pickedDate
@@ -59,20 +60,44 @@ class _PendapatanPageState extends State<PendapatanPage> {
     }
   }
 
+  DateTime? convertToDate(String input) {
+    try {
+      // Membuat objek DateFormat dengan format yang sesuai
+      final DateFormat format = DateFormat('dd/MM/yyyy');
+      // Parse String menjadi DateTime
+      return format.parseStrict(input);
+    } catch (e) {
+      // Jika parsing gagal, kembalikan null
+      return null;
+    }
+  }
+
   void _formatText() {
-    int number = int.tryParse(nominal.text) ?? 0;
+    int number = nominal;
+
     if (!_focusNode.hasFocus) {
-      nominal.text = formatToMoneyText(number.toDouble());
+      nominalController.text = formatToMoneyText(number.toDouble());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(nominal.toString());
     return MaterialApp(
         title: 'Pendapatan',
         theme: MyAppTheme.buildTheme(),
         home: Scaffold(
-          appBar: DefaultAppbar(title: "Pendapatan", parentContext: context),
+          appBar: DefaultAppbar(
+            title: "Pendapatan",
+            parentContext: context,
+            action: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SmartFinancePage()),
+              );
+            },
+          ),
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -84,8 +109,11 @@ class _PendapatanPageState extends State<PendapatanPage> {
                   action: () {
                     changeSelected();
                     dateInput.text = "";
-                    nominal.text = "";
+                    nominalController.text = "";
                     deskripsi.text = "";
+                    setState(() {
+                      nominal = 0;
+                    });
                   },
                 ),
                 RowLabelInput(
@@ -115,7 +143,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
                 ),
                 RowLabelInput(
                   focusNode: _focusNode,
-                  controller: nominal,
+                  controller: nominalController,
                   label: "Nominal",
                   inputDecoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -129,6 +157,11 @@ class _PendapatanPageState extends State<PendapatanPage> {
                         final double newNumericValue =
                             double.tryParse(newValue.text) ?? 0.0;
 
+                        //Save Unformat Nominal
+                        setState(() {
+                          nominal = int.tryParse(newValue.text) ?? 0;
+                        });
+
                         // Mengubah nilai numerik ke dalam format mata uang
                         final formattedValue =
                             formatToMoneyText(newNumericValue);
@@ -136,7 +169,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
                         // Memastikan nilai controller tidak berubah terus-menerus
                         if (formattedValue != newValue.text) {
                           // Update nilai pada controller
-                          nominal.value = TextEditingValue(
+                          nominalController.value = TextEditingValue(
                             text: formattedValue,
                             selection: TextSelection.collapsed(
                                 offset: formattedValue.length),
@@ -154,7 +187,18 @@ class _PendapatanPageState extends State<PendapatanPage> {
                     action: () {
                       debugPrint(dateInput.text);
                       debugPrint(deskripsi.text);
-                      debugPrint(nominal.text);
+                      debugPrint(nominal.toString());
+                      DateTime? parsedDate = convertToDate(dateInput.text);
+
+                      if (parsedDate != null) {
+                        listFinance.add(Finance(
+                            status: selected ? "Uang Masuk" : "Uang Keluar",
+                            deskripsi: deskripsi.text,
+                            datetime: parsedDate,
+                            nominal: nominal));
+                      } else {
+                        debugPrint("Gagal");
+                      }
                     },
                   ),
                 )
