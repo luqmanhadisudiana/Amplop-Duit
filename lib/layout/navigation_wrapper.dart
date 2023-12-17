@@ -9,14 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 
 class NavigationWrapper extends StatefulWidget {
-  const NavigationWrapper({super.key});
+  final int selectedIndex;
+  const NavigationWrapper({super.key, this.selectedIndex = 2});
 
   @override
   State<NavigationWrapper> createState() => _NavigationWrapperState();
 }
 
 class _NavigationWrapperState extends State<NavigationWrapper> {
-  int _selectedIndex = 2;
+  late int _selectedIndex;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,6 +29,9 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   void initState() {
     super.initState();
     // Memeriksa nilai isLogin saat aplikasi dimulai
+    setState(() {
+      _selectedIndex = widget.selectedIndex;
+    });
     loginStatus();
   }
 

@@ -2,7 +2,6 @@ import 'package:amplop_duit/component/card/card_finance_input.dart';
 import 'package:amplop_duit/component/card/card_finance_method.dart';
 import 'package:amplop_duit/component/card/card_finance_result.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
-import 'package:amplop_duit/component/table/data/bulan_row_data.dart';
 import 'package:amplop_duit/component/table/data/default_row_data.dart';
 import 'package:amplop_duit/component/table/data/tanggal_row_data.dart';
 import 'package:amplop_duit/component/table/data/column_row_data.dart';
@@ -11,6 +10,7 @@ import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/screens/smart%20finance/pendapatan.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
+import 'package:amplop_duit/util/sort_datetime.dart';
 import 'package:flutter/material.dart';
 
 class SmartFinancePage extends StatefulWidget {
@@ -25,46 +25,8 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
   static const customPadding = EdgeInsets.only(left: 16, top: 8);
-  List<Widget> childList = [
-    // BulanDataContainer(
-    //   date: DateTime.now(),
-    //   padding: customPadding,
-    // ),
-    // RowDataContainer(
-    //   text: formatToMoneyText(1200000),
-    //   padding: customPadding,
-    // ),
-    // WithColumnContainer(
-    //   topText: formatToMoneyText(1200000),
-    //   bottomText: 'total : ${formatToMoneyText(1200000)}',
-    //   padding: const EdgeInsets.only(right: 16, top: 8),
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    //   crossAxisAlignment: CrossAxisAlignment.end,
-    // )
-  ];
   List<List<Widget>> listOfChild = [];
   late List<List<Widget>> listOfChild2;
-
-  // List<List<Widget>> listOfChild2 = [
-  //   for (var i = 0; i < listFinance.length; i++)
-  //     [
-  //       TanggalDataContainer(
-  //         date: listFinance[i].datetime,
-  //         padding: customPadding,
-  //       ),
-  //       RowDataContainer(
-  //         text: listFinance[i].deskripsi,
-  //         fontSize: 10,
-  //         padding: const EdgeInsets.only(left: 16, top: 8),
-  //       ),
-  //       RowDataContainer(
-  //         text: formatToMoneyText(listFinance[i].nominal.toDouble()),
-  //         fontSize: 10,
-  //         alignment: Alignment.center,
-  //         padding: customPadding,
-  //       ),
-  //     ],
-  // ];
 
   TextEditingController tempController = TextEditingController();
   int tempNumber = 0;
@@ -85,23 +47,26 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   Widget build(BuildContext context) {
     displayText = selectedTable ? "Bulanan" : "Harian";
     debugPrint(listFinance.length.toString());
-    if (listFinance.isNotEmpty) {
+    List<Finance> sortedList =
+        sortByKey(listFinance, (finance) => finance.datetime, descending: true);
+
+    if (sortedList.isNotEmpty) {
       listOfChild2 = [
-        for (var i = 0; i < listFinance.length; i++)
+        for (var i = 0; i < sortedList.length; i++)
           [
             TanggalRowData(
-              date: listFinance[i].datetime,
+              date: sortedList[i].datetime,
               padding: customPadding,
             ),
             ColumnRowData(
-              topText: listFinance[i].deskripsi,
+              topText: sortedList[i].deskripsi,
               bottomText: "",
               version2: true,
-              status: listFinance[i].status,
+              status: sortedList[i].status,
               padding: const EdgeInsets.only(left: 16, top: 8),
             ),
             DefaultRowData(
-              text: formatToMoneyText(listFinance[i].nominal.toDouble()),
+              text: formatToMoneyText(sortedList[i].nominal.toDouble()),
               fontSize: 10,
               alignment: Alignment.center,
               padding: customPadding,
