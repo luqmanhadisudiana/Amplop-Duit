@@ -23,8 +23,8 @@ class SmartFinancePage extends StatefulWidget {
 
 class _SmartFinancePageState extends State<SmartFinancePage> {
   String displayText = "";
-  List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
-  List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
+  List<String> monthlyHeaderTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
+  List<String> dailyHeaderTable = ["Tanggal", 'Deskripsi', 'Nominal'];
   static const customPadding = EdgeInsets.only(left: 16, top: 8);
   late List<FinanceRowHelper> monthlyFinanceRow;
   late List<FinanceRowHelper> dailyFinancesRow;
@@ -99,27 +99,6 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
           ),
         ]));
       });
-
-      // monthlyFinanceRow = [
-      // for (var i = 0; i < sortedMonth.length; i++)
-      //   FinanceRowHelper(status: true, widgets: [
-      //     BulanRowData(
-      //       date: DateTime.now(),
-      //       padding: customPadding,
-      //     ),
-      //     DefaultRowData(
-      //       text: formatToMoneyText(1200000),
-      //       padding: customPadding,
-      //     ),
-      //     ColumnRowData(
-      //       topText: formatToMoneyText(1200000),
-      //       bottomText: 'total : ${formatToMoneyText(1200000)}',
-      //       padding: const EdgeInsets.only(right: 16, top: 8),
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       crossAxisAlignment: CrossAxisAlignment.end,
-      //     )
-      //   ])
-      // ];
     }
 
     if (dailyFinances.isNotEmpty) {
@@ -208,9 +187,10 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
               ),
               selectedTable // Table
                   ? MyTableView(
-                      headerData: headTable, listOfRowData: monthlyFinanceRow)
+                      headerData: monthlyHeaderTable,
+                      listOfRowData: monthlyFinanceRow)
                   : MyTableView(
-                      headerData: headTable2,
+                      headerData: dailyHeaderTable,
                       listOfRowData: dailyFinancesRow,
                     )
             ]),
