@@ -1,4 +1,7 @@
-import 'package:amplop_duit/component/button/main_button.dart';
+import 'package:amplop_duit/component/card/card_history.dart';
+import 'package:amplop_duit/component/card/card_mistake_status.dart';
+import 'package:amplop_duit/component/card/card_quiz_result.dart';
+import 'package:amplop_duit/component/customInkwell/custom_inkwell.dart';
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -8,20 +11,50 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: Build History Page
     // return const Text("History Page");
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        child: const MainButton(
-          buttonText: "Percobaan",
-          width: double.maxFinite,
-          height: 64,
-          bgColor: Colors.green,
-          textColor: Colors.black,
-          borderColor: Color(0xFF9382D5),
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          boxShadow: [],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const CardQuizResult(
+              status: true,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const CardQuizResult(
+              status: false,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Column(
+              children: [
+                CustomInkwell(
+                  text: "test",
+                  margin: EdgeInsets.only(bottom: 12),
+                ),
+                CustomInkwell(
+                  text: "test 2",
+                  margin: EdgeInsets.only(bottom: 12),
+                ),
+                CustomInkwell(
+                  text: "test 2",
+                  margin: EdgeInsets.only(bottom: 12),
+                  bgImageUrl: "assets/img/background/History-Kesalahan.png",
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const CardMistakeStatus(),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const CardHistory(),
+          )
+        ],
       ),
     );
   }

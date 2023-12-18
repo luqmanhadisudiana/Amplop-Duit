@@ -2,8 +2,8 @@ import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/row_label_input.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/models/finance.dart';
-import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +94,9 @@ class _PendapatanPageState extends State<PendapatanPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const SmartFinancePage()),
+                    builder: (context) => const NavigationWrapper(
+                          selectedIndex: 3,
+                        )),
               );
             },
           ),
@@ -102,7 +104,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
             child: Column(
               children: [
                 SwitchSection(
-                  width: 120,
+                  width: 150,
                   leftLabel: "Uang Masuk",
                   rightLabel: "Uang Keluar",
                   selected: selected,

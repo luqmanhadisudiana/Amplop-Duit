@@ -13,7 +13,7 @@ class SwitchSection extends StatelessWidget {
       this.action,
       required this.leftLabel,
       required this.rightLabel,
-      this.width = 85});
+      this.width = 120});
 
   @override
   Widget build(BuildContext context) {

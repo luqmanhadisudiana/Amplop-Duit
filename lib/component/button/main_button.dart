@@ -10,7 +10,7 @@ class MainButton extends StatelessWidget {
   final FontWeight fontWeight;
   final List<BoxShadow>? boxShadow;
   final EdgeInsets? padding, margin;
-  final Alignment? alignment;
+  final Alignment alignment;
 
   static List<BoxShadow> defaultBoxShadow = [
     BoxShadow(
@@ -43,43 +43,46 @@ class MainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: isDisabled
-          ? null
-          : () {
-              if (action != null && !isDisabled) {
-                action!();
-              }
-            },
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+    return Container(
+      padding: padding,
+      margin: margin,
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+        color: isDisabled ? disabledColor : bgColor,
+        boxShadow: boxShadow ?? defaultBoxShadow,
+        border: Border.all(
+          color: borderColor,
+          width: 1.0,
         ),
       ),
-      child: Container(
-        padding: padding,
-        margin: margin,
-        width: width,
-        height: height,
-        alignment: alignment,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-          color: isDisabled ? disabledColor : bgColor,
-          boxShadow: boxShadow ?? defaultBoxShadow,
-          border: Border.all(
-            color: borderColor,
-            width: 1.0,
-          ),
-        ),
-        child: Text(
-          buttonText,
-          style: TextStyle(
-            fontFamily: "Poppins",
-            color: isDisabled ? disabledTextColor : textColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
+      child: ElevatedButton(
+        onPressed: isDisabled
+            ? null
+            : () {
+                if (action != null && !isDisabled) {
+                  action!();
+                }
+              },
+        style: ElevatedButton.styleFrom(
+            shadowColor: Colors.black, // Warna shadow
+            elevation: 3, // Tinggi shadow
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+            ),
+            backgroundColor: bgColor,
+            foregroundColor: bgColor),
+        child: Align(
+          alignment: alignment,
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              fontFamily: "Poppins",
+              color: isDisabled ? disabledTextColor : textColor,
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+            ),
           ),
         ),
       ),
