@@ -13,7 +13,7 @@ class TableRowData extends StatelessWidget {
       this.crossAxisAlignment = CrossAxisAlignment.start,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.spaceHeight = 8.0,
-      this.useDivider = false,
+      this.useDivider = true,
       this.customWidth = const [0.20, 0.4, 0.4]});
 
   @override

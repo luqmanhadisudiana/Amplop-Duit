@@ -1,12 +1,16 @@
 import 'package:amplop_duit/component/table/table_header.dart';
 import 'package:amplop_duit/component/table/table_row.dart';
+import 'package:amplop_duit/models/finance.dart';
 import 'package:flutter/material.dart';
 
 class MyTableView extends StatelessWidget {
   final List<String> headerData;
-  final List<List<Widget>> listOfRowData;
-  const MyTableView(
-      {super.key, required this.headerData, required this.listOfRowData});
+  final List<FinanceRowHelper> listOfRowData;
+  const MyTableView({
+    super.key,
+    required this.headerData,
+    required this.listOfRowData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +50,8 @@ class MyTableView extends StatelessWidget {
                   children: [
                     for (var i = 0; i < listOfRowData.length; i++)
                       TableRowData(
-                        childList: listOfRowData[i],
-                        useDivider: true,
+                        childList: listOfRowData[i].widgets,
+                        useDivider: listOfRowData[i].status,
                       ),
                   ],
                 )

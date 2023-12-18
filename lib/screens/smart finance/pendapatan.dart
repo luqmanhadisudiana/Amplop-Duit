@@ -191,7 +191,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
                       DateTime? parsedDate = convertToDate(dateInput.text);
 
                       if (parsedDate != null) {
-                        listFinance.add(Finance(
+                        listFinance.add(DailyFinance(
                             status: selected ? "Uang Masuk" : "Uang Keluar",
                             deskripsi: deskripsi.text,
                             datetime: parsedDate,

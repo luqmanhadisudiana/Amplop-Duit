@@ -2,6 +2,7 @@ import 'package:amplop_duit/component/card/card_finance_input.dart';
 import 'package:amplop_duit/component/card/card_finance_method.dart';
 import 'package:amplop_duit/component/card/card_finance_result.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
+import 'package:amplop_duit/component/table/data/bulan_row_data.dart';
 import 'package:amplop_duit/component/table/data/default_row_data.dart';
 import 'package:amplop_duit/component/table/data/tanggal_row_data.dart';
 import 'package:amplop_duit/component/table/data/column_row_data.dart';
@@ -25,14 +26,14 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   List<String> headTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   List<String> headTable2 = ["Tanggal", 'Deskripsi', 'Nominal'];
   static const customPadding = EdgeInsets.only(left: 16, top: 8);
-  List<List<Widget>> listOfChild = [];
-  late List<List<Widget>> listOfChild2;
+  late List<FinanceRowHelper> monthlyFinanceRow;
+  late List<FinanceRowHelper> dailyFinancesRow;
 
   TextEditingController tempController = TextEditingController();
-  int tempNumber = 0;
-  void changeTempNumber(int number) {
+  int income = 0;
+  void changeIncome(int number) {
     setState(() {
-      tempNumber = number;
+      income = number;
     });
   }
 
@@ -43,39 +44,116 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
     });
   }
 
+  bool dividerRenderConditio() {
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     displayText = selectedTable ? "Bulanan" : "Harian";
-    debugPrint(listFinance.length.toString());
-    List<Finance> sortedList =
+    debugPrint('panjanga list finance : ${listFinance.length.toString()}');
+    List<DailyFinance> dailyFinances =
         sortByKey(listFinance, (finance) => finance.datetime, descending: true);
 
-    if (sortedList.isNotEmpty) {
-      listOfChild2 = [
-        for (var i = 0; i < sortedList.length; i++)
-          [
-            TanggalRowData(
-              date: sortedList[i].datetime,
-              padding: customPadding,
-            ),
-            ColumnRowData(
-              topText: sortedList[i].deskripsi,
-              bottomText: "",
-              version2: true,
-              status: sortedList[i].status,
-              padding: const EdgeInsets.only(left: 16, top: 8),
-            ),
-            DefaultRowData(
-              text: formatToMoneyText(sortedList[i].nominal.toDouble()),
-              fontSize: 10,
-              alignment: Alignment.center,
-              padding: customPadding,
-            ),
-          ],
+    Map<String, List<DailyFinance>> sortedMonth =
+        groupByMonth(listFinance, (finance) {
+      String month = "${finance.datetime.month}".padLeft(2, '0');
+      String year = "${finance.datetime.year}";
+      return "$year-$month";
+    }, ascending: false);
+
+    if (sortedMonth.isEmpty) {
+      monthlyFinanceRow = [];
+    } else {
+      debugPrint('Map sortedMonth tidak kosong, ${sortedMonth.length}');
+      monthlyFinanceRow = [];
+      sortedMonth.forEach((month, finance) {
+        int countTemp = 0;
+        for (var data in finance) {
+          if (data.status == "Uang Keluar") {
+            countTemp -= data.nominal;
+          } else {
+            countTemp += data.nominal;
+          }
+        }
+
+        debugPrint('$month: ${countTemp.toString()}');
+        debugPrint('$income $countTemp ${(income - (-countTemp))}');
+
+        monthlyFinanceRow.add(FinanceRowHelper(status: true, widgets: [
+          BulanRowData(
+            date: parseYearMonth(month),
+            padding: customPadding,
+          ),
+          DefaultRowData(
+            text: formatToMoneyText(income.toDouble()),
+            padding: customPadding,
+          ),
+          ColumnRowData(
+            topText: formatToMoneyText(countTemp.abs().toDouble()),
+            bottomText:
+                'total : ${formatToMoneyText((income - (-countTemp)).toDouble())}',
+            padding: const EdgeInsets.only(right: 16, top: 8),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+          ),
+        ]));
+      });
+
+      // monthlyFinanceRow = [
+      // for (var i = 0; i < sortedMonth.length; i++)
+      //   FinanceRowHelper(status: true, widgets: [
+      //     BulanRowData(
+      //       date: DateTime.now(),
+      //       padding: customPadding,
+      //     ),
+      //     DefaultRowData(
+      //       text: formatToMoneyText(1200000),
+      //       padding: customPadding,
+      //     ),
+      //     ColumnRowData(
+      //       topText: formatToMoneyText(1200000),
+      //       bottomText: 'total : ${formatToMoneyText(1200000)}',
+      //       padding: const EdgeInsets.only(right: 16, top: 8),
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       crossAxisAlignment: CrossAxisAlignment.end,
+      //     )
+      //   ])
+      // ];
+    }
+
+    if (dailyFinances.isNotEmpty) {
+      dailyFinancesRow = [
+        for (var i = 0; i < dailyFinances.length; i++)
+          FinanceRowHelper(
+              status: i != dailyFinances.length - 1
+                  ? dailyFinances[i].datetime.month !=
+                          dailyFinances[i + 1].datetime.month
+                      ? true
+                      : false
+                  : false,
+              widgets: [
+                TanggalRowData(
+                  date: dailyFinances[i].datetime,
+                  padding: customPadding,
+                ),
+                ColumnRowData(
+                  topText: dailyFinances[i].deskripsi,
+                  bottomText: "",
+                  version2: true,
+                  status: dailyFinances[i].status,
+                  padding: const EdgeInsets.only(left: 16, top: 8),
+                ),
+                DefaultRowData(
+                  text: formatToMoneyText(dailyFinances[i].nominal.toDouble()),
+                  fontSize: 10,
+                  alignment: Alignment.center,
+                  padding: customPadding,
+                ),
+              ])
       ];
     } else {
-      // Jika listFinance kosong, inisialisasikan listOfChild2 sebagai list kosong
-      listOfChild2 = [];
+      dailyFinancesRow = [];
     }
 
     return MaterialApp(
@@ -107,18 +185,18 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
               CardFinanceInput(
                 controller: tempController,
                 action: () {
-                  changeTempNumber(int.tryParse(tempController.text) ?? 0);
+                  changeIncome(int.tryParse(tempController.text) ?? 0);
                 },
               ),
               CardFinanceResult(
-                number: tempNumber.toDouble(),
+                number: income.toDouble(),
                 action: () {
-                  changeTempNumber(0);
+                  changeIncome(0);
                   tempController.text = '';
                 },
               ),
               CardFinanceMethodResult(
-                number: tempNumber.toDouble(),
+                number: income.toDouble(),
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -130,9 +208,11 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
               ),
               selectedTable // Table
                   ? MyTableView(
-                      headerData: headTable, listOfRowData: listOfChild)
+                      headerData: headTable, listOfRowData: monthlyFinanceRow)
                   : MyTableView(
-                      headerData: headTable2, listOfRowData: listOfChild2)
+                      headerData: headTable2,
+                      listOfRowData: dailyFinancesRow,
+                    )
             ]),
           ),
         ),
