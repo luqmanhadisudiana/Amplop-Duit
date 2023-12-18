@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class MainButton extends StatelessWidget {
   static const Color defaultBoxShadowColor = Color(0xFF000000);
   final String buttonText;
-  final Color bgColor, textColor, disabledColor, disabledTextColor;
+  final Color bgColor, textColor, disabledColor, disabledTextColor, borderColor;
   final Function? action;
   final double width, height, fontSize, borderRadius;
   final bool isDisabled;
   final FontWeight fontWeight;
   final List<BoxShadow>? boxShadow;
+  final EdgeInsets? padding, margin;
+  final Alignment? alignment;
 
   static List<BoxShadow> defaultBoxShadow = [
     BoxShadow(
@@ -33,30 +35,42 @@ class MainButton extends StatelessWidget {
       this.isDisabled = false,
       this.fontWeight = FontWeight.w600,
       this.borderRadius = 15,
-      this.boxShadow});
+      this.boxShadow,
+      this.margin,
+      this.padding,
+      this.borderColor = Colors.transparent,
+      this.alignment = Alignment.center});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
+    return TextButton(
+      onPressed: isDisabled
+          ? null
+          : () {
+              if (action != null && !isDisabled) {
+                action!();
+              }
+            },
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
+      ),
+      child: Container(
+        padding: padding,
+        margin: margin,
+        width: width,
+        height: height,
+        alignment: alignment,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           color: isDisabled ? disabledColor : bgColor,
-          boxShadow: boxShadow ?? defaultBoxShadow),
-      child: TextButton(
-        onPressed: isDisabled
-            ? null
-            : () {
-                if (action != null && !isDisabled) {
-                  action!();
-                }
-              },
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          boxShadow: boxShadow ?? defaultBoxShadow,
+          border: Border.all(
+            color: borderColor,
+            width: 1.0,
           ),
         ),
         child: Text(

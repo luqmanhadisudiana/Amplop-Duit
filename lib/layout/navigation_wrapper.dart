@@ -1,3 +1,4 @@
+import 'package:amplop_duit/screens/history/history.dart';
 import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
 import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
@@ -10,7 +11,7 @@ import 'package:amplop_duit/screens/auth/login.dart';
 
 class NavigationWrapper extends StatefulWidget {
   final int selectedIndex;
-  const NavigationWrapper({super.key, this.selectedIndex = 2});
+  const NavigationWrapper({super.key, this.selectedIndex = 3});
 
   @override
   State<NavigationWrapper> createState() => _NavigationWrapperState();
@@ -63,7 +64,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     const MyHomePage(),
     const LeaderboardPage(),
     const SmartFinancePage(),
-    const MyHomePage(),
+    const HistoryPage(),
     const MyHomePage(),
   ];
   @override
