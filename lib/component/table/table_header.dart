@@ -1,12 +1,11 @@
+import 'package:amplop_duit/component/table/setting.dart';
 import 'package:flutter/material.dart';
 
 class TableHeader extends StatelessWidget {
   final List<String> headerData;
   final List<double> customWidth;
   const TableHeader(
-      {super.key,
-      required this.headerData,
-      this.customWidth = const [0.20, 0.4, 0.4]});
+      {super.key, required this.headerData, this.customWidth = defaultWidth});
 
   @override
   Widget build(BuildContext context) {

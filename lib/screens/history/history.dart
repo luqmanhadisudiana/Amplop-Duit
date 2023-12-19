@@ -39,7 +39,8 @@ class HistoryPage extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 12),
                 ),
                 CustomInkwell(
-                  text: "test 2",
+                  text: "Kesalahanmu",
+                  textColor: Colors.white,
                   margin: EdgeInsets.only(bottom: 12),
                   bgImageUrl: "assets/img/background/History-Kesalahan.png",
                 ),

@@ -1,3 +1,4 @@
+import 'package:amplop_duit/component/table/setting.dart';
 import 'package:flutter/material.dart';
 
 class TableRowData extends StatelessWidget {
@@ -14,7 +15,7 @@ class TableRowData extends StatelessWidget {
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.spaceHeight = 8.0,
       this.useDivider = true,
-      this.customWidth = const [0.20, 0.4, 0.4]});
+      this.customWidth = defaultWidth});
 
   @override
   Widget build(BuildContext context) {

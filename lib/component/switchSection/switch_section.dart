@@ -5,7 +5,7 @@ class SwitchSection extends StatelessWidget {
   final bool selected;
   final Function? action;
   final String leftLabel, rightLabel;
-  final double width;
+  final double width, spacerWidth;
 
   const SwitchSection(
       {super.key,
@@ -13,7 +13,8 @@ class SwitchSection extends StatelessWidget {
       this.action,
       required this.leftLabel,
       required this.rightLabel,
-      this.width = 120});
+      this.width = 120,
+      this.spacerWidth = 80});
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +37,14 @@ class SwitchSection extends StatelessWidget {
             fontWeight: FontWeight.w400,
             borderRadius: 6,
             action: () {
-              if (action != null) {
+              if (action != null && selected == false) {
                 action!();
               }
             },
           ),
         ),
-        const SizedBox(
-          width: 80,
+        SizedBox(
+          width: spacerWidth,
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 1000),

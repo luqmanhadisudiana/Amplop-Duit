@@ -23,9 +23,6 @@ class TanggalRowData extends StatelessWidget {
     String formatedDay = DateFormat.E('id_ID').format(date);
     String monthYear = DateFormat('MM.yyyy').format(date);
 
-    debugPrint(stringNumberData);
-    debugPrint(formatedDay);
-    debugPrint(monthYear);
     return Container(
       margin: margin,
       padding: padding,

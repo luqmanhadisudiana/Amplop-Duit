@@ -11,7 +11,7 @@ import 'package:amplop_duit/screens/auth/login.dart';
 
 class NavigationWrapper extends StatefulWidget {
   final int selectedIndex;
-  const NavigationWrapper({super.key, this.selectedIndex = 3});
+  const NavigationWrapper({super.key, this.selectedIndex = 0});
 
   @override
   State<NavigationWrapper> createState() => _NavigationWrapperState();

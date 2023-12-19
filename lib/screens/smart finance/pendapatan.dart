@@ -1,5 +1,6 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/button/main_button.dart';
+import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/component/input/row_label_input.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
@@ -82,7 +83,6 @@ class _PendapatanPageState extends State<PendapatanPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(nominal.toString());
     return MaterialApp(
         title: 'Pendapatan',
         theme: MyAppTheme.buildTheme(),
@@ -95,7 +95,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const NavigationWrapper(
-                          selectedIndex: 3,
+                          selectedIndex: 2,
                         )),
               );
             },
@@ -105,6 +105,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
               children: [
                 SwitchSection(
                   width: 150,
+                  spacerWidth: 40,
                   leftLabel: "Uang Masuk",
                   rightLabel: "Uang Keluar",
                   selected: selected,
@@ -118,70 +119,85 @@ class _PendapatanPageState extends State<PendapatanPage> {
                     });
                   },
                 ),
-                RowLabelInput(
-                  controller: dateInput,
-                  label: "Tanggal",
-                  inputDecoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.calendar_today,
-                        color: Colors.black,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                  child: Column(
+                    children: [
+                      RowLabelInput(
+                        controller: dateInput,
+                        label: "Tanggal",
+                        inputDecoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.calendar_today,
+                              color: Colors.black,
+                            ),
+                            onPressed: null,
+                          ),
+                        ),
+                        readOnly: true,
+                        action: () {
+                          datePickAction();
+                        },
                       ),
-                      onPressed: null,
-                    ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      RowLabelInput(
+                        controller: deskripsi,
+                        label: "Deskripsi",
+                        inputDecoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      RowLabelInput(
+                        focusNode: _focusNode,
+                        controller: nominalController,
+                        label: "Nominal",
+                        textInputType: TextInputType.number,
+                        inputDecoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}')),
+                          TextInputFormatter.withFunction(
+                            (oldValue, newValue) {
+                              // Mengambil nilai numerik dari teks
+                              final double newNumericValue =
+                                  double.tryParse(newValue.text) ?? 0.0;
+
+                              //Save Unformat Nominal
+                              setState(() {
+                                nominal = int.tryParse(newValue.text) ?? 0;
+                              });
+
+                              // Mengubah nilai numerik ke dalam format mata uang
+                              final formattedValue =
+                                  formatToMoneyText(newNumericValue);
+
+                              // Memastikan nilai controller tidak berubah terus-menerus
+                              if (formattedValue != newValue.text) {
+                                // Update nilai pada controller
+                                nominalController.value = TextEditingValue(
+                                  text: formattedValue,
+                                  selection: TextSelection.collapsed(
+                                      offset: formattedValue.length),
+                                );
+                              }
+
+                              return newValue;
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  readOnly: true,
-                  action: () {
-                    datePickAction();
-                  },
-                ),
-                RowLabelInput(
-                  controller: deskripsi,
-                  label: "Deskripsi",
-                  inputDecoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                  ),
-                ),
-                RowLabelInput(
-                  focusNode: _focusNode,
-                  controller: nominalController,
-                  label: "Nominal",
-                  inputDecoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                    TextInputFormatter.withFunction(
-                      (oldValue, newValue) {
-                        // Mengambil nilai numerik dari teks
-                        final double newNumericValue =
-                            double.tryParse(newValue.text) ?? 0.0;
-
-                        //Save Unformat Nominal
-                        setState(() {
-                          nominal = int.tryParse(newValue.text) ?? 0;
-                        });
-
-                        // Mengubah nilai numerik ke dalam format mata uang
-                        final formattedValue =
-                            formatToMoneyText(newNumericValue);
-
-                        // Memastikan nilai controller tidak berubah terus-menerus
-                        if (formattedValue != newValue.text) {
-                          // Update nilai pada controller
-                          nominalController.value = TextEditingValue(
-                            text: formattedValue,
-                            selection: TextSelection.collapsed(
-                                offset: formattedValue.length),
-                          );
-                        }
-
-                        return newValue;
-                      },
-                    ),
-                  ],
                 ),
                 Center(
                   child: MainButton(
@@ -198,7 +214,20 @@ class _PendapatanPageState extends State<PendapatanPage> {
                             deskripsi: deskripsi.text,
                             datetime: parsedDate,
                             nominal: nominal));
+
+                        CustomAlertDialog(
+                          title: "Data Berhasil ditambahkan",
+                          desc:
+                              '${selected ? "Uang masuk" : "Uang keluar"} sebesar $nominal untuk $deskripsi',
+                          customIcon: const Icon(
+                            Icons.check_circle_outline,
+                            color: Colors.green,
+                          ),
+                        );
                       } else {
+                        const CustomAlertDialog(
+                            title: "Data Tidak berhasil ditambahkan",
+                            desc: 'Periksa kembali saat penginputan data');
                         debugPrint("Gagal");
                       }
                     },

@@ -161,21 +161,35 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                   action: () {
                     changeSelectedTable();
                   }),
-              CardFinanceInput(
-                controller: tempController,
-                action: () {
-                  changeIncome(int.tryParse(tempController.text) ?? 0);
-                },
+              const SizedBox(
+                height: 24,
               ),
-              CardFinanceResult(
-                number: income.toDouble(),
-                action: () {
-                  changeIncome(0);
-                  tempController.text = '';
-                },
-              ),
-              CardFinanceMethodResult(
-                number: income.toDouble(),
+              income == 0
+                  ? CardFinanceInput(
+                      controller: tempController,
+                      action: () {
+                        changeIncome(int.tryParse(tempController.text) ?? 0);
+                      },
+                    )
+                  : Column(
+                      children: [
+                        CardFinanceResult(
+                          number: income.toDouble(),
+                          action: () {
+                            changeIncome(0);
+                            tempController.text = '';
+                          },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        CardFinanceMethodResult(
+                          number: income.toDouble(),
+                        ),
+                      ],
+                    ),
+              const SizedBox(
+                height: 24,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -184,6 +198,9 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins")),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               selectedTable // Table
                   ? MyTableView(
