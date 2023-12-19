@@ -21,7 +21,7 @@ class StatisticSection extends StatelessWidget {
           ),
           // decoration: BoxDecoration(color: Colors.blue),
           SizedBox(
-            height: 16.0,
+            height: 15.0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,14 +30,14 @@ class StatisticSection extends StatelessWidget {
                   title: 'Runtutan Harian',
                   value: '5 Hari',
                   imageUrl: 'assets/img/home/Card-State-Day.png'),
-              SizedBox(width: 30),
+              SizedBox(width: 15),
               CardState(
                   title: 'Total Poin',
                   value: '2805',
                   imageUrl: 'assets/img/home/Card-State-Total-Point.png'),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -45,7 +45,7 @@ class StatisticSection extends StatelessWidget {
                   title: 'Sisa Waktu',
                   value: '2 Hari',
                   imageUrl: 'assets/img/home/Card-State-Countdown.png'),
-              SizedBox(width: 30),
+              SizedBox(width: 15),
               CardState(
                   title: 'Posisi Tertinggi',
                   value: '2',

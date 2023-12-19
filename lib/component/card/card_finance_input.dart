@@ -23,6 +23,7 @@ class CardFinanceInput extends StatelessWidget {
               "assets/img/background/Smart Finance - Pemasukan Uang Bulanan 1.svg",
               fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
             ),
             Container(
               padding: const EdgeInsets.all(16),
@@ -59,7 +60,9 @@ class CardFinanceInput extends StatelessWidget {
                       MainButton(
                         buttonText: "Hitung",
                         bgColor: const Color(0xFFFF6E30),
+                        padding: const EdgeInsets.all(0),
                         height: 32,
+                        width: 80,
                         fontSize: 12,
                         borderRadius: 6,
                         action: () {

@@ -133,6 +133,9 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 ),
                               ],
                             ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Center(
                       child: MainButton(
                           isDisabled: coursePointerProvider.getselectedQuiz <

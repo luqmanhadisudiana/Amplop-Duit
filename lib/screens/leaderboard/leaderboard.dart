@@ -14,6 +14,7 @@ class LeaderboardPage extends StatefulWidget {
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
   int liga = 0;
+  List<String> listLiga = ["", "Perunggu", "Perak", "Emas", "Berlian", "Rubi"];
   @override
   void initState() {
     super.initState();
@@ -61,9 +62,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text(
-                    "Liga Perunggu",
-                    style: TextStyle(
+                  Text(
+                    "Liga ${listLiga[liga]}",
+                    style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         fontFamily: "Poppins"),

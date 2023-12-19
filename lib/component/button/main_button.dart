@@ -44,7 +44,6 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding,
       margin: margin,
       width: width,
       height: height,
@@ -66,13 +65,15 @@ class MainButton extends StatelessWidget {
                 }
               },
         style: ElevatedButton.styleFrom(
-            shadowColor: Colors.black, // Warna shadow
-            elevation: 3, // Tinggi shadow
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-            ),
-            backgroundColor: bgColor,
-            foregroundColor: bgColor),
+          shadowColor: Colors.black, // Warna shadow
+          elevation: 3, // Tinggi shadow
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          ),
+          backgroundColor: bgColor,
+          foregroundColor: bgColor,
+          padding: padding,
+        ),
         child: Align(
           alignment: alignment,
           child: Text(

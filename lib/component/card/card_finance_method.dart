@@ -22,6 +22,7 @@ class CardFinanceMethodResult extends StatelessWidget {
               "assets/img/background/Smart Finance - Pemasukan Uang Bulanan 2.svg",
               fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
             ),
             Container(
               padding: const EdgeInsets.all(16),

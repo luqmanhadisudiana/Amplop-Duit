@@ -69,9 +69,10 @@ class _TestPageState extends State<TestPage> {
   }
 
   void ligaValueChange() async {
-    if ((int.tryParse(ligaController.text) ?? 0) <= 5) {
+    if ((int.tryParse(ligaController.text) ?? 0) > 0 &&
+        (int.tryParse(ligaController.text) ?? 0) <= 5) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 0);
+      prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
     } else {
       warning();
     }
@@ -217,6 +218,14 @@ class LabelAndTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0), // Radius border
             ),
           ),
+          onTap: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              controller.selection = TextSelection(
+                baseOffset: 0,
+                extentOffset: controller.text.length,
+              );
+            });
+          },
         ),
       ],
     );

@@ -180,6 +180,7 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                     )),
               ),
               SwitchSection(
+                  width: 100,
                   leftLabel: "Bulanan",
                   rightLabel: "Harian",
                   selected: selectedTable,

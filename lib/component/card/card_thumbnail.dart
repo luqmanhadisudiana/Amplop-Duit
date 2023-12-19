@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CardThumbnail extends StatelessWidget {
   final String imageUrl;
@@ -43,20 +44,41 @@ class CardThumbnail extends StatelessWidget {
                     ? Image.network(
                         imageUrl,
                         fit: BoxFit.cover,
+                        width: double.maxFinite,
+                        height: 70,
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) {
                             return child;
                           } else {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        (loadingProgress.expectedTotalBytes ??
-                                            1)
-                                    : null,
+                            return
+                                // Container(
+                                // padding: const EdgeInsets.only(top: 10),
+                                // child: Column(
+                                // children: [
+                                Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 70,
+                                color: Colors.white,
                               ),
+                              // ),
+                              // Center(
+                              //   child: CircularProgressIndicator(
+                              //     value: loadingProgress.expectedTotalBytes !=
+                              //             null
+                              //         ? loadingProgress
+                              //                 .cumulativeBytesLoaded /
+                              //             (loadingProgress
+                              //                     .expectedTotalBytes ??
+                              //                 1)
+                              //         : null,
+                              //   ),
+                              // ),
+                              // ],
+                              // )
                             );
                           }
                         },
