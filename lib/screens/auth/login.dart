@@ -72,6 +72,7 @@ class LoginPage extends StatefulWidget {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
+    prefs.setInt('currentLiga', 1);
 
     // Navigasi ke halaman HomePage
     WidgetsBinding.instance.addPostFrameCallback((_) {

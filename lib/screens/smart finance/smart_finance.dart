@@ -13,6 +13,7 @@ import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:amplop_duit/util/sort_datetime.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SmartFinancePage extends StatefulWidget {
   const SmartFinancePage({super.key});
@@ -31,10 +32,34 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
 
   TextEditingController tempController = TextEditingController();
   int income = 0;
-  void changeIncome(int number) {
+  void changeIncome(int number) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('income', number);
     setState(() {
       income = number;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getCurrentIncome();
+  }
+
+  void _getCurrentIncome() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? storedIncome = prefs.getInt('income');
+
+    if (storedIncome != null) {
+      setState(() {
+        income = storedIncome;
+      });
+    } else {
+      setState(() {
+        income = 0;
+      });
+    }
   }
 
   bool selectedTable = true;
@@ -77,8 +102,8 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
           }
         }
 
-        debugPrint('$month: ${countTemp.toString()}');
-        debugPrint('$income $countTemp ${(income - (-countTemp))}');
+        // debugPrint('$month: ${countTemp.toString()}');
+        // debugPrint('$income $countTemp ${(income - (-countTemp))}');
 
         monthlyFinanceRow.add(FinanceRowHelper(status: true, widgets: [
           BulanRowData(

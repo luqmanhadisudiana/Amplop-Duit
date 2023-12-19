@@ -1,5 +1,6 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TestPage extends StatefulWidget {
-  const TestPage({super.key});
+  final int? currentIndex;
+  const TestPage({super.key, this.currentIndex});
 
   @override
   State<TestPage> createState() => _TestPageState();
@@ -17,6 +19,7 @@ class _TestPageState extends State<TestPage> {
   late CoursePointerProvider coursePointerProvider;
   TextEditingController courseIndexController = TextEditingController();
   TextEditingController quizIndexController = TextEditingController();
+  TextEditingController ligaController = TextEditingController();
 
   @override
   void initState() {
@@ -35,6 +38,8 @@ class _TestPageState extends State<TestPage> {
     quizIndexController.addListener(() {
       onValueChanged("quiz");
     });
+    ligaController.addListener(ligaValueChange);
+    _getCurrentLiga();
   }
 
   void onValueChanged(String text) {
@@ -63,6 +68,15 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
+  void ligaValueChange() async {
+    if ((int.tryParse(ligaController.text) ?? 0) <= 5) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 0);
+    } else {
+      warning();
+    }
+  }
+
   void warning() {
     showDialog<String>(
       context: context,
@@ -72,6 +86,7 @@ class _TestPageState extends State<TestPage> {
         action: () {
           courseIndexController.text = (1).toString();
           quizIndexController.text = (0).toString();
+          ligaController.text = (1).toString();
 
           Navigator.of(context).pop();
           FocusManager.instance.primaryFocus?.unfocus(); // Unfocus TextField
@@ -104,12 +119,33 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
+  void _getCurrentLiga() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentLiga = prefs.getInt('currentLiga') ?? 0;
+
+    setState(() {
+      ligaController.text = currentLiga.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Test Page",
       home: Scaffold(
-        appBar: DefaultAppbar(title: "Test Page", parentContext: context),
+        appBar: DefaultAppbar(
+          title: "Test Page",
+          parentContext: context,
+          action: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationWrapper(
+                        selectedIndex: widget.currentIndex ?? 0,
+                      )),
+            );
+          },
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -124,6 +160,10 @@ class _TestPageState extends State<TestPage> {
                   LabelAndTextField(
                     label: "Quiz Index",
                     controller: quizIndexController,
+                  ),
+                  LabelAndTextField(
+                    label: "Liga Index",
+                    controller: ligaController,
                   ),
                 ],
               )

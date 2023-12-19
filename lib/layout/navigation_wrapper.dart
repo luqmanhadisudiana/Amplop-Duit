@@ -102,7 +102,9 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const TestPage()));
+                          builder: (context) => TestPage(
+                                currentIndex: _selectedIndex,
+                              )));
                 },
                 tooltip: 'Test Page',
                 child: const Icon(Icons.refresh),

@@ -3,9 +3,31 @@ import 'package:amplop_duit/models/learderboard.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaderboardPage extends StatelessWidget {
-  const LeaderboardPage({Key? key}) : super(key: key);
+class LeaderboardPage extends StatefulWidget {
+  const LeaderboardPage({super.key});
+
+  @override
+  State<LeaderboardPage> createState() => _LeaderboardPageState();
+}
+
+class _LeaderboardPageState extends State<LeaderboardPage> {
+  int liga = 0;
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLiga();
+  }
+
+  void _getCurrentLiga() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentLiga = prefs.getInt('currentLiga') ?? 0;
+
+    setState(() {
+      liga = currentLiga;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +48,9 @@ class LeaderboardPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (var i = 0; i < 5; i++)
-                          i < 1
-                              ? SvgPicture.asset("assets/icon/Liga-Active.svg",
+                          i < liga
+                              ? SvgPicture.asset(
+                                  "assets/icon/Liga-${i + 1}.svg",
                                   height: 50)
                               : SvgPicture.asset(
                                   "assets/icon/Liga-Inactive.svg",
