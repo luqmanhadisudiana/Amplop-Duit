@@ -132,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const StatisticSection(),
                 Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

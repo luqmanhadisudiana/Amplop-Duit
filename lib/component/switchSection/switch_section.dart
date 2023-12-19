@@ -6,6 +6,7 @@ class SwitchSection extends StatelessWidget {
   final Function? action;
   final String leftLabel, rightLabel;
   final double width, spacerWidth;
+  final EdgeInsets padding;
 
   const SwitchSection(
       {super.key,
@@ -14,7 +15,8 @@ class SwitchSection extends StatelessWidget {
       required this.leftLabel,
       required this.rightLabel,
       this.width = 120,
-      this.spacerWidth = 80});
+      this.spacerWidth = 80,
+      this.padding = const EdgeInsets.all(0)});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class SwitchSection extends StatelessWidget {
             fontSize: 12,
             height: 28,
             width: width,
+            padding: padding,
             fontWeight: FontWeight.w400,
             borderRadius: 6,
             action: () {
