@@ -22,8 +22,12 @@ class PendapatanPage extends StatefulWidget {
 class _PendapatanPageState extends State<PendapatanPage> {
   TextEditingController dateInput = TextEditingController();
   TextEditingController nominalController = TextEditingController();
+  TextEditingController nominalFormattedController = TextEditingController();
+  TextEditingController nominalHiddenController = TextEditingController();
+
   TextEditingController deskripsi = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  // final FocusNode _focusNode = FocusNode();
+  final FocusNode _hiddenInputFocusNode = FocusNode();
   int nominal = 0;
 
   bool selected = true;
@@ -38,7 +42,19 @@ class _PendapatanPageState extends State<PendapatanPage> {
   void initState() {
     super.initState();
     dateInput.text = ""; //set the initial value of text field
-    _focusNode.addListener(_formatText);
+    // _focusNode.addListener(_formatText);
+    nominalHiddenController.addListener(() {
+      nominalHiddenController.selection =
+          TextSelection.collapsed(offset: nominalHiddenController.text.length);
+      String visibleInputValue = nominalHiddenController.text;
+      int temp = int.tryParse(visibleInputValue) ?? 0;
+      double tempDouble = temp.toDouble();
+      nominalFormattedController.text =
+          formatToMoneyText(tempDouble, decimal: 0);
+      setState(() {
+        nominal = temp;
+      });
+    });
   }
 
   void datePickAction() async {
@@ -73,12 +89,24 @@ class _PendapatanPageState extends State<PendapatanPage> {
     }
   }
 
-  void _formatText() {
-    int number = nominal;
+  // void _formatText() {
+  //   int number = nominal;
 
-    if (!_focusNode.hasFocus) {
-      nominalController.text = formatToMoneyText(number.toDouble());
-    }
+  //   if (!_focusNode.hasFocus) {
+  //     nominalController.text = formatToMoneyText(number.toDouble());
+  //   }
+  // }
+
+  @override
+  void dispose() {
+    dateInput.dispose();
+    nominalController.dispose();
+    nominalFormattedController.dispose();
+    nominalHiddenController.dispose();
+    deskripsi.dispose();
+    _hiddenInputFocusNode.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -128,7 +156,12 @@ class _PendapatanPageState extends State<PendapatanPage> {
                         controller: dateInput,
                         label: "Tanggal",
                         inputDecoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
                           suffixIcon: IconButton(
                             icon: Icon(
                               Icons.calendar_today,
@@ -149,52 +182,56 @@ class _PendapatanPageState extends State<PendapatanPage> {
                         controller: deskripsi,
                         label: "Deskripsi",
                         inputDecoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 8,
                       ),
                       RowLabelInput(
-                        focusNode: _focusNode,
-                        controller: nominalController,
+                        controller: nominalFormattedController,
                         label: "Nominal",
                         textInputType: TextInputType.number,
                         inputDecoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d+\.?\d{0,2}')),
-                          TextInputFormatter.withFunction(
-                            (oldValue, newValue) {
-                              // Mengambil nilai numerik dari teks
-                              final double newNumericValue =
-                                  double.tryParse(newValue.text) ?? 0.0;
-
-                              //Save Unformat Nominal
-                              setState(() {
-                                nominal = int.tryParse(newValue.text) ?? 0;
-                              });
-
-                              // Mengubah nilai numerik ke dalam format mata uang
-                              final formattedValue =
-                                  formatToMoneyText(newNumericValue);
-
-                              // Memastikan nilai controller tidak berubah terus-menerus
-                              if (formattedValue != newValue.text) {
-                                // Update nilai pada controller
-                                nominalController.value = TextEditingValue(
-                                  text: formattedValue,
-                                  selection: TextSelection.collapsed(
-                                      offset: formattedValue.length),
-                                );
-                              }
-
-                              return newValue;
-                            },
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
                           ),
-                        ],
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
+                        ),
+                        readOnly: true,
+                        action: () {
+                          FocusScope.of(context)
+                              .requestFocus(_hiddenInputFocusNode);
+                        },
+                      ),
+
+                      // Hidden Input
+                      Opacity(
+                        opacity: 0.0,
+                        child: RowLabelInput(
+                          controller: nominalHiddenController,
+                          focusNode: _hiddenInputFocusNode,
+                          label: "Nominal",
+                          textInputType: TextInputType.number,
+                          inputDecoration: const InputDecoration(
+                            border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xFFE9E9E9))),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF5338BC)),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -208,26 +245,34 @@ class _PendapatanPageState extends State<PendapatanPage> {
                       debugPrint(nominal.toString());
                       DateTime? parsedDate = convertToDate(dateInput.text);
 
-                      if (parsedDate != null) {
+                      if (parsedDate != null && nominal != 0) {
                         listFinance.add(DailyFinance(
                             status: selected ? "Uang Masuk" : "Uang Keluar",
                             deskripsi: deskripsi.text,
                             datetime: parsedDate,
                             nominal: nominal));
 
-                        CustomAlertDialog(
-                          title: "Data Berhasil ditambahkan",
-                          desc:
-                              '${selected ? "Uang masuk" : "Uang keluar"} sebesar $nominal untuk $deskripsi',
-                          customIcon: const Icon(
-                            Icons.check_circle_outline,
-                            color: Colors.green,
-                          ),
-                        );
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                CustomAlertDialog(
+                                  title: "Data Berhasil ditambahkan",
+                                  desc:
+                                      '${selected ? "Uang masuk" : "Uang keluar"} sebesar ${formatToMoneyText(nominal.toDouble())} untuk ${deskripsi.text}',
+                                  customIcon: const Icon(
+                                    Icons.check_circle_outline,
+                                    color: Colors.green,
+                                  ),
+                                ));
                       } else {
-                        const CustomAlertDialog(
-                            title: "Data Tidak berhasil ditambahkan",
-                            desc: 'Periksa kembali saat penginputan data');
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                const CustomAlertDialog(
+                                    title: "Data Tidak berhasil ditambahkan",
+                                    desc:
+                                        'Periksa kembali saat penginputan data'));
+
                         debugPrint("Gagal");
                       }
                     },

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 class RowLabelInput extends StatelessWidget {
   final Function? action;
+  final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
   final InputDecoration? inputDecoration;
   final bool readOnly; // Date must true
@@ -14,6 +15,7 @@ class RowLabelInput extends StatelessWidget {
   const RowLabelInput(
       {super.key,
       this.action,
+      this.onChanged,
       this.controller,
       this.inputDecoration,
       this.readOnly = false,
@@ -48,6 +50,7 @@ class RowLabelInput extends StatelessWidget {
                 controller: controller,
                 decoration: inputDecoration,
                 readOnly: readOnly,
+                onChanged: onChanged,
                 onTap: () {
                   if (action != null) {
                     action!();
