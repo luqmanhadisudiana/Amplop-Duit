@@ -51,41 +51,51 @@ class CardFinanceMethodResult extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Kebutuhan pokok (50%)",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Poppins")),
-                          Text(formatToMoneyText(number * 0.5),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "Poppins")),
-                        ],
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Kebutuhan pokok (50%)",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Poppins")),
+                            Text(formatToMoneyText(number * 0.5),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: "Poppins")),
+                          ],
+                        ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Keinginan (30%)",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Poppins")),
-                          Text(formatToMoneyText(number * 0.3),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "Poppins")),
-                        ],
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Keinginan (30%)",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Poppins")),
+                                Text(formatToMoneyText(number * 0.3),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: "Poppins")),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),

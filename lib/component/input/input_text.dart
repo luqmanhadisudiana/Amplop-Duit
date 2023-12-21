@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
@@ -8,6 +9,7 @@ class MyTextField extends StatelessWidget {
   final double height, width, borderRadius;
   final TextStyle textStyle;
   final TextInputType? textInputType;
+  final List<TextInputFormatter> inputFormatters;
 
   const MyTextField(
       {super.key,
@@ -19,6 +21,7 @@ class MyTextField extends StatelessWidget {
       this.width = double.maxFinite,
       this.borderRadius = 15,
       this.textInputType,
+      this.inputFormatters = const [],
       this.textStyle = const TextStyle(
           fontSize: 16, fontFamily: "Poppins", fontWeight: FontWeight.w400)});
 
@@ -31,6 +34,7 @@ class MyTextField extends StatelessWidget {
         controller: controller,
         obscureText: isPassword,
         keyboardType: textInputType,
+        inputFormatters: inputFormatters,
         decoration: InputDecoration(
           labelStyle: textStyle,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),

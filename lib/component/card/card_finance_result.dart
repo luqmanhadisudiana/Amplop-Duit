@@ -12,22 +12,23 @@ class CardFinanceResult extends StatelessWidget {
     // Container Hasil
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: 94,
+        height: 95,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(6.0)),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
+            //BG image
             SvgPicture.asset(
               "assets/img/background/Smart Finance - Pemasukan Uang Bulanan Output.svg",
               fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              // height: MediaQuery.of(context).size.height,
             ),
             Container(
               padding: const EdgeInsets.only(
-                  left: 16, bottom: 16, right: 16, top: 24),
+                  left: 16, bottom: 16, right: 16, top: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

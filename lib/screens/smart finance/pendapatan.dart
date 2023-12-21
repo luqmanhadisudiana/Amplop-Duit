@@ -5,6 +5,7 @@ import 'package:amplop_duit/component/input/row_label_input.dart';
 import 'package:amplop_duit/component/switchSection/switch_section.dart';
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/models/finance.dart';
+import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
@@ -263,6 +264,16 @@ class _PendapatanPageState extends State<PendapatanPage> {
                                     Icons.check_circle_outline,
                                     color: Colors.green,
                                   ),
+                                  action: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SmartFinancePage(
+                                                isDisplayBulanan: false,
+                                              )),
+                                    );
+                                  },
                                 ));
                       } else {
                         showDialog<String>(

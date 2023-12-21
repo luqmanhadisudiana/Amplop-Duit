@@ -20,28 +20,28 @@ class FinanceRowHelper {
   FinanceRowHelper({required this.status, required this.widgets});
 }
 
-// class MonthlyFinance {
-//   final int nominal;
-//   final DateTime datetime;
+class MonthlyFinance {
+  int nominal;
+  final DateTime datetime;
 
-//   const MonthlyFinance({
-//     required this.datetime,
-//     required this.nominal,
-//   });
-// }
+  MonthlyFinance({
+    required this.nominal,
+    required this.datetime,
+  });
+}
 
-// List<Finance> listFinance = [];
+List<MonthlyFinance> listMonthlyFinance = [
+  MonthlyFinance(
+      datetime: DateTime(DateTime.now().year, DateTime.now().month - 1),
+      nominal: 9000000),
+];
+
 List<DailyFinance> listFinance = [
   DailyFinance(deskripsi: "test 1", datetime: DateTime.now(), nominal: 3000),
   DailyFinance(
       deskripsi: "test 4",
       datetime: DateTime(
           DateTime.now().year, DateTime.now().month - 1, DateTime.now().day),
-      nominal: 3000),
-  DailyFinance(
-      deskripsi: "test 6",
-      datetime: DateTime(DateTime.now().year, DateTime.now().month - 3,
-          DateTime.now().day - 4),
       nominal: 3000),
   DailyFinance(
       deskripsi: "test 5",

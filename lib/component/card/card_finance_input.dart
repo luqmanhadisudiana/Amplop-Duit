@@ -1,6 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CardFinanceInput extends StatelessWidget {
@@ -46,6 +47,9 @@ class CardFinanceInput extends StatelessWidget {
                           child: MyTextField(
                         controller: controller,
                         textInputType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         hintText: "",
                         height: 32,
                         borderRadius: 6,
