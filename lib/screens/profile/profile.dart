@@ -4,6 +4,7 @@ import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,9 +17,25 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   List<String> monthlyHeaderTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   List<FinanceRowHelper> dailyFinancesRow = [];
+  int liga = 0;
   bool isLoading = true;
   final String imagePath =
       "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/profile/hadi.png";
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLiga();
+  }
+
+  void _getCurrentLiga() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentLiga = prefs.getInt('currentLiga') ?? 0;
+
+    setState(() {
+      liga = currentLiga;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +46,13 @@ class _ProfilePageState extends State<ProfilePage> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
+                SizedBox(
                     height: 200,
                     width: double.maxFinite,
                     child: Stack(
                       children: [
                         // Image BG
-                        Container(
+                        SizedBox(
                             height: double.maxFinite,
                             width: double.maxFinite,
                             child: Image.network(
@@ -123,8 +140,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             offset: const Offset(0, 4),
                           ),
                         ]),
-                        child: SvgPicture.asset("assets/icon/Liga-1.svg",
-                            height: 50),
+                        child: liga <= 0
+                            ? SvgPicture.asset("assets/icon/Liga-Inactive.svg",
+                                height: 50)
+                            : SvgPicture.asset("assets/icon/Liga-$liga.svg",
+                                height: 50),
                       )
                     ],
                   ),
