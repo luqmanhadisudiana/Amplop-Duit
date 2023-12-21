@@ -41,7 +41,7 @@ class CourseProvider with ChangeNotifier {
 
 class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int selectedCourse = 0;
-  int selectedQuiz = 0;
+  int selectedQuiz = -1;
 
   int get getSelectedCourse => selectedCourse;
   int get getselectedQuiz => selectedQuiz;

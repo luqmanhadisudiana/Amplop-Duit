@@ -2,6 +2,8 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/section/statistic_section.dart';
 import 'package:amplop_duit/models/achievement.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:amplop_duit/screens/course/my_course.dart';
@@ -20,6 +22,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late CoursePointerProvider coursePointerProvider;
   late int level = 0;
+  MyCourseStatus? _myCourseStatus;
+
+  Future<void> _loadMyObject() async {
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+
+    if (myObjectMap != null) {
+      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
+      setState(() {
+        _myCourseStatus = myObject;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -28,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Provider.of<CoursePointerProvider>(context, listen: false);
 
     level = coursePointerProvider.getSelectedCourse + 1;
+    _loadMyObject();
   }
 
   @override
@@ -134,9 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 60,
                                 ),
                                 const SizedBox(width: 21.0),
-                                const Text(
-                                  "5",
-                                  style: TextStyle(
+                                Text(
+                                  _myCourseStatus != null
+                                      ? _myCourseStatus!.heart.toString()
+                                      : "0",
+                                  style: const TextStyle(
                                       color: Color(0xFF3F3F3F),
                                       fontSize: 32,
                                       fontWeight: FontWeight.w600),
@@ -155,9 +173,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 60,
                                 ),
                                 const SizedBox(width: 21.0),
-                                const Text(
-                                  "5",
-                                  style: TextStyle(
+                                Text(
+                                  _myCourseStatus != null
+                                      ? _myCourseStatus!.diamond.toString()
+                                      : "0",
+                                  style: const TextStyle(
                                       color: Color(0xFF3F3F3F),
                                       fontSize: 32,
                                       fontWeight: FontWeight.w600),

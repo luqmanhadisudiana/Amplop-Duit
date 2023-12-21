@@ -1,5 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  MyCourseStatus? _myCourseStatus;
+
+  Future<void> saveMyCourseStatus() async {
+    if (_myCourseStatus != null) {
+      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -101,6 +111,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             // Tambahkan logika yang ingin dilakukan saat div/button diklik
                             debugPrint('Google Login');
                             LoginPage.doLogin(context);
+                            setState(() {
+                              _myCourseStatus =
+                                  MyCourseStatus(heart: 5, diamond: 5);
+                            });
+                            saveMyCourseStatus();
                           },
                           child: Container(
                             width: 150.0,

@@ -1,6 +1,8 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ class _TestPageState extends State<TestPage> {
   TextEditingController courseIndexController = TextEditingController();
   TextEditingController quizIndexController = TextEditingController();
   TextEditingController ligaController = TextEditingController();
+  TextEditingController heartController = TextEditingController();
+  TextEditingController diamondController = TextEditingController();
 
   @override
   void initState() {
@@ -38,8 +42,44 @@ class _TestPageState extends State<TestPage> {
     quizIndexController.addListener(() {
       onValueChanged("quiz");
     });
+
     ligaController.addListener(ligaValueChange);
     _getCurrentLiga();
+    _loadMyObject();
+
+    heartController.addListener(heartAndDiamondValueChanged);
+    diamondController.addListener(heartAndDiamondValueChanged);
+  }
+
+  MyCourseStatus? _myCourseStatus;
+
+  Future<void> _loadMyObject() async {
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+
+    if (myObjectMap != null) {
+      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
+      setState(() {
+        _myCourseStatus = myObject;
+      });
+      heartController.text = myObject.heart.toString();
+      diamondController.text = myObject.diamond.toString();
+    }
+  }
+
+  Future<void> _saveMyObject() async {
+    if (_myCourseStatus != null) {
+      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
+    }
+  }
+
+  void heartAndDiamondValueChanged() {
+    setState(() {
+      _myCourseStatus = MyCourseStatus(
+          heart: int.tryParse(heartController.text) ?? 0,
+          diamond: int.tryParse(diamondController.text) ?? 0);
+    });
+    _saveMyObject();
   }
 
   void onValueChanged(String text) {
@@ -114,6 +154,12 @@ class _TestPageState extends State<TestPage> {
     prefs.clear();
     debugPrint("reset");
 
+    // Reset
+    setState(() {
+      _myCourseStatus?.reset();
+    });
+    _saveMyObject();
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -165,6 +211,29 @@ class _TestPageState extends State<TestPage> {
                   LabelAndTextField(
                     label: "Liga Index",
                     controller: ligaController,
+                  ),
+                  LabelAndTextField(
+                    label: "Heart",
+                    controller: heartController,
+                  ),
+                  LabelAndTextField(
+                    label: "Diamond",
+                    controller: diamondController,
+                  ),
+                  Text(
+                    _myCourseStatus != null
+                        ? 'Diamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}'
+                        : 'No data',
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
+                      });
+                      _saveMyObject();
+                    },
+                    child: const Text('Reset'),
                   ),
                 ],
               )

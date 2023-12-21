@@ -1,5 +1,7 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/auth/forgot_password.dart';
 import 'package:amplop_duit/screens/auth/register.dart';
 import 'package:amplop_duit/screens/loading/main_loading.dart';
@@ -87,6 +89,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late final AnimationController _controller;
 
+  MyCourseStatus? _myCourseStatus;
+
+  Future<void> saveMyCourseStatus() async {
+    if (_myCourseStatus != null) {
+      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,6 +111,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(_myCourseStatus != null ? "tidak null" : "null");
     return Scaffold(
       body: Center(
         child: Column(
@@ -212,6 +223,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   // Tambahkan logika yang ingin dilakukan saat div/button diklik
                   debugPrint('Google Login');
                   LoginPage.doLogin(context);
+                  setState(() {
+                    _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
+                  });
+                  saveMyCourseStatus();
                 },
                 child: Container(
                   width: 150.0,
@@ -243,6 +258,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 width: 170.0,
                 action: () {
                   LoginPage.doLogin(context);
+                  setState(() {
+                    _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
+                  });
+                  saveMyCourseStatus();
                 }),
           ],
         ),
