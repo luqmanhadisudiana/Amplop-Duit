@@ -22,7 +22,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement profile page
     return MaterialApp(
         title: "Smart Finace",
         theme: MyAppTheme.buildTheme(),

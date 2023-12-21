@@ -13,7 +13,6 @@ class CardHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Banner History
     return Container(
       width: width,
       height: height,

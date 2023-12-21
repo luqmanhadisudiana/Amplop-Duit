@@ -18,7 +18,6 @@ class CardQuizResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Card hasil quiz, bisa ada salah dan benar
     return LayoutBuilder(builder: (context, constraints) {
       double expandedWidth = constraints.maxWidth;
       return Container(

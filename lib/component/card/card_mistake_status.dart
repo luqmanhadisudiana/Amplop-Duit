@@ -14,7 +14,6 @@ class CardMistakeStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Card status pada halaman kesalahanmu
     return Container(
       width: width,
       height: height,

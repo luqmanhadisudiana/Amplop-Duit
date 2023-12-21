@@ -11,8 +11,6 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Build History Page
-    // return const Text("History Page");
     return MaterialApp(
       title: "History",
       theme: MyAppTheme.buildTheme(),

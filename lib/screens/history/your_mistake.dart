@@ -10,7 +10,6 @@ class YourMistakePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Your Mistake Page
     return MaterialApp(
       title: "Kesalahan",
       theme: MyAppTheme.buildTheme(),

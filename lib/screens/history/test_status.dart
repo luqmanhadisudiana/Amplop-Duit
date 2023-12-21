@@ -8,7 +8,6 @@ class TestStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Page untuk melihat hasil percobaan
     return MaterialApp(
         title: "Percobaan",
         theme: MyAppTheme.buildTheme(),
