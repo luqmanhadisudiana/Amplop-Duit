@@ -12,13 +12,13 @@ class QuestionAnswer {
   final String question;
   final List<Answer> answerList;
   bool isDone;
-  int selectedAnswer;
+  int savedAnswer;
 
   QuestionAnswer(
       {required this.question,
       required this.answerList,
       this.isDone = false,
-      this.selectedAnswer = -1});
+      this.savedAnswer = -1});
 }
 
 class Headline {
@@ -68,13 +68,16 @@ var courseList = [
           "n9pFVCWKbB4", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
       listQuestionAnswer: [
-        QuestionAnswer(question: "Ini Pertanyaan 1", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
+        QuestionAnswer(
+            question:
+                "Dari video sebelumnya, berikut apa aspek yang harus diperhatikan dalam mencatat keuangan?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Jawaban 1", status: true),
+              Answer(text: "Jawaban 2", status: false),
+              Answer(text: "Jawaban 3", status: false),
+              Answer(text: "Jawaban 4", status: false),
+            ]),
         QuestionAnswer(question: "Ini Pertanyaan 2", answerList: [
           // salah satu harus true karena jawaban
           Answer(text: "Jawaban 1", status: true),

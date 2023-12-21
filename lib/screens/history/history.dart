@@ -2,6 +2,7 @@ import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/card/card_history.dart';
 import 'package:amplop_duit/component/card/card_quiz_result.dart';
 import 'package:amplop_duit/component/customInkwell/custom_inkwell.dart';
+import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/screens/history/your_mistake.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -58,11 +59,28 @@ class HistoryPage extends StatelessWidget {
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins")),
-                for (var i = 0; i < 5; i++)
+                const SizedBox(
+                  height: 16,
+                ),
+                listHistory.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Kamu belum mengerjakan Quiz",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFFD1D1D1)),
+                        ),
+                      )
+                    : const SizedBox(),
+                for (var i = 0; i < listHistory.length; i++)
                   Container(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: CardQuizResult(
-                      status: i % 2 == 0,
+                      title: listHistory[i].title,
+                      question: listHistory[i].question,
+                      answer: listHistory[i].jawaban,
+                      status: listHistory[i].status,
                     ),
                   ),
               ],

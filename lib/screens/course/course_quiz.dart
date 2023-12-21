@@ -2,10 +2,12 @@ import 'package:amplop_duit/component/answerContainer/answer_container.dart';
 import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart';
 import 'package:amplop_duit/models/course.dart';
+import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CourseQuiz extends StatefulWidget {
   final String question, thumbnailUrl;
@@ -29,73 +31,83 @@ class _CourseQuizState extends State<CourseQuiz> {
   late CoursePointerProvider coursePointerProvider;
   int selectedIndex = -1;
   late int currentIndex;
-  // late bool isButtonDisable;
+  late bool isButtonDisable;
   late String buttonText;
 
   @override
   void initState() {
     super.initState();
+    debugPrint("======================================================");
     // provider
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
     coursePointerProvider =
         Provider.of<CoursePointerProvider>(context, listen: false);
-    debugPrint(courseProvider
-        .getQuestionStatus(widget.courseIndex, widget.quizIndex)
-        .toString());
-    debugPrint('course : ${widget.courseIndex}, quiz : ${widget.quizIndex}');
-    buttonText =
-        courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)
-            ? "Kembali"
-            : "Berikutnya";
+    int courseIdx = widget.courseIndex;
+    int quizIdx = widget.quizIndex;
+    bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
+    int savedAnswer = courseProvider.getSavedAnswer(courseIdx, quizIdx);
 
-    currentIndex =
-        courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex);
+    debugPrint(quizStatus.toString());
+    debugPrint(
+      'course : $courseIdx, quiz : $quizIdx, savedAnswer : $savedAnswer, quizStatus : $quizStatus',
+    );
+
+    isButtonDisable = quizStatus == true && savedAnswer != -1 ? true : false;
+    // buttonText = quizStatus ? "Kembali" : "Berikutnya";
+    currentIndex = savedAnswer;
+
+    if (quizStatus == true && savedAnswer == -1) {
+      debugPrint("Kembali");
+      buttonText = "Kembali";
+    } else {
+      debugPrint("Berikutnya");
+      buttonText = "Berikutnya";
+    }
 
     if (currentIndex != -1) {
       selectedIndex = currentIndex;
     }
-
-    // isButtonDisable =
-    //     courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex);
   }
 
   void modalAction(i) {
+    bool answerStatus = widget.listAnswer[i].status;
+    int courseIdx = widget.courseIndex;
+    int quizIdx = widget.quizIndex;
+    bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
+    int savedAnswer = courseProvider.getSavedAnswer(courseIdx, quizIdx);
+    int currentQuizPointer = coursePointerProvider.getselectedQuiz;
+    int indexAnswer = i;
+    debugPrint(
+        "indexAnswer $indexAnswer,\nCourse Index : $courseIdx,\nQuiz Index : $quizIdx,\nPointerQuiz : $currentQuizPointer,\nSelected Index : $selectedIndex,\nQuestion Status: : $answerStatus,\nquizStatus : $quizStatus,\nSaved Value : $savedAnswer\n\n");
+
     setState(() {
-      selectedIndex = i;
+      selectedIndex = indexAnswer;
     });
-    showCustomBottomSheet(context, widget.listAnswer[i].status, buttonText, () {
-      debugPrint(courseProvider
-          .getQuestionStatus(widget.courseIndex, widget.quizIndex)
-          .toString());
-      if (courseProvider.getQuestionStatus(
-              widget.courseIndex, widget.quizIndex) ==
-          false) {
-        debugPrint("Valid");
-        if (widget.quizIndex != 0) {
-          if (courseProvider.getSelectedAnswer(
-                  widget.courseIndex, widget.quizIndex - 1) !=
-              -1) {
-            debugPrint("nextQuiz");
-            coursePointerProvider.nextQuiz();
-          }
-        } else {
-          debugPrint("nextQuiz");
-          coursePointerProvider.nextQuiz();
-        }
 
-        debugPrint(
-            '87, Course Index : ${widget.courseIndex}, Quiz Index : ${widget.quizIndex}, Selected Index : $selectedIndex, Status : ${widget.listAnswer[i].status}');
+    showCustomBottomSheet(context, answerStatus, buttonText, () {
+      debugPrint("Modal Clicked");
 
-        if (widget.listAnswer[i].status) {
-          debugPrint("updateQuestionStatus");
-          courseProvider.updateQuestionStatus(
-              widget.courseIndex, widget.quizIndex, true);
-          debugPrint("updateSelectedAnswer");
-          courseProvider.updateSelectedAnswer(
-              widget.courseIndex, widget.quizIndex, selectedIndex);
-        } else {
-          debugPrint("Not Valid");
-        }
+      debugPrint("setIsDone}");
+      courseProvider.setIsDone(courseIdx, quizIdx);
+
+      debugPrint("check apakah jawaban benar ${answerStatus == true}");
+      if (answerStatus == true) {
+        courseProvider.updateSavedAnswer(courseIdx, quizIdx, indexAnswer);
+      }
+
+      debugPrint("check next quiz ${currentQuizPointer == quizIdx}");
+      if (currentQuizPointer == quizIdx) {
+        coursePointerProvider.nextQuiz();
+      }
+
+      if (!quizStatus) {
+        listHistory.add(History(
+            idCourse: courseIdx,
+            status: answerStatus,
+            attempt: 1,
+            title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
+            question: widget.question,
+            jawaban: widget.listAnswer[indexAnswer].text));
       }
 
       Navigator.pop(context);
@@ -105,15 +117,7 @@ class _CourseQuizState extends State<CourseQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    // selectedIndex =
-    // courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex);
-    // debugPrint(selectedIndex.toString());
-
-    // isButtonDisable =
-    //     courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex);
-    // debugPrint(isButtonDisable.toString());
-    debugPrint(
-        'Question Status: ${courseProvider.getQuestionStatus(widget.courseIndex, widget.quizIndex)}, Course Index : ${widget.courseIndex}, Quiz Index : ${widget.quizIndex}, Saved Value : ${courseProvider.getSelectedAnswer(widget.courseIndex, widget.quizIndex)}');
+    debugPrint("Button is disable : $isButtonDisable");
     return MaterialApp(
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
@@ -145,14 +149,13 @@ class _CourseQuizState extends State<CourseQuiz> {
                           if (loadingProgress == null) {
                             return child;
                           } else {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        (loadingProgress.expectedTotalBytes ??
-                                            1)
-                                    : null,
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 150.0,
+                                color: Colors.white,
                               ),
                             );
                           }
@@ -178,7 +181,7 @@ class _CourseQuizState extends State<CourseQuiz> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Level ${widget.courseIndex + 1}, Bagian ${widget.quizIndex}",
+                            "Level ${widget.courseIndex + 1}, Bagian ${widget.quizIndex + 1}",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 16),
                           ),
@@ -201,13 +204,11 @@ class _CourseQuizState extends State<CourseQuiz> {
                               ? Colors.blue
                               : Colors.red)
                           : Colors.white,
-                      action:
-                          // isButtonDisable
-                          //     ? null
-                          //     :
-                          () {
-                        modalAction(i);
-                      },
+                      action: isButtonDisable
+                          ? null
+                          : () {
+                              modalAction(i);
+                            },
                     )
                 ],
               ),

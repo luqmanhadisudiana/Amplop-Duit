@@ -14,10 +14,8 @@ class CourseProvider with ChangeNotifier {
     return listCourse[index].feedback;
   }
 
-  void updateQuestionStatus(
-      int indexCourse, int indexQuestion, bool newStatus) {
-    listCourse[indexCourse].listQuestionAnswer[indexQuestion].isDone =
-        newStatus;
+  void setIsDone(int indexCourse, int indexQuestion) {
+    listCourse[indexCourse].listQuestionAnswer[indexQuestion].isDone = true;
     notifyListeners();
   }
 
@@ -26,27 +24,24 @@ class CourseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedAnswer(
-      int indexCourse, int indexQuestion, int indexOfAnswer) {
-    listCourse[indexCourse].listQuestionAnswer[indexQuestion].selectedAnswer =
+  void updateSavedAnswer(int indexCourse, int indexQuiz, int indexOfAnswer) {
+    listCourse[indexCourse].listQuestionAnswer[indexQuiz].savedAnswer =
         indexOfAnswer;
     notifyListeners();
   }
 
-  int getSelectedAnswer(int indexCourse, int indexQuestion) {
-    return listCourse[indexCourse]
-        .listQuestionAnswer[indexQuestion]
-        .selectedAnswer;
+  int getSavedAnswer(int indexCourse, int indexQuiz) {
+    return listCourse[indexCourse].listQuestionAnswer[indexQuiz].savedAnswer;
   }
 
-  bool getQuestionStatus(int indexCourse, int indexQuestion) {
-    return listCourse[indexCourse].listQuestionAnswer[indexQuestion].isDone;
+  bool getIsDone(int indexCourse, int indexQuiz) {
+    return listCourse[indexCourse].listQuestionAnswer[indexQuiz].isDone;
   }
 }
 
 class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int selectedCourse = 0;
-  int selectedQuiz = -1;
+  int selectedQuiz = 0;
 
   int get getSelectedCourse => selectedCourse;
   int get getselectedQuiz => selectedQuiz;

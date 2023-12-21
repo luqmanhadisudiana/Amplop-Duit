@@ -2,11 +2,13 @@ import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/section/statistic_section.dart';
 import 'package:amplop_duit/models/achievement.dart';
+import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -16,6 +18,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late CoursePointerProvider coursePointerProvider;
+  late int level = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    coursePointerProvider =
+        Provider.of<CoursePointerProvider>(context, listen: false);
+
+    level = coursePointerProvider.getSelectedCourse + 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -228,10 +242,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5.0)),
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Expanded(
                                 child: Text(
@@ -251,8 +265,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                '1',
-                                style: TextStyle(
+                                level.toString(),
+                                style: const TextStyle(
                                     // backgroundColor: Colors.black12,
                                     color: Colors.white,
                                     fontSize: 42.0,

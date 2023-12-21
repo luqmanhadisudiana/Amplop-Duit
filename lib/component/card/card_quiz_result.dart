@@ -4,14 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CardQuizResult extends StatelessWidget {
   final double width, height;
   final bool status;
-  final String title, description, answer;
+  final String title, question, answer;
   const CardQuizResult({
     super.key,
     this.width = double.maxFinite,
     this.height = 200,
     required this.status,
     this.title = "Level 1, Bagian 1",
-    this.description =
+    this.question =
         "Dari video sebelumnya, berikut apa aspek yang harus diperhatikan dalam mencatat keuangan?",
     this.answer = "Uang, Keluar, dan Masuk",
   });
@@ -77,7 +77,7 @@ class CardQuizResult extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    description,
+                    question,
                     style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

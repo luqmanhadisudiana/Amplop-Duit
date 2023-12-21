@@ -32,7 +32,6 @@ class _MyCoursePageState extends State<MyCoursePage> {
   }
 
   void navigateToQuiz(index) {
-    debugPrint("Quiz");
     Navigator.push(
       context,
       MaterialPageRoute(
