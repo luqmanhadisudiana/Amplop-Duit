@@ -1,4 +1,5 @@
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,9 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => CoursePointerProvider()),
+      // ChangeNotifierProvider(create: (context) => CoursePointerProvider()),
       ChangeNotifierProvider(create: (context) => CourseProvider()),
+      ChangeNotifierProvider(create: (context) => MyCourseStatus()),
       // Tambahkan provider lain sesuai kebutuhan
     ],
     child: MaterialApp(

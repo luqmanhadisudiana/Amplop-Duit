@@ -3,8 +3,6 @@ import 'package:amplop_duit/component/card/card_achievement.dart';
 import 'package:amplop_duit/component/section/statistic_section.dart';
 import 'package:amplop_duit/models/achievement.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
-import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/home/achievement.dart';
 import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:amplop_duit/theme.dart';
@@ -20,30 +18,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late CoursePointerProvider coursePointerProvider;
-  late int level = 0;
-  MyCourseStatus? _myCourseStatus;
-
-  Future<void> _loadMyObject() async {
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
-
-    if (myObjectMap != null) {
-      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
-      setState(() {
-        _myCourseStatus = myObject;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    coursePointerProvider =
-        Provider.of<CoursePointerProvider>(context, listen: false);
-
-    level = coursePointerProvider.getSelectedCourse + 1;
-    _loadMyObject();
   }
 
   @override
@@ -150,14 +127,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 60,
                                 ),
                                 const SizedBox(width: 21.0),
-                                Text(
-                                  _myCourseStatus != null
-                                      ? _myCourseStatus!.heart.toString()
-                                      : "0",
-                                  style: const TextStyle(
-                                      color: Color(0xFF3F3F3F),
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w600),
+                                Consumer<MyCourseStatus>(
+                                  builder: (context, myCourseStatus, child) {
+                                    return Text(
+                                      myCourseStatus.heart.toString(),
+                                      style: const TextStyle(
+                                          color: Color(0xFF3F3F3F),
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -173,14 +152,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 60,
                                 ),
                                 const SizedBox(width: 21.0),
-                                Text(
-                                  _myCourseStatus != null
-                                      ? _myCourseStatus!.diamond.toString()
-                                      : "0",
-                                  style: const TextStyle(
-                                      color: Color(0xFF3F3F3F),
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w600),
+                                Consumer<MyCourseStatus>(
+                                  builder: (context, myCourseStatus, child) {
+                                    return Text(
+                                      myCourseStatus.diamond.toString(),
+                                      style: const TextStyle(
+                                          color: Color(0xFF3F3F3F),
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -284,13 +265,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                level.toString(),
-                                style: const TextStyle(
-                                    // backgroundColor: Colors.black12,
-                                    color: Colors.white,
-                                    fontSize: 42.0,
-                                    fontWeight: FontWeight.w600),
+                              Consumer<MyCourseStatus>(
+                                builder: (context, myCourseStatus, child) {
+                                  return Text(
+                                    (myCourseStatus.getSelectedCourse + 1)
+                                        .toString(),
+                                    style: const TextStyle(
+                                        // backgroundColor: Colors.black12,
+                                        color: Colors.white,
+                                        fontSize: 42.0,
+                                        fontWeight: FontWeight.w600),
+                                  );
+                                },
                               ),
                             ],
                           ),

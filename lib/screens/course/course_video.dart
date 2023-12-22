@@ -1,6 +1,7 @@
 import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ class CourseVideo extends StatefulWidget {
 
 class _CourseVideoState extends State<CourseVideo> {
   late CourseProvider courseProvider;
-  late CoursePointerProvider coursePointerProvider;
+  late MyCourseStatus myCourseStatusProvider;
+
   late YoutubePlayerController _controller;
   late String buttonText;
   late int feedback;
@@ -47,29 +49,25 @@ class _CourseVideoState extends State<CourseVideo> {
       ),
     );
     feedback = widget.currentFeedback;
+    courseProvider = Provider.of<CourseProvider>(context, listen: false);
+    myCourseStatusProvider =
+        Provider.of<MyCourseStatus>(context, listen: false);
+    buttonText = courseProvider.getCourseFeedback(widget.index) == 0
+        ? "Berikutnya"
+        : "Kembali";
     debugPrint(widget.index.toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    // provider
-    courseProvider = Provider.of<CourseProvider>(context, listen: false);
-    coursePointerProvider =
-        Provider.of<CoursePointerProvider>(context, listen: false);
-
-    buttonText = courseProvider.getCourseFeedback(widget.index) == 0
-        ? "Berikutnya"
-        : "Kembali";
-
-    // feedback = courseProvider.getCourseFeedback(widget.index);
     return MaterialApp(
       title: 'Course',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
           appBar: CourseAppbar(
               title: "My Course",
-              heartCount: 5,
-              diamondCount: 5,
+              // heartCount: 5,
+              // diamondCount: 5,
               parentContext: context),
           body: ListView(
             children: [
@@ -341,9 +339,9 @@ class _CourseVideoState extends State<CourseVideo> {
                               if (courseProvider
                                       .getCourseFeedback(widget.index) ==
                                   0) {
-                                coursePointerProvider.nextQuiz();
+                                myCourseStatusProvider.nextQuiz();
                               }
-                              debugPrint(coursePointerProvider.getselectedQuiz
+                              debugPrint(myCourseStatusProvider.getselectedQuiz
                                   .toString());
                               courseProvider.updateFeedbackCourse(
                                   widget.index, feedback);

@@ -5,6 +5,7 @@ import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
 import 'package:amplop_duit/models/course.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/course/course_quiz.dart';
 import 'package:amplop_duit/screens/course/course_video.dart';
@@ -20,37 +21,47 @@ class MyCoursePage extends StatefulWidget {
 }
 
 class _MyCoursePageState extends State<MyCoursePage> {
-  late CoursePointerProvider coursePointerProvider;
   late CourseProvider courseProvider;
   late int selectedQuiz, selectedCourse;
   late Course course;
   late String headlineTitle, headlineDesc, thumbailUrl;
-
   @override
   void initState() {
     super.initState();
   }
 
-  void navigateToQuiz(index) {
+  // void navigateToQuiz(index, myCourseStatusProvider) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //         builder: (context) => CourseQuiz(
+  //             question: course.listQuestionAnswer[index].question,
+  //             thumbnailUrl: course.videoThumbail,
+  //             listAnswer: course.listQuestionAnswer[index].answerList,
+  //             courseIndex: myCourseStatusProvider.getSelectedCourse,
+  //             quizIndex: index)),
+  //   );
+  // }
+  void navigateToQuiz(
+      question, thumbnailUrl, listAnswer, courseIndex, quizIndex) {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => CourseQuiz(
-              question: course.listQuestionAnswer[index].question,
-              thumbnailUrl: course.videoThumbail,
-              listAnswer: course.listQuestionAnswer[index].answerList,
-              courseIndex: coursePointerProvider.getSelectedCourse,
-              quizIndex: index)),
+              question: question,
+              thumbnailUrl: thumbnailUrl,
+              listAnswer: listAnswer,
+              courseIndex: courseIndex,
+              quizIndex: quizIndex)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     courseProvider = Provider.of<CourseProvider>(context);
-    coursePointerProvider = Provider.of<CoursePointerProvider>(context);
-    selectedQuiz = coursePointerProvider.getselectedQuiz;
-    selectedCourse = coursePointerProvider.getSelectedCourse;
-
+    var myCourseStatusProvider = context.watch<MyCourseStatus>();
+    selectedQuiz = myCourseStatusProvider.getselectedQuiz;
+    selectedCourse = myCourseStatusProvider.getSelectedCourse;
     course = courseProvider.getCourseByIndex(selectedCourse);
     debugPrint('index quiz : ${selectedQuiz.toString()}');
 
@@ -64,8 +75,8 @@ class _MyCoursePageState extends State<MyCoursePage> {
       home: Scaffold(
           appBar: CourseAppbar(
               title: "My Course",
-              heartCount: 5,
-              diamondCount: 5,
+              // heartCount: myCourseStatusProvider.heart,
+              // diamondCount: myCourseStatusProvider.diamond,
               parentContext: context),
           body: ListView(
             children: [
@@ -93,7 +104,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                   description: course.description,
                                   ytVideoID: course.ytVideoID,
                                   currentFeedback: course.feedback,
-                                  index: (coursePointerProvider
+                                  index: (myCourseStatusProvider
                                       .getSelectedCourse))),
                         );
                       },
@@ -106,7 +117,14 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 GestureDetector(
                                   onTap: i <= selectedQuiz
                                       ? () {
-                                          navigateToQuiz(i);
+                                          navigateToQuiz(
+                                              course.listQuestionAnswer[i]
+                                                  .question,
+                                              thumbailUrl,
+                                              course.listQuestionAnswer[i]
+                                                  .answerList,
+                                              selectedCourse,
+                                              i);
                                         }
                                       : null,
                                   child: StepCourse(
@@ -122,7 +140,14 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 GestureDetector(
                                   onTap: i <= selectedQuiz
                                       ? () {
-                                          navigateToQuiz(i);
+                                          navigateToQuiz(
+                                              course.listQuestionAnswer[i]
+                                                  .question,
+                                              thumbailUrl,
+                                              course.listQuestionAnswer[i]
+                                                  .answerList,
+                                              selectedCourse,
+                                              i);
                                         }
                                       : null,
                                   child: StepCourse(
@@ -137,15 +162,15 @@ class _MyCoursePageState extends State<MyCoursePage> {
                     ),
                     Center(
                       child: MainButton(
-                          isDisabled: coursePointerProvider.getselectedQuiz <
+                          isDisabled: myCourseStatusProvider.getselectedQuiz <
                               course.listQuestionAnswer.length,
                           width: 280,
                           buttonText: "Level Selanjutnya",
                           action: () {
                             debugPrint(
-                                "Level Selanjutnya ${coursePointerProvider.getSelectedCourse + 1}");
+                                "Level Selanjutnya ${myCourseStatusProvider.getSelectedCourse + 1}");
 
-                            if (coursePointerProvider.getSelectedCourse ==
+                            if (myCourseStatusProvider.getSelectedCourse ==
                                 courseProvider.getCourseList.length - 1) {
                               showDialog<String>(
                                 context: context,
@@ -156,7 +181,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 ),
                               );
                             } else {
-                              coursePointerProvider.nextCourse();
+                              myCourseStatusProvider.nextCourse();
                             }
                           }),
                     ),

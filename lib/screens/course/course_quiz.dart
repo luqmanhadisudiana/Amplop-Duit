@@ -3,6 +3,8 @@ import 'package:amplop_duit/component/appbar/course_appbar.dart';
 import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart';
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/models/history.dart';
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,7 @@ class CourseQuiz extends StatefulWidget {
 
 class _CourseQuizState extends State<CourseQuiz> {
   late CourseProvider courseProvider;
-  late CoursePointerProvider coursePointerProvider;
+  late MyCourseStatus myCourseStatusProvider;
   int selectedIndex = -1;
   late int currentIndex;
   late bool isButtonDisable;
@@ -40,8 +42,8 @@ class _CourseQuizState extends State<CourseQuiz> {
     debugPrint("======================================================");
     // provider
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
-    coursePointerProvider =
-        Provider.of<CoursePointerProvider>(context, listen: false);
+    myCourseStatusProvider =
+        Provider.of<MyCourseStatus>(context, listen: false);
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
     bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
@@ -67,6 +69,26 @@ class _CourseQuizState extends State<CourseQuiz> {
     if (currentIndex != -1) {
       selectedIndex = currentIndex;
     }
+    _loadMyObject();
+  }
+
+  MyCourseStatus? _myCourseStatus;
+
+  Future<void> _loadMyObject() async {
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+
+    if (myObjectMap != null) {
+      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
+      setState(() {
+        _myCourseStatus = myObject;
+      });
+    }
+  }
+
+  Future<void> _saveMyObject() async {
+    _myCourseStatus = myCourseStatusProvider;
+    await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
   }
 
   void modalAction(i) {
@@ -75,7 +97,7 @@ class _CourseQuizState extends State<CourseQuiz> {
     int quizIdx = widget.quizIndex;
     bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
     int savedAnswer = courseProvider.getSavedAnswer(courseIdx, quizIdx);
-    int currentQuizPointer = coursePointerProvider.getselectedQuiz;
+    int currentQuizPointer = myCourseStatusProvider.selectedQuiz;
     int indexAnswer = i;
     debugPrint(
         "indexAnswer $indexAnswer,\nCourse Index : $courseIdx,\nQuiz Index : $quizIdx,\nPointerQuiz : $currentQuizPointer,\nSelected Index : $selectedIndex,\nQuestion Status: : $answerStatus,\nquizStatus : $quizStatus,\nSaved Value : $savedAnswer\n\n");
@@ -87,17 +109,21 @@ class _CourseQuizState extends State<CourseQuiz> {
     showCustomBottomSheet(context, answerStatus, buttonText, () {
       debugPrint("Modal Clicked");
 
-      debugPrint("setIsDone}");
+      debugPrint("setIsDone");
       courseProvider.setIsDone(courseIdx, quizIdx);
 
       debugPrint("check apakah jawaban benar ${answerStatus == true}");
       if (answerStatus == true) {
         courseProvider.updateSavedAnswer(courseIdx, quizIdx, indexAnswer);
+      } else {
+        setState(() {
+          myCourseStatusProvider.decreaseHeart();
+        });
       }
 
       debugPrint("check next quiz ${currentQuizPointer == quizIdx}");
       if (currentQuizPointer == quizIdx) {
-        coursePointerProvider.nextQuiz();
+        myCourseStatusProvider.nextQuiz();
       }
 
       if (!quizStatus) {
@@ -110,6 +136,8 @@ class _CourseQuizState extends State<CourseQuiz> {
             jawaban: widget.listAnswer[indexAnswer].text));
       }
 
+      _saveMyObject();
+
       Navigator.pop(context);
       Navigator.pop(context);
     });
@@ -117,16 +145,11 @@ class _CourseQuizState extends State<CourseQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Button is disable : $isButtonDisable");
     return MaterialApp(
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
         home: Scaffold(
-          appBar: CourseAppbar(
-              title: "My Course",
-              heartCount: 5,
-              diamondCount: 5,
-              parentContext: context),
+          appBar: CourseAppbar(title: "My Course", parentContext: context),
           body: ListView(children: [
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

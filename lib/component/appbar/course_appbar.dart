@@ -1,16 +1,18 @@
+import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final int heartCount, diamondCount;
+  // final int heartCount, diamondCount;
   final BuildContext parentContext;
 
   const CourseAppbar({
     super.key,
     required this.title,
-    required this.heartCount,
-    required this.diamondCount,
+    // required this.heartCount,
+    // required this.diamondCount,
     required this.parentContext,
   });
 
@@ -19,6 +21,7 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localCourseStatus = context.watch<MyCourseStatus>();
     return AppBar(
       automaticallyImplyLeading: false,
       title: Row(
@@ -51,7 +54,7 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 8.0,
                   ),
                   Text(
-                    heartCount.toString(),
+                    localCourseStatus.diamond.toString(),
                     style: const TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 8,
@@ -73,7 +76,7 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 8.0,
                   ),
                   Text(
-                    heartCount.toString(),
+                    localCourseStatus.diamond.toString(),
                     style: const TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 8,

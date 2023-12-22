@@ -18,7 +18,6 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  late CoursePointerProvider coursePointerProvider;
   TextEditingController courseIndexController = TextEditingController();
   TextEditingController quizIndexController = TextEditingController();
   TextEditingController ligaController = TextEditingController();
@@ -28,27 +27,31 @@ class _TestPageState extends State<TestPage> {
   @override
   void initState() {
     super.initState();
-    coursePointerProvider =
-        Provider.of<CoursePointerProvider>(context, listen: false);
-
-    courseIndexController.text =
-        (coursePointerProvider.getSelectedCourse + 1).toString();
-    quizIndexController.text =
-        (coursePointerProvider.getselectedQuiz + 1).toString();
-
     courseIndexController.addListener(() {
-      onValueChanged("course");
+      onValueChanged("Course");
     });
     quizIndexController.addListener(() {
-      onValueChanged("quiz");
+      onValueChanged("Quiz");
+    });
+    ligaController.addListener(ligaValueChange);
+    heartController.addListener(() {
+      onValueChanged("Heart");
+    });
+    diamondController.addListener(() {
+      onValueChanged("Diamond");
     });
 
-    ligaController.addListener(ligaValueChange);
     _getCurrentLiga();
     _loadMyObject();
+  }
 
-    heartController.addListener(heartAndDiamondValueChanged);
-    diamondController.addListener(heartAndDiamondValueChanged);
+  void _getCurrentLiga() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentLiga = prefs.getInt('currentLiga') ?? 0;
+
+    setState(() {
+      ligaController.text = currentLiga.toString();
+    });
   }
 
   MyCourseStatus? _myCourseStatus;
@@ -59,11 +62,14 @@ class _TestPageState extends State<TestPage> {
 
     if (myObjectMap != null) {
       final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
+      courseIndexController.text = (myObject.getSelectedCourse + 1).toString();
+      quizIndexController.text = (myObject.getselectedQuiz + 1).toString();
+      heartController.text = myObject.heart.toString();
+      diamondController.text = myObject.diamond.toString();
+
       setState(() {
         _myCourseStatus = myObject;
       });
-      heartController.text = myObject.heart.toString();
-      diamondController.text = myObject.diamond.toString();
     }
   }
 
@@ -73,39 +79,49 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
-  void heartAndDiamondValueChanged() {
-    setState(() {
-      _myCourseStatus = MyCourseStatus(
-          heart: int.tryParse(heartController.text) ?? 0,
-          diamond: int.tryParse(diamondController.text) ?? 0);
-    });
-    _saveMyObject();
-  }
-
   void onValueChanged(String text) {
-    debugPrint(text);
-    CoursePointerProvider coursePointerProvider =
-        Provider.of<CoursePointerProvider>(context, listen: false);
     CourseProvider courseProvider =
         Provider.of<CourseProvider>(context, listen: false);
+    MyCourseStatus localmyCourseStatus =
+        Provider.of<MyCourseStatus>(context, listen: false);
 
-    int courseIndex = int.tryParse(courseIndexController.text) ?? 1;
+    int courseIndex = int.tryParse(courseIndexController.text) ?? 0;
     int quizIndex = int.tryParse(quizIndexController.text) ?? 0;
+    int heart = int.tryParse(heartController.text) ?? 0;
+    int diamond = int.tryParse(diamondController.text) ?? 0;
 
-    if (courseIndex < courseProvider.getCourseList.length) {
-      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
-    } else {
-      warning();
-    }
+    int courseLength = courseProvider.getCourseList.length;
 
-    if (quizIndex == 0) {
-      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
-    } else if (quizIndex <
-        courseProvider.getCourseList[courseIndex].listQuestionAnswer.length) {
-      coursePointerProvider.setNewValue(courseIndex - 1, quizIndex - 1);
-    } else {
-      warning();
+    debugPrint(
+        'listening $text, quizIndex : $quizIndex, courseIndex $courseIndex, heart : $heart, diamond $diamond');
+
+    if (_myCourseStatus != null && courseIndex != 0) {
+      if (courseIndex < courseLength && courseIndex >= 1) {
+        setState(() {
+          _myCourseStatus!
+              .setNewValue(heart, diamond, courseIndex - 1, quizIndex - 1);
+        });
+        localmyCourseStatus.setNewValue(
+            heart, diamond, courseIndex - 1, quizIndex - 1);
+      } else {
+        warning("course");
+      }
+
+      int quizLenght =
+          courseProvider.getCourseList[courseIndex].listQuestionAnswer.length;
+
+      if (quizIndex < quizLenght && quizIndex >= 0) {
+        setState(() {
+          _myCourseStatus!
+              .setNewValue(heart, diamond, courseIndex - 1, quizIndex - 1);
+        });
+        localmyCourseStatus.setNewValue(
+            heart, diamond, courseIndex - 1, quizIndex - 1);
+      } else {
+        warning("quiz");
+      }
     }
+    _saveMyObject();
   }
 
   void ligaValueChange() async {
@@ -114,20 +130,32 @@ class _TestPageState extends State<TestPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
     } else {
-      warning();
+      warning("liga");
     }
   }
 
-  void warning() {
+  void warning(String text) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => CustomAlertDialog(
         title: "Index Out Bound",
         desc: "Reseting value to default",
         action: () {
-          courseIndexController.text = (1).toString();
-          quizIndexController.text = (0).toString();
-          ligaController.text = (1).toString();
+          if (text.toLowerCase() == "course") {
+            courseIndexController.text = (1).toString();
+          }
+          if (text.toLowerCase() == "quiz") {
+            quizIndexController.text = (0).toString();
+          }
+          if (text.toLowerCase() == "heart") {
+            heartController.text = (5).toString();
+          }
+          if (text.toLowerCase() == "diamond") {
+            diamondController.text = (5).toString();
+          }
+          if (text.toLowerCase() == "liga") {
+            ligaController.text = (1).toString();
+          }
 
           Navigator.of(context).pop();
           FocusManager.instance.primaryFocus?.unfocus(); // Unfocus TextField
@@ -139,40 +167,44 @@ class _TestPageState extends State<TestPage> {
   @override
   void dispose() {
     courseIndexController.removeListener(() {
-      onValueChanged("course");
+      onValueChanged("Course");
     });
-    courseIndexController.dispose();
     quizIndexController.removeListener(() {
-      onValueChanged("quiz");
+      onValueChanged("Quiz");
     });
+    heartController.removeListener(() {
+      onValueChanged("Heart");
+    });
+    diamondController.removeListener(() {
+      onValueChanged("Diamond");
+    });
+    ligaController.addListener(ligaValueChange);
+    courseIndexController.dispose();
     quizIndexController.dispose();
+    heartController.dispose();
+    diamondController.dispose();
+    ligaController.dispose();
+
     super.dispose();
   }
 
   void reset(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    debugPrint("reset");
+    debugPrint("pref clear");
 
-    // Reset
-    setState(() {
-      _myCourseStatus?.reset();
-    });
-    _saveMyObject();
+    if (_myCourseStatus != null) {
+      debugPrint("object course clear");
+      setState(() {
+        _myCourseStatus!.reset();
+      });
+      await PreferencesManager.resetMyObject();
+    }
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
-  }
-
-  void _getCurrentLiga() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int currentLiga = prefs.getInt('currentLiga') ?? 0;
-
-    setState(() {
-      ligaController.text = currentLiga.toString();
-    });
   }
 
   @override
@@ -201,16 +233,16 @@ class _TestPageState extends State<TestPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   LabelAndTextField(
-                    label: "Course Index",
+                    label: "Liga Index",
+                    controller: ligaController,
+                  ),
+                  LabelAndTextField(
+                    label: "Course Index + 1",
                     controller: courseIndexController,
                   ),
                   LabelAndTextField(
-                    label: "Quiz Index",
+                    label: "Quiz Index  + 1",
                     controller: quizIndexController,
-                  ),
-                  LabelAndTextField(
-                    label: "Liga Index",
-                    controller: ligaController,
                   ),
                   LabelAndTextField(
                     label: "Heart",
@@ -220,21 +252,40 @@ class _TestPageState extends State<TestPage> {
                     label: "Diamond",
                     controller: diamondController,
                   ),
-                  Text(
-                    _myCourseStatus != null
-                        ? 'Diamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}'
-                        : 'No data',
-                  ),
+                  Consumer<MyCourseStatus>(
+                      builder: (context, myCourseStatus, child) {
+                    return Text(
+                        'Provider Data : \nDiamond: ${myCourseStatus.diamond}, Heart: ${myCourseStatus.heart}, selectedCourse: ${myCourseStatus.selectedCourse}, selectedQuiz: ${myCourseStatus.selectedQuiz}, ');
+                  }),
+                  Text(_myCourseStatus != null
+                      ? 'SharedPreference Data : \nDiamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}, selectedCourse: ${_myCourseStatus!.selectedCourse}, selectedQuiz: ${_myCourseStatus!.selectedQuiz},'
+                      : "No Data"),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
-                      });
-                      _saveMyObject();
-                    },
-                    child: const Text('Reset'),
-                  ),
+                  Consumer<MyCourseStatus>(
+                      builder: (context, myCourseStatus, child) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        //Object
+                        setState(() {
+                          _myCourseStatus = MyCourseStatus(
+                              heart: 5,
+                              diamond: 5,
+                              selectedCourse: 0,
+                              selectedQuiz: -1);
+                        });
+                        //Provider
+                        myCourseStatus.setNewValue(5, 5, 0, -1);
+                        //Controller
+                        courseIndexController.text = (1).toString();
+                        quizIndexController.text = (0).toString();
+                        heartController.text = (5).toString();
+                        diamondController.text = (5).toString();
+                        ligaController.text = (1).toString();
+                        _saveMyObject();
+                      },
+                      child: const Text('Reset'),
+                    );
+                  }),
                 ],
               )
             ],

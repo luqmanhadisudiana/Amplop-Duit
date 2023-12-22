@@ -7,6 +7,7 @@ import 'package:amplop_duit/screens/auth/register.dart';
 import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
@@ -69,33 +70,10 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
-
-  static void doLogin(BuildContext context) async {
-    // Simpan nilai isLogin ke SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLogin', true);
-    prefs.setInt('currentLiga', 1);
-
-    // Navigasi ke halaman HomePage
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainLoading()),
-      );
-    });
-  }
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late final AnimationController _controller;
-
-  MyCourseStatus? _myCourseStatus;
-
-  Future<void> saveMyCourseStatus() async {
-    if (_myCourseStatus != null) {
-      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
-    }
-  }
 
   @override
   void initState() {
@@ -109,9 +87,41 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<void> saveMyObject(MyCourseStatus myCourseStatus) async {
+    await PreferencesManager.saveMyObject(myCourseStatus.toMap());
+  }
+
+  Future<void> setLoginStatus(Function callback) async {
+    // Simpan nilai isLogin ke SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogin', true);
+    prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
+
+    //Check Object
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+    if (myObjectMap == null) {
+      callback();
+    }
+  }
+
+  // Future<bool> checkMyCourseStatus() async {
+  //   final Map<String, dynamic>? myObjectMap =
+  //       await PreferencesManager.loadMyObject();
+
+  //   debugPrint(myObjectMap.toString());
+  //   if (myObjectMap == null) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
-    debugPrint(_myCourseStatus != null ? "tidak null" : "null");
+    //Course Status
+    var myCourseStatus = context.watch<MyCourseStatus>();
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -219,14 +229,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             const SizedBox(height: 16.0),
             Center(
               child: InkWell(
-                onTap: () {
-                  // Tambahkan logika yang ingin dilakukan saat div/button diklik
+                onTap: () async {
                   debugPrint('Google Login');
-                  LoginPage.doLogin(context);
-                  setState(() {
-                    _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
+                  setLoginStatus(() {
+                    myCourseStatus.setNewValue(5, 5, 0, -1);
+                    saveMyObject(myCourseStatus);
                   });
-                  saveMyCourseStatus();
+                  // Navigasi ke halaman HomePage
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MainLoading()),
+                    );
+                  });
                 },
                 child: Container(
                   width: 150.0,
@@ -256,12 +272,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             MainButton(
                 buttonText: "Masuk",
                 width: 170.0,
-                action: () {
-                  LoginPage.doLogin(context);
-                  setState(() {
-                    _myCourseStatus = MyCourseStatus(heart: 5, diamond: 5);
+                action: () async {
+                  debugPrint('Button Login');
+                  setLoginStatus(() {
+                    myCourseStatus.setNewValue(5, 5, 0, -1);
+                    saveMyObject(myCourseStatus);
                   });
-                  saveMyCourseStatus();
+                  // Navigasi ke halaman HomePage
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MainLoading()),
+                    );
+                  });
                 }),
           ],
         ),

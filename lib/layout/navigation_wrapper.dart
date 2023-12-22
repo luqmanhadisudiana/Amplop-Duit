@@ -1,3 +1,5 @@
+import 'package:amplop_duit/models/my_course_status.dart';
+import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/history/history.dart';
 import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
@@ -7,6 +9,7 @@ import 'package:amplop_duit/screens/testpage/testpage.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 
@@ -30,22 +33,51 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
   @override
   void initState() {
     super.initState();
+    initialize();
+  }
+
+  void initialize() async {
     // Memeriksa nilai isLogin saat aplikasi dimulai
     setState(() {
       _selectedIndex = widget.selectedIndex;
     });
-    loginStatus();
+
+    await loginStatus(context);
+
+    MyCourseStatus myObject = await getCurrentObject();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<MyCourseStatus>(context, listen: false).setNewValue(
+        myObject.heart,
+        myObject.diamond,
+        myObject.selectedCourse,
+        myObject.selectedQuiz,
+      );
+    });
   }
 
-  void loginStatus() async {
+  Future<MyCourseStatus> getCurrentObject() async {
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+
+    MyCourseStatus myObject;
+    if (myObjectMap != null) {
+      myObject = MyCourseStatus.fromMap(myObjectMap);
+    } else {
+      myObject = MyCourseStatus();
+    }
+
+    return myObject;
+  }
+
+  Future<void> loginStatus(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLogin = prefs.getBool('isLogin') ?? false;
-    debugPrint(isLogin.toString());
+    debugPrint('is logged in : ${isLogin.toString()}');
 
     // Jika isLogin bernilai true, pindah ke halaman utama
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!isLogin) {
-        Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),
         );

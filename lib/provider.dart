@@ -39,38 +39,39 @@ class CourseProvider with ChangeNotifier {
   }
 }
 
-class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  int selectedCourse = 0;
-  int selectedQuiz = -1;
+//
+// class CoursePointerProvider with ChangeNotifier, DiagnosticableTreeMixin {
+//   int selectedCourse = 0;
+//   int selectedQuiz = -1;
 
-  int get getSelectedCourse => selectedCourse;
-  int get getselectedQuiz => selectedQuiz;
+//   int get getSelectedCourse => selectedCourse;
+//   int get getselectedQuiz => selectedQuiz;
 
-  void setNewValue(int courseIndex, int quizIndex) {
-    selectedCourse = courseIndex;
-    selectedQuiz = quizIndex;
-    notifyListeners();
-  }
+//   void setNewValue(int courseIndex, int quizIndex) {
+//     selectedCourse = courseIndex;
+//     selectedQuiz = quizIndex;
+//     notifyListeners();
+//   }
 
-  void updateSelectedCourseByID(int id) {
-    selectedCourse = id;
-    notifyListeners();
-  }
+//   void updateSelectedCourseByID(int id) {
+//     selectedCourse = id;
+//     notifyListeners();
+//   }
 
-  void updateselectedCourseByIndex(int index) {
-    selectedCourse = index;
-    notifyListeners();
-  }
+//   void updateselectedCourseByIndex(int index) {
+//     selectedCourse = index;
+//     notifyListeners();
+//   }
 
-  void nextCourse() {
-    selectedCourse = selectedCourse + 1;
-    //reset quiz index
-    selectedQuiz = -1;
-    notifyListeners();
-  }
+//   void nextCourse() {
+//     selectedCourse = selectedCourse + 1;
+//     //reset quiz index
+//     selectedQuiz = -1;
+//     notifyListeners();
+//   }
 
-  void nextQuiz() {
-    selectedQuiz = selectedQuiz + 1;
-    notifyListeners();
-  }
-}
+//   void nextQuiz() {
+//     selectedQuiz = selectedQuiz + 1;
+//     notifyListeners();
+//   }
+// }

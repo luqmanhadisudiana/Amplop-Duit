@@ -3,8 +3,11 @@ import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
+import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -14,16 +17,27 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  MyCourseStatus? _myCourseStatus;
+  Future<void> saveMyObject(MyCourseStatus myCourseStatus) async {
+    await PreferencesManager.saveMyObject(myCourseStatus.toMap());
+  }
 
-  Future<void> saveMyCourseStatus() async {
-    if (_myCourseStatus != null) {
-      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
+  Future<void> setLoginStatus(Function callback) async {
+    // Simpan nilai isLogin ke SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogin', true);
+    prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
+
+    //Check Object
+    final Map<String, dynamic>? myObjectMap =
+        await PreferencesManager.loadMyObject();
+    if (myObjectMap == null) {
+      callback();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var myCourseStatus = context.watch<MyCourseStatus>();
     return MaterialApp(
         title: 'Register',
         theme: MyAppTheme.buildTheme(),
@@ -110,12 +124,18 @@ class _RegisterPageState extends State<RegisterPage> {
                           onTap: () {
                             // Tambahkan logika yang ingin dilakukan saat div/button diklik
                             debugPrint('Google Login');
-                            LoginPage.doLogin(context);
-                            setState(() {
-                              _myCourseStatus =
-                                  MyCourseStatus(heart: 5, diamond: 5);
+                            setLoginStatus(() {
+                              myCourseStatus.setNewValue(7, 7, 0, -1);
+                              saveMyObject(myCourseStatus);
                             });
-                            saveMyCourseStatus();
+                            // Navigasi ke halaman HomePage
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MainLoading()),
+                              );
+                            });
                           },
                           child: Container(
                             width: 150.0,

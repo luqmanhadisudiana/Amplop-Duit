@@ -21,8 +21,8 @@ class PreferencesManager {
     return null;
   }
 
-  Future<void> resetMyObject() async {
+  static Future<void> resetMyObject() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('myObject');
+    await prefs.remove(_key);
   }
 }
