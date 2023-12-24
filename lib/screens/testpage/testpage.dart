@@ -1,8 +1,8 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -57,26 +57,19 @@ class _TestPageState extends State<TestPage> {
   MyCourseStatus? _myCourseStatus;
 
   Future<void> _loadMyObject() async {
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
+    MyCourseStatus myCourseStatus =
+        Provider.of<MyCourseStatus>(context, listen: false);
+    await myCourseStatus.loadFromSharedPreferences();
 
-    if (myObjectMap != null) {
-      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
-      courseIndexController.text = (myObject.getSelectedCourse + 1).toString();
-      quizIndexController.text = (myObject.getselectedQuiz + 1).toString();
-      heartController.text = myObject.heart.toString();
-      diamondController.text = myObject.diamond.toString();
+    courseIndexController.text =
+        (myCourseStatus.getSelectedCourse + 1).toString();
+    quizIndexController.text = (myCourseStatus.getselectedQuiz + 1).toString();
+    heartController.text = myCourseStatus.heart.toString();
+    diamondController.text = myCourseStatus.diamond.toString();
 
-      setState(() {
-        _myCourseStatus = myObject;
-      });
-    }
-  }
-
-  Future<void> _saveMyObject() async {
-    if (_myCourseStatus != null) {
-      await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
-    }
+    setState(() {
+      _myCourseStatus = myCourseStatus;
+    });
   }
 
   void onValueChanged(String text) {
@@ -121,7 +114,7 @@ class _TestPageState extends State<TestPage> {
         warning("quiz");
       }
     }
-    _saveMyObject();
+    localmyCourseStatus.saveSharedPreferences();
   }
 
   void ligaValueChange() async {
@@ -193,18 +186,44 @@ class _TestPageState extends State<TestPage> {
     prefs.clear();
     debugPrint("pref clear");
 
-    if (_myCourseStatus != null) {
-      debugPrint("object course clear");
-      setState(() {
-        _myCourseStatus!.reset();
-      });
-      await PreferencesManager.resetMyObject();
-    }
+    // CourseProvider localCourseProvider =
+    //     Provider.of<CourseProvider>(context, listen: false);
+    // localCourseProvider.reset();
+
+    MyCourseStatus localmyCourseStatus =
+        Provider.of<MyCourseStatus>(context, listen: false);
+    localmyCourseStatus.reset();
+    localmyCourseStatus.resetMyObject();
+    debugPrint("reset object");
+
+    ListSavedAnswer localMySavedAnswer =
+        Provider.of<ListSavedAnswer>(context, listen: false);
+    localMySavedAnswer.resetMyObject();
+    debugPrint("reset saved answer");
+
+    HistoryList localHistoryList =
+        Provider.of<HistoryList>(context, listen: false);
+    localHistoryList.resetMyObject();
+    debugPrint("reset history");
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
+  }
+
+  late ListSavedAnswer mySavedAnswer;
+  bool showListSavedAnswer = false;
+
+  void getFunction() async {
+    var localmySavedAnswer =
+        Provider.of<ListSavedAnswer>(context, listen: false);
+
+    debugPrint("Get Data");
+    setState(() {
+      mySavedAnswer = localmySavedAnswer;
+      showListSavedAnswer = true;
+    });
   }
 
   @override
@@ -275,17 +294,41 @@ class _TestPageState extends State<TestPage> {
                         });
                         //Provider
                         myCourseStatus.setNewValue(5, 5, 0, -1);
+                        myCourseStatus.saveSharedPreferences();
                         //Controller
                         courseIndexController.text = (1).toString();
                         quizIndexController.text = (0).toString();
                         heartController.text = (5).toString();
                         diamondController.text = (5).toString();
                         ligaController.text = (1).toString();
-                        _saveMyObject();
                       },
                       child: const Text('Reset'),
                     );
                   }),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      debugPrint("starting");
+                      getFunction();
+                    },
+                    child: const Text('Get Saved Answer'),
+                  ),
+                  showListSavedAnswer
+                      ? Column(
+                          children: [
+                            mySavedAnswer.listSavedAnswer.isEmpty
+                                ? const Text("No Data")
+                                : const SizedBox(),
+                            for (var i = 0;
+                                i < mySavedAnswer.listSavedAnswer.length;
+                                i++)
+                              Text(
+                                  '${mySavedAnswer.listSavedAnswer[i].courseIndex}, ${mySavedAnswer.listSavedAnswer[i].quizIndex},${mySavedAnswer.listSavedAnswer[i].indexSavedAnswer}')
+                          ],
+                        )
+                      : const SizedBox()
                 ],
               )
             ],

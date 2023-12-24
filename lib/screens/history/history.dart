@@ -6,6 +6,7 @@ import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/screens/history/your_mistake.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -62,27 +63,35 @@ class HistoryPage extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                listHistory.isEmpty
-                    ? const Center(
-                        child: Text(
-                          "Kamu belum mengerjakan Quiz",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFD1D1D1)),
-                        ),
-                      )
-                    : const SizedBox(),
-                for (var i = 0; i < listHistory.length; i++)
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: CardQuizResult(
-                      title: listHistory[i].title,
-                      question: listHistory[i].question,
-                      answer: listHistory[i].jawaban,
-                      status: listHistory[i].status,
-                    ),
-                  ),
+                Consumer<HistoryList>(
+                  builder: (context, historyList, child) {
+                    return Column(
+                      children: [
+                        historyList.listHistory.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "Kamu belum mengerjakan Quiz",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFFD1D1D1)),
+                                ),
+                              )
+                            : const SizedBox(),
+                        for (var i = 0; i < historyList.listHistory.length; i++)
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CardQuizResult(
+                              title: historyList.listHistory[i].title,
+                              question: historyList.listHistory[i].question,
+                              answer: historyList.listHistory[i].jawaban,
+                              status: historyList.listHistory[i].status,
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           ),

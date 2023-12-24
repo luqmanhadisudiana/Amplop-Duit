@@ -1,5 +1,5 @@
+import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/history/history.dart';
 import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
@@ -43,36 +43,24 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     });
 
     await loginStatus(context);
-
-    MyCourseStatus myObject = await getCurrentObject();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<MyCourseStatus>(context, listen: false).setNewValue(
-        myObject.heart,
-        myObject.diamond,
-        myObject.selectedCourse,
-        myObject.selectedQuiz,
-      );
-    });
-  }
-
-  Future<MyCourseStatus> getCurrentObject() async {
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
-
-    MyCourseStatus myObject;
-    if (myObjectMap != null) {
-      myObject = MyCourseStatus.fromMap(myObjectMap);
-    } else {
-      myObject = MyCourseStatus();
-    }
-
-    return myObject;
   }
 
   Future<void> loginStatus(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLogin = prefs.getBool('isLogin') ?? false;
     debugPrint('is logged in : ${isLogin.toString()}');
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      MyCourseStatus localmyCourseStatus =
+          Provider.of<MyCourseStatus>(context, listen: false);
+      localmyCourseStatus.loadFromSharedPreferences();
+      ListSavedAnswer localMySavedAnswer =
+          Provider.of<ListSavedAnswer>(context, listen: false);
+      localMySavedAnswer.loadFromSharedPreferences();
+      HistoryList localHistoryList =
+          Provider.of<HistoryList>(context, listen: false);
+      localHistoryList.loadFromSharedPreferences();
+    });
 
     // Jika isLogin bernilai true, pindah ke halaman utama
     WidgetsBinding.instance.addPostFrameCallback((_) async {

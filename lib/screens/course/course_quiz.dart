@@ -4,7 +4,6 @@ import 'package:amplop_duit/component/customBottomModal/custom_bottom_modal.dart
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +30,9 @@ class CourseQuiz extends StatefulWidget {
 class _CourseQuizState extends State<CourseQuiz> {
   late CourseProvider courseProvider;
   late MyCourseStatus myCourseStatusProvider;
+  late ListSavedAnswer listSavedAnswer;
+  late HistoryList listHistory;
+
   int selectedIndex = -1;
   late int currentIndex;
   late bool isButtonDisable;
@@ -44,10 +46,11 @@ class _CourseQuizState extends State<CourseQuiz> {
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
     myCourseStatusProvider =
         Provider.of<MyCourseStatus>(context, listen: false);
+    listSavedAnswer = Provider.of<ListSavedAnswer>(context, listen: false);
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
     bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
-    int savedAnswer = courseProvider.getSavedAnswer(courseIdx, quizIdx);
+    int savedAnswer = listSavedAnswer.getSavedAnswer(courseIdx, quizIdx);
 
     debugPrint(quizStatus.toString());
     debugPrint(
@@ -69,29 +72,11 @@ class _CourseQuizState extends State<CourseQuiz> {
     if (currentIndex != -1) {
       selectedIndex = currentIndex;
     }
-    _loadMyObject();
-  }
-
-  MyCourseStatus? _myCourseStatus;
-
-  Future<void> _loadMyObject() async {
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
-
-    if (myObjectMap != null) {
-      final MyCourseStatus myObject = MyCourseStatus.fromMap(myObjectMap);
-      setState(() {
-        _myCourseStatus = myObject;
-      });
-    }
-  }
-
-  Future<void> _saveMyObject() async {
-    _myCourseStatus = myCourseStatusProvider;
-    await PreferencesManager.saveMyObject(_myCourseStatus!.toMap());
   }
 
   void modalAction(i) {
+    listSavedAnswer = Provider.of<ListSavedAnswer>(context, listen: false);
+    listHistory = Provider.of<HistoryList>(context, listen: false);
     bool answerStatus = widget.listAnswer[i].status;
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
@@ -115,6 +100,12 @@ class _CourseQuizState extends State<CourseQuiz> {
       debugPrint("check apakah jawaban benar ${answerStatus == true}");
       if (answerStatus == true) {
         courseProvider.updateSavedAnswer(courseIdx, quizIdx, indexAnswer);
+        listSavedAnswer.addSavedAnswer(MySavedAnswer(
+          courseIndex: courseIdx,
+          quizIndex: quizIdx,
+          indexSavedAnswer: indexAnswer,
+        ));
+        listSavedAnswer.saveToSharedPreferences();
       } else {
         setState(() {
           myCourseStatusProvider.decreaseHeart();
@@ -127,16 +118,17 @@ class _CourseQuizState extends State<CourseQuiz> {
       }
 
       if (!quizStatus) {
-        listHistory.add(History(
+        listHistory.addHistory(History(
             idCourse: courseIdx,
             status: answerStatus,
             attempt: 1,
             title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
             question: widget.question,
             jawaban: widget.listAnswer[indexAnswer].text));
+        listHistory.saveToSharedPreferences();
       }
 
-      _saveMyObject();
+      myCourseStatusProvider.saveSharedPreferences();
 
       Navigator.pop(context);
       Navigator.pop(context);

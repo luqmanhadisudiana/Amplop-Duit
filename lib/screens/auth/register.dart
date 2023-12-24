@@ -1,7 +1,6 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
@@ -17,27 +16,23 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  Future<void> saveMyObject(MyCourseStatus myCourseStatus) async {
-    await PreferencesManager.saveMyObject(myCourseStatus.toMap());
-  }
-
-  Future<void> setLoginStatus(Function callback) async {
+  Future<void> setLoginStatus() async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
     prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
 
     //Check Object
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
-    if (myObjectMap == null) {
-      callback();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      MyCourseStatus localmyCourseStatus =
+          Provider.of<MyCourseStatus>(context, listen: false);
+      localmyCourseStatus.setNewValue(10, 10, 0, -1);
+      localmyCourseStatus.saveSharedPreferences();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var myCourseStatus = context.watch<MyCourseStatus>();
     return MaterialApp(
         title: 'Register',
         theme: MyAppTheme.buildTheme(),
@@ -124,10 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           onTap: () {
                             // Tambahkan logika yang ingin dilakukan saat div/button diklik
                             debugPrint('Google Login');
-                            setLoginStatus(() {
-                              myCourseStatus.setNewValue(7, 7, 0, -1);
-                              saveMyObject(myCourseStatus);
-                            });
+                            setLoginStatus();
                             // Navigasi ke halaman HomePage
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.pushReplacement(

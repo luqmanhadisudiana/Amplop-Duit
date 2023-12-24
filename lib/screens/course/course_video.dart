@@ -52,6 +52,7 @@ class _CourseVideoState extends State<CourseVideo> {
     courseProvider = Provider.of<CourseProvider>(context, listen: false);
     myCourseStatusProvider =
         Provider.of<MyCourseStatus>(context, listen: false);
+    debugPrint(courseProvider.getCourseFeedback(widget.index).toString());
     buttonText = courseProvider.getCourseFeedback(widget.index) == 0
         ? "Berikutnya"
         : "Kembali";

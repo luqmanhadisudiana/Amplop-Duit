@@ -1,7 +1,6 @@
 import 'package:amplop_duit/component/button/main_button.dart';
 import 'package:amplop_duit/component/input/input_text.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
-import 'package:amplop_duit/preferences_manager.dart';
 import 'package:amplop_duit/screens/auth/forgot_password.dart';
 import 'package:amplop_duit/screens/auth/register.dart';
 import 'package:amplop_duit/screens/loading/main_loading.dart';
@@ -87,40 +86,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> saveMyObject(MyCourseStatus myCourseStatus) async {
-    await PreferencesManager.saveMyObject(myCourseStatus.toMap());
-  }
-
-  Future<void> setLoginStatus(Function callback) async {
+  Future<void> setLoginStatus() async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
     prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
 
     //Check Object
-    final Map<String, dynamic>? myObjectMap =
-        await PreferencesManager.loadMyObject();
-    if (myObjectMap == null) {
-      callback();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      MyCourseStatus localmyCourseStatus =
+          Provider.of<MyCourseStatus>(context, listen: false);
+      localmyCourseStatus.setNewValue(10, 10, 0, -1);
+      localmyCourseStatus.saveSharedPreferences();
+    });
   }
-
-  // Future<bool> checkMyCourseStatus() async {
-  //   final Map<String, dynamic>? myObjectMap =
-  //       await PreferencesManager.loadMyObject();
-
-  //   debugPrint(myObjectMap.toString());
-  //   if (myObjectMap == null) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
-    //Course Status
-    var myCourseStatus = context.watch<MyCourseStatus>();
 
     return Scaffold(
       body: Center(
@@ -231,10 +213,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               child: InkWell(
                 onTap: () async {
                   debugPrint('Google Login');
-                  setLoginStatus(() {
-                    myCourseStatus.setNewValue(5, 5, 0, -1);
-                    saveMyObject(myCourseStatus);
-                  });
+                  setLoginStatus();
                   // Navigasi ke halaman HomePage
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushReplacement(
@@ -274,10 +253,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 width: 170.0,
                 action: () async {
                   debugPrint('Button Login');
-                  setLoginStatus(() {
-                    myCourseStatus.setNewValue(5, 5, 0, -1);
-                    saveMyObject(myCourseStatus);
-                  });
+                  setLoginStatus();
                   // Navigasi ke halaman HomePage
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushReplacement(

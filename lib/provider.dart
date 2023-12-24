@@ -4,6 +4,10 @@ import 'package:flutter/foundation.dart';
 class CourseProvider with ChangeNotifier {
   List<Course> listCourse = courseList;
 
+  void reset() {
+    listCourse = courseList;
+  }
+
   List<Course> get getCourseList => listCourse;
 
   Course getCourseByIndex(int index) {
