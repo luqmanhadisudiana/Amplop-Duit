@@ -59,6 +59,8 @@ class MyCourseStatus extends ChangeNotifier {
 
   void decreaseDiamond() {
     diamond = diamond - 1;
+    heart = 5;
+
     notifyListeners();
   }
 
@@ -86,7 +88,6 @@ class MyCourseStatus extends ChangeNotifier {
 
   void nextCourse() {
     selectedCourse = selectedCourse + 1;
-    //reset quiz index
     selectedQuiz = -1;
     notifyListeners();
   }

@@ -16,11 +16,24 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  Future<void> saveDataWithExpiration(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Set tanggal kedaluwarsa ke awal hari berikutnya
+    DateTime expirationDate = DateTime.now().add(const Duration(days: 1));
+    expirationDate = DateTime(expirationDate.year, expirationDate.month,
+        expirationDate.day, 0, 0, 0, 0);
+
+    await prefs.setString(key, expirationDate.toIso8601String());
+  }
+
   Future<void> setLoginStatus() async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
     prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
+    debugPrint("Set Expired");
+    await saveDataWithExpiration('Expired');
 
     //Check Object
     WidgetsBinding.instance.addPostFrameCallback((_) {

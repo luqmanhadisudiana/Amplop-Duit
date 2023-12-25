@@ -56,23 +56,28 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     bool isLogin = prefs.getBool('isLogin') ?? false;
     debugPrint('is logged in : ${isLogin.toString()}');
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      MyCourseStatus localmyCourseStatus =
-          Provider.of<MyCourseStatus>(context, listen: false);
-      localmyCourseStatus.loadFromSharedPreferences();
-      ListSavedAnswer localMySavedAnswer =
-          Provider.of<ListSavedAnswer>(context, listen: false);
-      localMySavedAnswer.loadFromSharedPreferences();
-      HistoryList localHistoryList =
-          Provider.of<HistoryList>(context, listen: false);
-      localHistoryList.loadFromSharedPreferences();
-      ListMonthlyFinance localListMonthly =
-          Provider.of<ListMonthlyFinance>(context, listen: false);
-      localListMonthly.loadFromSharedPreferences();
-      ListDailyFinance localListDaily =
-          Provider.of<ListDailyFinance>(context, listen: false);
-      localListDaily.loadFromSharedPreferences();
-    });
+    if (isLogin) {
+      // Mengecek dan menghapus data yang sudah kadaluwarsa
+      await checkAndRemoveExpiredData('Expired');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        MyCourseStatus localmyCourseStatus =
+            Provider.of<MyCourseStatus>(context, listen: false);
+        localmyCourseStatus.loadFromSharedPreferences();
+        ListSavedAnswer localMySavedAnswer =
+            Provider.of<ListSavedAnswer>(context, listen: false);
+        localMySavedAnswer.loadFromSharedPreferences();
+        HistoryList localHistoryList =
+            Provider.of<HistoryList>(context, listen: false);
+        localHistoryList.loadFromSharedPreferences();
+        ListMonthlyFinance localListMonthly =
+            Provider.of<ListMonthlyFinance>(context, listen: false);
+        localListMonthly.loadFromSharedPreferences();
+        ListDailyFinance localListDaily =
+            Provider.of<ListDailyFinance>(context, listen: false);
+        localListDaily.loadFromSharedPreferences();
+      });
+    }
 
     // Jika isLogin bernilai true, pindah ke halaman utama
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -83,6 +88,31 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
         );
       }
     });
+  }
+
+  Future<void> checkAndRemoveExpiredData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? expirationDateString = prefs.getString(key);
+    debugPrint("Get Data");
+    if (expirationDateString != null) {
+      debugPrint("tidak null");
+
+      // Pengecekan apakah data sudah kadaluwarsa
+      DateTime expirationDate = DateTime.parse(expirationDateString);
+      if (DateTime.now().isAfter(expirationDate)) {
+        // Data sudah kadaluwarsa, hapus key
+        debugPrint("clear bang");
+        List<String> keysToRemove = [
+          'historyList',
+          'myCourseStatus',
+          'savedAnswers'
+        ];
+        for (String key in keysToRemove) {
+          await prefs.remove(key);
+        }
+      }
+    }
   }
 
   final List<List<String>> _icons = [

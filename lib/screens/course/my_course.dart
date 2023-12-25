@@ -4,6 +4,7 @@ import 'package:amplop_duit/component/card/card_thumbnail.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
 import 'package:amplop_duit/component/informationLevel/information_level.dart';
 import 'package:amplop_duit/component/stepCourse/step_course.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
@@ -28,20 +29,65 @@ class _MyCoursePageState extends State<MyCoursePage> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showAlertDialog();
+    });
   }
 
-  // void navigateToQuiz(index, myCourseStatusProvider) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //         builder: (context) => CourseQuiz(
-  //             question: course.listQuestionAnswer[index].question,
-  //             thumbnailUrl: course.videoThumbail,
-  //             listAnswer: course.listQuestionAnswer[index].answerList,
-  //             courseIndex: myCourseStatusProvider.getSelectedCourse,
-  //             quizIndex: index)),
-  //   );
-  // }
+  void showAlertDialog() {
+    var myCourseStatusProvider =
+        Provider.of<MyCourseStatus>(context, listen: false);
+
+    if (myCourseStatusProvider.diamond == 0) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => CustomAlertDialog(
+          title: "Diamond Anda Telah Habis",
+          desc: "Silahkan melanjutkan pada besok hari",
+          action: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NavigationWrapper()),
+            );
+          },
+        ),
+      );
+    }
+
+    if (myCourseStatusProvider.heart == 0 &&
+        myCourseStatusProvider.diamond != 0) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => CustomAlertDialog(
+          title: "Nyawa Anda Telah Habis",
+          desc: "Untuk Melanjutkan tukarkan Diamond dengan 5 Nyawa",
+          actions: [
+            ActionItem(
+              text: "Tidak",
+              color: const Color(0xFFCC3E57),
+              onPressed: () {
+                debugPrint("Cancel button clicked!");
+                Navigator.pop(context);
+              },
+            ),
+            ActionItem(
+              text: "Ya",
+              color: const Color(0xFF339933),
+              onPressed: () {
+                debugPrint("Ya button clicked!");
+                Navigator.pop(context);
+                myCourseStatusProvider.decreaseDiamond();
+                myCourseStatusProvider.saveSharedPreferences();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   void navigateToQuiz(
       question, thumbnailUrl, listAnswer, courseIndex, quizIndex) {
     Navigator.push(
@@ -53,7 +99,9 @@ class _MyCoursePageState extends State<MyCoursePage> {
               listAnswer: listAnswer,
               courseIndex: courseIndex,
               quizIndex: quizIndex)),
-    );
+    ).then((value) => {
+          if (value != null && value == true) {initState()}
+        });
   }
 
   @override
@@ -117,14 +165,19 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 GestureDetector(
                                   onTap: i <= selectedQuiz
                                       ? () {
-                                          navigateToQuiz(
-                                              course.listQuestionAnswer[i]
-                                                  .question,
-                                              thumbailUrl,
-                                              course.listQuestionAnswer[i]
-                                                  .answerList,
-                                              selectedCourse,
-                                              i);
+                                          if (myCourseStatusProvider.heart ==
+                                              0) {
+                                            showAlertDialog();
+                                          } else {
+                                            navigateToQuiz(
+                                                course.listQuestionAnswer[i]
+                                                    .question,
+                                                thumbailUrl,
+                                                course.listQuestionAnswer[i]
+                                                    .answerList,
+                                                selectedCourse,
+                                                i);
+                                          }
                                         }
                                       : null,
                                   child: StepCourse(
@@ -140,14 +193,19 @@ class _MyCoursePageState extends State<MyCoursePage> {
                                 GestureDetector(
                                   onTap: i <= selectedQuiz
                                       ? () {
-                                          navigateToQuiz(
-                                              course.listQuestionAnswer[i]
-                                                  .question,
-                                              thumbailUrl,
-                                              course.listQuestionAnswer[i]
-                                                  .answerList,
-                                              selectedCourse,
-                                              i);
+                                          if (myCourseStatusProvider.heart ==
+                                              0) {
+                                            showAlertDialog();
+                                          } else {
+                                            navigateToQuiz(
+                                                course.listQuestionAnswer[i]
+                                                    .question,
+                                                thumbailUrl,
+                                                course.listQuestionAnswer[i]
+                                                    .answerList,
+                                                selectedCourse,
+                                                i);
+                                          }
                                         }
                                       : null,
                                   child: StepCourse(
@@ -182,6 +240,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                               );
                             } else {
                               myCourseStatusProvider.nextCourse();
+                              myCourseStatusProvider.saveSharedPreferences();
                             }
                           }),
                     ),

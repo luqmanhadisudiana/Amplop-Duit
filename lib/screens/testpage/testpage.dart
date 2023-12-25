@@ -109,7 +109,7 @@ class _TestPageState extends State<TestPage> {
       int quizLenght =
           courseProvider.getCourseList[courseIndex].listQuestionAnswer.length;
 
-      if (quizIndex < quizLenght && quizIndex >= 0) {
+      if (quizIndex <= quizLenght && quizIndex >= 0) {
         setState(() {
           _myCourseStatus!
               .setNewValue(heart, diamond, courseIndex - 1, quizIndex - 1);
