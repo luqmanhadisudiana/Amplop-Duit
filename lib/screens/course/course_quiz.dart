@@ -118,15 +118,18 @@ class _CourseQuizState extends State<CourseQuiz> {
       }
 
       if (!quizStatus) {
+        myCourseStatusProvider.start();
         listHistory.addHistory(History(
             idCourse: courseIdx,
             status: answerStatus,
-            attempt: 1,
+            attempt: myCourseStatusProvider.attempt,
             title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
             question: widget.question,
             jawaban: widget.listAnswer[indexAnswer].text));
         listHistory.saveToSharedPreferences();
       }
+
+      debugPrint('${myCourseStatusProvider.attempt}');
 
       myCourseStatusProvider.saveSharedPreferences();
 

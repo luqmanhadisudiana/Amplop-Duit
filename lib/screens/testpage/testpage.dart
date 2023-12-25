@@ -314,10 +314,10 @@ class _TestPageState extends State<TestPage> {
                     Consumer<MyCourseStatus>(
                         builder: (context, myCourseStatus, child) {
                       return Text(
-                          'Provider State Data : \nDiamond: ${myCourseStatus.diamond}, Heart: ${myCourseStatus.heart}, selectedCourse: ${myCourseStatus.selectedCourse}, selectedQuiz: ${myCourseStatus.selectedQuiz}, ');
+                          'Provider State Data : \nDiamond: ${myCourseStatus.diamond}, Heart: ${myCourseStatus.heart}, selectedCourse: ${myCourseStatus.selectedCourse}, selectedQuiz: ${myCourseStatus.selectedQuiz}, attempt: ${myCourseStatus.attempt}');
                     }),
                     Text(_myCourseStatus != null
-                        ? 'Local Data : \nDiamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}, selectedCourse: ${_myCourseStatus!.selectedCourse}, selectedQuiz: ${_myCourseStatus!.selectedQuiz},'
+                        ? 'Local Data : \nDiamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}, selectedCourse: ${_myCourseStatus!.selectedCourse}, selectedQuiz: ${_myCourseStatus!.selectedQuiz}, attempt: ${_myCourseStatus!.attempt}'
                         : "No Data"),
                     const SizedBox(height: 20),
                     Consumer<MyCourseStatus>(
@@ -670,7 +670,74 @@ class _TestPageState extends State<TestPage> {
                               ],
                             ),
                           ],
-                        ))
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text("Data Provider List History"),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Consumer<HistoryList>(builder: (context, data, child) {
+                      List<double> customWidth =
+                          List.generate(6, (index) => 1 / 6);
+                      return Column(
+                        children: [
+                          TableHeader(
+                            headerData: const [
+                              'idCourse',
+                              'status',
+                              'attempt',
+                              'title',
+                              'question',
+                              'jawaban',
+                            ],
+                            customWidth: customWidth,
+                          ),
+                          data.listHistory.isEmpty
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30.0),
+                                  height: 100,
+                                  width: double.maxFinite,
+                                  color: const Color(0xFFEDEDED),
+                                  child: const Center(
+                                    child: Text(
+                                      "Kosong",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFFD1D1D1)),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          for (var i = 0; i < data.listHistory.length; i++)
+                            TableRowData(
+                              childList: [
+                                DefaultRowData(
+                                    text: data.listHistory[i].idCourse
+                                        .toString()),
+                                DefaultRowData(
+                                    text:
+                                        data.listHistory[i].status.toString()),
+                                DefaultRowData(
+                                    text:
+                                        data.listHistory[i].attempt.toString()),
+                                DefaultRowData(
+                                    text: data.listHistory[i].title.toString()),
+                                DefaultRowData(
+                                    text: data.listHistory[i].question
+                                        .toString()),
+                                DefaultRowData(
+                                    text:
+                                        data.listHistory[i].jawaban.toString()),
+                              ],
+                              customWidth: customWidth,
+                            ),
+                        ],
+                      );
+                    })
                   ],
                 ),
               ],

@@ -1,16 +1,19 @@
+import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class CardMistakeStatus extends StatelessWidget {
   final double width, height;
-  final String currentStatus;
-  final int trials;
-  const CardMistakeStatus(
-      {super.key,
-      this.width = double.maxFinite,
-      this.height = 105,
-      this.currentStatus = "Level 1\nBagian 1",
-      this.trials = 5});
+  // final String currentStatus;
+  // final int trials;
+  const CardMistakeStatus({
+    super.key,
+    this.width = double.maxFinite,
+    this.height = 105,
+    // this.currentStatus = "Level 1\nBagian 1",
+    // this.trials = 5
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +47,20 @@ class CardMistakeStatus extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        currentStatus,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Consumer<MyCourseStatus>(
+                          builder: (context, myCourseStatus, child) {
+                        return Text(
+                          myCourseStatus.getselectedQuiz == -1
+                              ? "Level ${myCourseStatus.getSelectedCourse + 1}"
+                              : "Level ${myCourseStatus.getSelectedCourse + 1}\nBagian ${myCourseStatus.getselectedQuiz + 1}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -70,15 +78,20 @@ class CardMistakeStatus extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(
-                      "$trials Kali",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Consumer<MyCourseStatus>(
+                        builder: (context, myCourseStatus, child) {
+                      return Text(
+                        myCourseStatus.attempt == 0
+                            ? "Belum Ada"
+                            : "${myCourseStatus.attempt} Kali",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }),
                   ],
                 ))
               ],

@@ -60,12 +60,17 @@ class HistoryList extends ChangeNotifier {
   Future<void> loadFromSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String>? jsonList = prefs.getStringList('historyList');
-
+    debugPrint("get historyList");
     if (jsonList != null) {
       listHistory = jsonList
           .map<History>((json) =>
               History.fromJson(jsonDecode(json) as Map<String, dynamic>))
           .toList();
+      notifyListeners();
+      debugPrint("done...");
+    } else {
+      // Jika jsonList kosong, inisialisasi listHistory dengan list kosong
+      listHistory = [];
       notifyListeners();
     }
   }

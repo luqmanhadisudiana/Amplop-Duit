@@ -100,15 +100,15 @@ class ListDailyFinance extends ChangeNotifier {
   Future<void> loadFromSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String>? jsonList = prefs.getStringList('dailyList');
-
+    debugPrint("get dailyList");
     if (jsonList != null) {
       listDailyFinance = jsonList
           .map<DailyFinance>((json) =>
               DailyFinance.fromJson(jsonDecode(json) as Map<String, dynamic>))
           .toList();
       notifyListeners();
+      debugPrint("done...");
     }
-    debugPrint("Done Load");
   }
 
   Future<void> resetMyObject() async {
@@ -183,14 +183,15 @@ class ListMonthlyFinance extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String>? jsonList = prefs.getStringList('monthlyList');
 
+    debugPrint("get monthlyList");
     if (jsonList != null) {
       listMonthlyFinance = jsonList
           .map<MonthlyFinance>((json) =>
               MonthlyFinance.fromJson(jsonDecode(json) as Map<String, dynamic>))
           .toList();
       notifyListeners();
+      debugPrint("done...");
     }
-    debugPrint("Done Load");
   }
 
   Future<void> resetMyObject() async {

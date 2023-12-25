@@ -8,12 +8,14 @@ class MyCourseStatus extends ChangeNotifier {
   int diamond;
   int selectedCourse;
   int selectedQuiz;
+  int attempt;
 
   MyCourseStatus({
     this.heart = 5,
     this.diamond = 5,
     this.selectedCourse = 0,
     this.selectedQuiz = -1,
+    this.attempt = 0,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,16 +24,24 @@ class MyCourseStatus extends ChangeNotifier {
       'diamond': diamond,
       'selectedCourse': selectedCourse,
       'selectedQuiz': selectedQuiz,
+      'attempt': attempt,
     };
   }
 
   factory MyCourseStatus.fromMap(Map<String, dynamic> map) {
     return MyCourseStatus(
-      heart: map['heart'],
-      diamond: map['diamond'],
-      selectedCourse: map['selectedCourse'] ?? 0,
-      selectedQuiz: map['selectedQuiz'] ?? -1,
-    );
+        heart: map['heart'],
+        diamond: map['diamond'],
+        selectedCourse: map['selectedCourse'] ?? 0,
+        selectedQuiz: map['selectedQuiz'] ?? -1,
+        attempt: map['attempt']);
+  }
+
+  void start() {
+    if (attempt == 0) {
+      attempt += 1;
+    }
+    notifyListeners();
   }
 
   void reset() {
@@ -39,6 +49,7 @@ class MyCourseStatus extends ChangeNotifier {
     diamond = 5;
     selectedCourse = 0;
     selectedQuiz = -1;
+    attempt = 0;
     notifyListeners();
   }
 
@@ -60,6 +71,7 @@ class MyCourseStatus extends ChangeNotifier {
   void decreaseDiamond() {
     diamond = diamond - 1;
     heart = 5;
+    attempt = attempt + 1;
 
     notifyListeners();
   }
@@ -116,6 +128,7 @@ class MyCourseStatus extends ChangeNotifier {
       diamond = savedStatus.diamond;
       selectedCourse = savedStatus.selectedCourse;
       selectedQuiz = savedStatus.selectedQuiz;
+      attempt = savedStatus.attempt;
 
       notifyListeners();
     }
@@ -128,6 +141,7 @@ class MyCourseStatus extends ChangeNotifier {
     diamond = 5;
     selectedCourse = 0;
     selectedQuiz = -1;
+    attempt = 0;
     notifyListeners();
   }
 }
@@ -195,12 +209,13 @@ class ListSavedAnswer extends ChangeNotifier {
   Future<void> loadFromSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String>? jsonList = prefs.getStringList('savedAnswers');
-
+    debugPrint("get savedAnswers");
     if (jsonList != null) {
       listSavedAnswer = jsonList
           .map<MySavedAnswer>((json) =>
               MySavedAnswer.fromJson(jsonDecode(json) as Map<String, dynamic>))
           .toList();
+      debugPrint("done...");
     } else {
       listSavedAnswer = [];
     }
