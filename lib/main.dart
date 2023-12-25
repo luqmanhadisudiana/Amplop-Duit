@@ -1,4 +1,5 @@
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
@@ -17,6 +18,9 @@ void main() async {
       ChangeNotifierProvider(create: (context) => MyCourseStatus()),
       ChangeNotifierProvider(create: (context) => ListSavedAnswer()),
       ChangeNotifierProvider(create: (context) => HistoryList()),
+      ChangeNotifierProvider(create: (context) => ListMonthlyFinance()),
+      ChangeNotifierProvider(create: (context) => ListDailyFinance()),
+
       // Tambahkan provider lain sesuai kebutuhan
     ],
     child: MaterialApp(

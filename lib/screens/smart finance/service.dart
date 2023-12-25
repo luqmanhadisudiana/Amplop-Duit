@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 
 const customPadding = EdgeInsets.only(left: 16, top: 8);
 
-List<FinanceRowHelper> getListMonthlyFinance() {
+List<FinanceRowHelper> getRowMonthlyFinance(
+    List<DailyFinance> dataDaily, List<MonthlyFinance> dataMonthly) {
   List<FinanceRowHelper> monthlyFinanceRow;
 
   Map<String, List<DailyFinance>> sortedMonth =
-      groupByMonth(listFinance, (finance) {
+      groupByMonth(dataDaily, (finance) {
     String month = "${finance.datetime.month}".padLeft(2, '0');
     String year = "${finance.datetime.year}";
     return "$year-$month";
@@ -35,13 +36,9 @@ List<FinanceRowHelper> getListMonthlyFinance() {
         }
       }
 
-      // debugPrint('${parseYearMonth(month)}: ${countTemp.toString()}');
-      // debugPrint('$income $countTemp ${(income - (-countTemp))}');
-
-      for (var i = 0; i < listMonthlyFinance.length; i++) {
-        if (parseYearMonth(month).month ==
-            listMonthlyFinance[i].datetime.month) {
-          tempIncome = listMonthlyFinance[i].nominal;
+      for (var i = 0; i < dataMonthly.length; i++) {
+        if (parseYearMonth(month).month == dataMonthly[i].datetime.month) {
+          tempIncome = dataMonthly[i].nominal;
         }
       }
 
@@ -68,9 +65,9 @@ List<FinanceRowHelper> getListMonthlyFinance() {
   return monthlyFinanceRow;
 }
 
-List<FinanceRowHelper> getListDailyFinance() {
+List<FinanceRowHelper> getRowDailyFinance(List<DailyFinance> data) {
   List<DailyFinance> dailyFinances =
-      sortByKey(listFinance, (finance) => finance.datetime, descending: true);
+      sortByKey(data, (finance) => finance.datetime, descending: true);
 
   List<FinanceRowHelper> dailyFinancesRow;
 

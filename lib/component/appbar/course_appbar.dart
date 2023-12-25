@@ -54,7 +54,7 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 8.0,
                   ),
                   Text(
-                    localCourseStatus.diamond.toString(),
+                    localCourseStatus.heart.toString(),
                     style: const TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 8,

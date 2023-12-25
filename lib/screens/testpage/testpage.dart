@@ -1,11 +1,17 @@
 import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/customAlertDialog/custom_alert_dialog.dart';
+import 'package:amplop_duit/component/input/row_label_input.dart';
+import 'package:amplop_duit/component/table/data/default_row_data.dart';
+import 'package:amplop_duit/component/table/table_header.dart';
+import 'package:amplop_duit/component/table/table_row.dart';
 import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
 import 'package:amplop_duit/screens/auth/login.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,9 +24,9 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  TextEditingController ligaController = TextEditingController();
   TextEditingController courseIndexController = TextEditingController();
   TextEditingController quizIndexController = TextEditingController();
-  TextEditingController ligaController = TextEditingController();
   TextEditingController heartController = TextEditingController();
   TextEditingController diamondController = TextEditingController();
 
@@ -118,12 +124,14 @@ class _TestPageState extends State<TestPage> {
   }
 
   void ligaValueChange() async {
-    if ((int.tryParse(ligaController.text) ?? 0) > 0 &&
-        (int.tryParse(ligaController.text) ?? 0) <= 5) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
-    } else {
-      warning("liga");
+    if (ligaController.text != "") {
+      if ((int.tryParse(ligaController.text) ?? 0) > 0 &&
+          (int.tryParse(ligaController.text) ?? 0) <= 5) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
+      } else {
+        warning("liga");
+      }
     }
   }
 
@@ -186,10 +194,6 @@ class _TestPageState extends State<TestPage> {
     prefs.clear();
     debugPrint("pref clear");
 
-    // CourseProvider localCourseProvider =
-    //     Provider.of<CourseProvider>(context, listen: false);
-    // localCourseProvider.reset();
-
     MyCourseStatus localmyCourseStatus =
         Provider.of<MyCourseStatus>(context, listen: false);
     localmyCourseStatus.reset();
@@ -205,6 +209,14 @@ class _TestPageState extends State<TestPage> {
         Provider.of<HistoryList>(context, listen: false);
     localHistoryList.resetMyObject();
     debugPrint("reset history");
+
+    providerListDailyFinance =
+        Provider.of<ListDailyFinance>(context, listen: false);
+    providerListDailyFinance.resetMyObject();
+    providerListMonthlyFinance =
+        Provider.of<ListMonthlyFinance>(context, listen: false);
+    providerListMonthlyFinance.resetMyObject();
+    debugPrint("reset finance");
 
     Navigator.pushReplacement(
       context,
@@ -226,8 +238,39 @@ class _TestPageState extends State<TestPage> {
     });
   }
 
+  late ListMonthlyFinance providerListMonthlyFinance;
+  late ListDailyFinance providerListDailyFinance;
+  bool loadingState = false;
+
+  void setAndSaved() {
+    providerListDailyFinance =
+        Provider.of<ListDailyFinance>(context, listen: false);
+    providerListMonthlyFinance =
+        Provider.of<ListMonthlyFinance>(context, listen: false);
+
+    providerListMonthlyFinance.addBatch(listMonthlyFinance);
+    providerListDailyFinance.addBatch(listFinance);
+    providerListMonthlyFinance.saveToSharedPreferences();
+    providerListDailyFinance.saveToSharedPreferences();
+    debugPrint("done");
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<TextEditingController> listController = [
+      ligaController,
+      courseIndexController,
+      quizIndexController,
+      heartController,
+      diamondController
+    ];
+    List<String> listLabel = [
+      "Liga Index",
+      "Course Index + 1",
+      "Quiz Index + 1",
+      "Heart",
+      "Diamond"
+    ];
     return MaterialApp(
       title: "Test Page",
       home: Scaffold(
@@ -235,6 +278,7 @@ class _TestPageState extends State<TestPage> {
           title: "Test Page",
           parentContext: context,
           action: () {
+            Navigator.pop(context);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -245,93 +289,392 @@ class _TestPageState extends State<TestPage> {
           },
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  LabelAndTextField(
-                    label: "Liga Index",
-                    controller: ligaController,
-                  ),
-                  LabelAndTextField(
-                    label: "Course Index + 1",
-                    controller: courseIndexController,
-                  ),
-                  LabelAndTextField(
-                    label: "Quiz Index  + 1",
-                    controller: quizIndexController,
-                  ),
-                  LabelAndTextField(
-                    label: "Heart",
-                    controller: heartController,
-                  ),
-                  LabelAndTextField(
-                    label: "Diamond",
-                    controller: diamondController,
-                  ),
-                  Consumer<MyCourseStatus>(
-                      builder: (context, myCourseStatus, child) {
-                    return Text(
-                        'Provider Data : \nDiamond: ${myCourseStatus.diamond}, Heart: ${myCourseStatus.heart}, selectedCourse: ${myCourseStatus.selectedCourse}, selectedQuiz: ${myCourseStatus.selectedQuiz}, ');
-                  }),
-                  Text(_myCourseStatus != null
-                      ? 'SharedPreference Data : \nDiamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}, selectedCourse: ${_myCourseStatus!.selectedCourse}, selectedQuiz: ${_myCourseStatus!.selectedQuiz},'
-                      : "No Data"),
-                  const SizedBox(height: 20),
-                  Consumer<MyCourseStatus>(
-                      builder: (context, myCourseStatus, child) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        //Object
-                        setState(() {
-                          _myCourseStatus = MyCourseStatus(
-                              heart: 5,
-                              diamond: 5,
-                              selectedCourse: 0,
-                              selectedQuiz: -1);
-                        });
-                        //Provider
-                        myCourseStatus.setNewValue(5, 5, 0, -1);
-                        myCourseStatus.saveSharedPreferences();
-                        //Controller
-                        courseIndexController.text = (1).toString();
-                        quizIndexController.text = (0).toString();
-                        heartController.text = (5).toString();
-                        diamondController.text = (5).toString();
-                        ligaController.text = (1).toString();
-                      },
-                      child: const Text('Reset'),
-                    );
-                  }),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      debugPrint("starting");
-                      getFunction();
-                    },
-                    child: const Text('Get Saved Answer'),
-                  ),
-                  showListSavedAnswer
-                      ? Column(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    for (var i = 0; i < listController.length; i++)
+                      RowLabelInput(
+                        label: listLabel[i],
+                        controller: listController[i],
+                        textInputType: TextInputType.number,
+                        inputDecoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFE9E9E9)),
+                          ),
+                        ),
+                      ),
+                    Consumer<MyCourseStatus>(
+                        builder: (context, myCourseStatus, child) {
+                      return Text(
+                          'Provider State Data : \nDiamond: ${myCourseStatus.diamond}, Heart: ${myCourseStatus.heart}, selectedCourse: ${myCourseStatus.selectedCourse}, selectedQuiz: ${myCourseStatus.selectedQuiz}, ');
+                    }),
+                    Text(_myCourseStatus != null
+                        ? 'Local Data : \nDiamond: ${_myCourseStatus!.diamond}, Heart: ${_myCourseStatus!.heart}, selectedCourse: ${_myCourseStatus!.selectedCourse}, selectedQuiz: ${_myCourseStatus!.selectedQuiz},'
+                        : "No Data"),
+                    const SizedBox(height: 20),
+                    Consumer<MyCourseStatus>(
+                        builder: (context, myCourseStatus, child) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          //Object
+                          setState(() {
+                            _myCourseStatus = MyCourseStatus(
+                                heart: 5,
+                                diamond: 5,
+                                selectedCourse: 0,
+                                selectedQuiz: -1);
+                          });
+                          //Provider
+                          myCourseStatus.setNewValue(5, 5, 0, -1);
+                          myCourseStatus.saveSharedPreferences();
+                          //Controller
+                          courseIndexController.text = (1).toString();
+                          quizIndexController.text = (0).toString();
+                          heartController.text = (5).toString();
+                          diamondController.text = (5).toString();
+                          ligaController.text = (1).toString();
+                        },
+                        child: const Text('Reset'),
+                      );
+                    }),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              debugPrint("starting");
+                              getFunction();
+                            },
+                            child: const Text('Get Saved Answer'),
+                          ),
+                          showListSavedAnswer
+                              ? Column(
+                                  children: [
+                                    const TableHeader(headerData: [
+                                      "Course Index",
+                                      "Quiz Index",
+                                      "IndexSavedAnswer"
+                                    ]),
+                                    mySavedAnswer.listSavedAnswer.isEmpty
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30.0),
+                                            height: 100,
+                                            width: double.maxFinite,
+                                            color: const Color(0xFFEDEDED),
+                                            child: const Center(
+                                              child: Text(
+                                                "Kosong",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFFD1D1D1)),
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    for (var i = 0;
+                                        i <
+                                            mySavedAnswer
+                                                .listSavedAnswer.length;
+                                        i++)
+                                      TableRowData(childList: [
+                                        DefaultRowData(
+                                            text: mySavedAnswer
+                                                .listSavedAnswer[i].courseIndex
+                                                .toString()),
+                                        DefaultRowData(
+                                            text: mySavedAnswer
+                                                .listSavedAnswer[i].quizIndex
+                                                .toString()),
+                                        DefaultRowData(
+                                            text: mySavedAnswer
+                                                .listSavedAnswer[i]
+                                                .indexSavedAnswer
+                                                .toString()),
+                                      ], useDivider: true)
+                                  ],
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // Finance
+                    SizedBox(
+                        width: double.maxFinite,
+                        child: Column(
                           children: [
-                            mySavedAnswer.listSavedAnswer.isEmpty
-                                ? const Text("No Data")
-                                : const SizedBox(),
-                            for (var i = 0;
-                                i < mySavedAnswer.listSavedAnswer.length;
-                                i++)
-                              Text(
-                                  '${mySavedAnswer.listSavedAnswer[i].courseIndex}, ${mySavedAnswer.listSavedAnswer[i].quizIndex},${mySavedAnswer.listSavedAnswer[i].indexSavedAnswer}')
+                            ElevatedButton(
+                              onPressed: () {
+                                debugPrint(
+                                    "Set Provider Finance to Dummy Data");
+                                setAndSaved();
+                              },
+                              child: const Text('Set Provider to Dummy Data'),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text("Data Monthly Finance"),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text("Data Dummy"),
+                                Column(
+                                  children: [
+                                    const TableHeader(
+                                      headerData: [
+                                        "Date",
+                                        "Nominal",
+                                      ],
+                                      customWidth: [0.5, 0.5],
+                                    ),
+                                    listMonthlyFinance.isEmpty
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30.0),
+                                            height: 100,
+                                            width: double.maxFinite,
+                                            color: const Color(0xFFEDEDED),
+                                            child: const Center(
+                                              child: Text(
+                                                "Kosong",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFFD1D1D1)),
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    for (var i = 0;
+                                        i < listMonthlyFinance.length;
+                                        i++)
+                                      TableRowData(childList: [
+                                        DefaultRowData(
+                                            text: DateFormat('MM.yyyy').format(
+                                                listMonthlyFinance[i]
+                                                    .datetime)),
+                                        DefaultRowData(
+                                            text: listMonthlyFinance[i]
+                                                .nominal
+                                                .toString()),
+                                      ], customWidth: const [
+                                        0.5,
+                                        0.5
+                                      ]),
+                                  ],
+                                ),
+                                const Text("Data Provider"),
+                                Consumer<ListMonthlyFinance>(
+                                    builder: (context, data, child) {
+                                  return Column(
+                                    children: [
+                                      const TableHeader(
+                                        headerData: [
+                                          "Date",
+                                          "Nominal",
+                                        ],
+                                        customWidth: [0.5, 0.5],
+                                      ),
+                                      data.listMonthlyFinance.isEmpty
+                                          ? Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 30.0),
+                                              height: 100,
+                                              width: double.maxFinite,
+                                              color: const Color(0xFFEDEDED),
+                                              child: const Center(
+                                                child: Text(
+                                                  "Kosong",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Color(0xFFD1D1D1)),
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                      for (var i = 0;
+                                          i < data.listMonthlyFinance.length;
+                                          i++)
+                                        TableRowData(childList: [
+                                          DefaultRowData(
+                                              text: DateFormat('MM.yyyy')
+                                                  .format(data
+                                                      .listMonthlyFinance[i]
+                                                      .datetime)),
+                                          DefaultRowData(
+                                              text: data
+                                                  .listMonthlyFinance[i].nominal
+                                                  .toString()),
+                                        ], customWidth: const [
+                                          0.5,
+                                          0.5
+                                        ]),
+                                    ],
+                                  );
+                                })
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text("Data Dummy Daily Finance"),
+                                Column(
+                                  children: [
+                                    const TableHeader(
+                                      headerData: [
+                                        "Date",
+                                        "Nominal",
+                                        "Date",
+                                        "Nominal",
+                                      ],
+                                      customWidth: [0.25, 0.25, 0.25, 0.25],
+                                    ),
+                                    listMonthlyFinance.isEmpty
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30.0),
+                                            height: 100,
+                                            width: double.maxFinite,
+                                            color: const Color(0xFFEDEDED),
+                                            child: const Center(
+                                              child: Text(
+                                                "Kosong",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFFD1D1D1)),
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    for (var i = 0; i < listFinance.length; i++)
+                                      TableRowData(childList: [
+                                        DefaultRowData(
+                                            text: DateFormat('dd.MM.yyyy')
+                                                .format(
+                                                    listFinance[i].datetime)),
+                                        DefaultRowData(
+                                            text: listFinance[i]
+                                                .nominal
+                                                .toString()),
+                                        DefaultRowData(
+                                            text: listFinance[i]
+                                                .deskripsi
+                                                .toString()),
+                                        DefaultRowData(
+                                            text: listFinance[i]
+                                                .status
+                                                .toString()),
+                                      ], customWidth: const [
+                                        0.25,
+                                        0.25,
+                                        0.25,
+                                        0.25
+                                      ]),
+                                  ],
+                                ),
+                                const Text("Data Provider"),
+                                Consumer<ListDailyFinance>(
+                                    builder: (context, data, child) {
+                                  return Column(
+                                    children: [
+                                      const TableHeader(
+                                        headerData: [
+                                          "Date",
+                                          "Nominal",
+                                          "Date",
+                                          "Nominal",
+                                        ],
+                                        customWidth: [0.25, 0.25, 0.25, 0.25],
+                                      ),
+                                      data.listDailyFinance.isEmpty
+                                          ? Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 30.0),
+                                              height: 100,
+                                              width: double.maxFinite,
+                                              color: const Color(0xFFEDEDED),
+                                              child: const Center(
+                                                child: Text(
+                                                  "Kosong",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Color(0xFFD1D1D1)),
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                      for (var i = 0;
+                                          i < data.listDailyFinance.length;
+                                          i++)
+                                        TableRowData(childList: [
+                                          DefaultRowData(
+                                              text: DateFormat('dd.MM.yyyy')
+                                                  .format(data
+                                                      .listDailyFinance[i]
+                                                      .datetime)),
+                                          DefaultRowData(
+                                              text: data
+                                                  .listDailyFinance[i].nominal
+                                                  .toString()),
+                                          DefaultRowData(
+                                              text: data
+                                                  .listDailyFinance[i].deskripsi
+                                                  .toString()),
+                                          DefaultRowData(
+                                              text: data
+                                                  .listDailyFinance[i].status
+                                                  .toString()),
+                                        ], customWidth: const [
+                                          0.25,
+                                          0.25,
+                                          0.25,
+                                          0.25
+                                        ]),
+                                    ],
+                                  );
+                                })
+                              ],
+                            ),
                           ],
-                        )
-                      : const SizedBox()
-                ],
-              )
-            ],
+                        ))
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -342,55 +685,6 @@ class _TestPageState extends State<TestPage> {
           child: const Icon(Icons.refresh),
         ),
       ),
-    );
-  }
-}
-
-class LabelAndTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-
-  const LabelAndTextField({
-    super.key,
-    required this.controller,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          // inputFormatters: <TextInputFormatter>[
-          //   FilteringTextInputFormatter.allow(
-          //     RegExp(r'^\d*$'),
-          //   ),
-          // ],
-          decoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color(0xFF696969), // Warna border
-                width: 1.0, // Lebar border
-              ),
-              borderRadius: BorderRadius.circular(15.0), // Radius border
-            ),
-          ),
-          onTap: () {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              controller.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: controller.text.length,
-              );
-            });
-          },
-        ),
-      ],
     );
   }
 }

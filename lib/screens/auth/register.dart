@@ -26,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       MyCourseStatus localmyCourseStatus =
           Provider.of<MyCourseStatus>(context, listen: false);
-      localmyCourseStatus.setNewValue(10, 10, 0, -1);
+      localmyCourseStatus.setNewValue(5, 5, 0, -1);
       localmyCourseStatus.saveSharedPreferences();
     });
   }

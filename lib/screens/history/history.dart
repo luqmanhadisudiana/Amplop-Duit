@@ -2,6 +2,7 @@ import 'package:amplop_duit/component/appbar/default_appbar.dart';
 import 'package:amplop_duit/component/card/card_history.dart';
 import 'package:amplop_duit/component/card/card_quiz_result.dart';
 import 'package:amplop_duit/component/customInkwell/custom_inkwell.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/screens/history/your_mistake.dart';
 import 'package:amplop_duit/theme.dart';
@@ -22,6 +23,13 @@ class HistoryPage extends StatelessWidget {
           parentContext: context,
           action: () {
             debugPrint("Ini History");
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NavigationWrapper(
+                        selectedIndex: 0,
+                      )),
+            );
           },
         ),
         body: SingleChildScrollView(

@@ -9,8 +9,8 @@ import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 // import 'package:intl/intl.dart';
 
 class PendapatanPage extends StatefulWidget {
@@ -89,14 +89,6 @@ class _PendapatanPageState extends State<PendapatanPage> {
       return null;
     }
   }
-
-  // void _formatText() {
-  //   int number = nominal;
-
-  //   if (!_focusNode.hasFocus) {
-  //     nominalController.text = formatToMoneyText(number.toDouble());
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -241,17 +233,22 @@ class _PendapatanPageState extends State<PendapatanPage> {
                   child: MainButton(
                     buttonText: "Menyimpan",
                     action: () {
+                      var providerListDailyFinance =
+                          Provider.of<ListDailyFinance>(context, listen: false);
                       debugPrint(dateInput.text);
                       debugPrint(deskripsi.text);
                       debugPrint(nominal.toString());
                       DateTime? parsedDate = convertToDate(dateInput.text);
 
                       if (parsedDate != null && nominal != 0) {
-                        listFinance.add(DailyFinance(
-                            status: selected ? "Uang Masuk" : "Uang Keluar",
-                            deskripsi: deskripsi.text,
-                            datetime: parsedDate,
-                            nominal: nominal));
+                        providerListDailyFinance.listDailyFinance.add(
+                            DailyFinance(
+                                status: selected ? "Uang Masuk" : "Uang Keluar",
+                                deskripsi: deskripsi.text,
+                                datetime: parsedDate,
+                                nominal: nominal));
+
+                        providerListDailyFinance.saveToSharedPreferences();
 
                         showDialog<String>(
                             context: context,
@@ -269,8 +266,12 @@ class _PendapatanPageState extends State<PendapatanPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const SmartFinancePage(
-                                                isDisplayBulanan: false,
+                                              const NavigationWrapper(
+                                                selectedIndex: 2,
+                                                customRedirect:
+                                                    SmartFinancePage(
+                                                  isDisplayBulanan: false,
+                                                ),
                                               )),
                                     );
                                   },

@@ -8,7 +8,7 @@ import 'package:amplop_duit/screens/smart%20finance/pendapatan.dart';
 import 'package:amplop_duit/screens/smart%20finance/service.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class SmartFinancePage extends StatefulWidget {
   final bool isDisplayBulanan;
@@ -29,8 +29,6 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   // late bool isMonthlyIncomeAvailable;
   late int income;
   void changeIncome(int number) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('income', number);
     setState(() {
       income = number;
     });
@@ -39,8 +37,9 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
   @override
   void initState() {
     super.initState();
-
-    income = getCurrentIncome();
+    var providerListMonthlyFinance =
+        Provider.of<ListMonthlyFinance>(context, listen: false);
+    income = providerListMonthlyFinance.getCurrentIncome();
     selectedTable = widget.isDisplayBulanan;
   }
 
@@ -55,31 +54,22 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
     return false;
   }
 
-  void setValueMonthly(int newNominal) {
-    int index = -1;
-    for (var i = 0; i < listMonthlyFinance.length; i++) {
-      if (DateTime(DateTime.now().year, DateTime.now().month) ==
-          listMonthlyFinance[i].datetime) {
-        index = i;
-      }
-    }
-    if (index != -1) {
-      listMonthlyFinance[index].nominal = newNominal;
-    } else {
-      listMonthlyFinance.add(MonthlyFinance(
-          nominal: newNominal,
-          datetime: DateTime(DateTime.now().year, DateTime.now().month)));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     displayText = selectedTable ? "Bulanan" : "Harian";
     // isMonthlyIncomeAvailable = income == 0 ? true : false;
-    monthlyFinanceRow = getListMonthlyFinance();
-    dailyFinancesRow = getListDailyFinance();
-    debugPrint("getter ${listMonthlyFinance.length}");
-    // debugPrint("status $isMonthlyIncomeAvailable");
+    var providerListDailyFinance =
+        Provider.of<ListDailyFinance>(context, listen: false);
+    var providerListMonthlyFinance =
+        Provider.of<ListMonthlyFinance>(context, listen: false);
+
+    monthlyFinanceRow = getRowMonthlyFinance(
+        providerListDailyFinance.listDailyFinance,
+        providerListMonthlyFinance.listMonthlyFinance);
+    dailyFinancesRow =
+        getRowDailyFinance(providerListDailyFinance.listDailyFinance);
+    debugPrint(
+        "getter list, get ${providerListMonthlyFinance.listMonthlyFinance.length} data");
 
     return MaterialApp(
       title: "Smart Finace",
@@ -117,7 +107,8 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
                       action: () {
                         int newNominal = int.tryParse(tempController.text) ?? 0;
                         changeIncome(newNominal);
-                        setValueMonthly(newNominal);
+                        providerListMonthlyFinance
+                            .updateLatestMonthValue(newNominal);
                       },
                     )
                   : Column(

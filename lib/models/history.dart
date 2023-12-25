@@ -72,7 +72,7 @@ class HistoryList extends ChangeNotifier {
 
   Future<void> resetMyObject() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("savedAnswers");
+    await prefs.remove("historyList");
 
     // Set listSavedAnswer to an empty list
     listHistory = [];

@@ -1,3 +1,4 @@
+import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/screens/history/history.dart';
@@ -15,7 +16,9 @@ import 'package:amplop_duit/screens/auth/login.dart';
 
 class NavigationWrapper extends StatefulWidget {
   final int selectedIndex;
-  const NavigationWrapper({super.key, this.selectedIndex = 0});
+  final Widget? customRedirect;
+  const NavigationWrapper(
+      {super.key, this.selectedIndex = 0, this.customRedirect});
 
   @override
   State<NavigationWrapper> createState() => _NavigationWrapperState();
@@ -23,10 +26,12 @@ class NavigationWrapper extends StatefulWidget {
 
 class _NavigationWrapperState extends State<NavigationWrapper> {
   late int _selectedIndex;
+  late Widget? _customBody;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _customBody = null;
     });
   }
 
@@ -40,6 +45,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     // Memeriksa nilai isLogin saat aplikasi dimulai
     setState(() {
       _selectedIndex = widget.selectedIndex;
+      _customBody = widget.customRedirect;
     });
 
     await loginStatus(context);
@@ -60,6 +66,12 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
       HistoryList localHistoryList =
           Provider.of<HistoryList>(context, listen: false);
       localHistoryList.loadFromSharedPreferences();
+      ListMonthlyFinance localListMonthly =
+          Provider.of<ListMonthlyFinance>(context, listen: false);
+      localListMonthly.loadFromSharedPreferences();
+      ListDailyFinance localListDaily =
+          Provider.of<ListDailyFinance>(context, listen: false);
+      localListDaily.loadFromSharedPreferences();
     });
 
     // Jika isLogin bernilai true, pindah ke halaman utama
@@ -94,7 +106,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
       title: 'Home',
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
-        body: _pages[_selectedIndex],
+        body: _customBody ?? _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: List.generate(
@@ -128,6 +140,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
                               )));
                 },
                 tooltip: 'Test Page',
+                heroTag: null,
                 child: const Icon(Icons.refresh),
               ), // Th,
       ),

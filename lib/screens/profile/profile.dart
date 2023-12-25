@@ -1,9 +1,11 @@
 import 'package:amplop_duit/component/section/statistic_section.dart';
 import 'package:amplop_duit/component/table/table_view.dart';
 import 'package:amplop_duit/models/finance.dart';
+import 'package:amplop_duit/screens/smart%20finance/service.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -16,7 +18,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   List<String> monthlyHeaderTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
-  List<FinanceRowHelper> dailyFinancesRow = [];
   int liga = 0;
   bool isLoading = true;
   final String imagePath =
@@ -37,8 +38,21 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  late List<FinanceRowHelper> monthlyFinanceRow;
+
   @override
   Widget build(BuildContext context) {
+    var providerListDailyFinance =
+        Provider.of<ListDailyFinance>(context, listen: false);
+    var providerListMonthlyFinance =
+        Provider.of<ListMonthlyFinance>(context, listen: false);
+
+    monthlyFinanceRow = getRowMonthlyFinance(
+        providerListDailyFinance.listDailyFinance,
+        providerListMonthlyFinance.listMonthlyFinance);
+
+    debugPrint(
+        "getter list, get ${providerListMonthlyFinance.listMonthlyFinance.length} data");
     return MaterialApp(
         title: "Smart Finace",
         theme: MyAppTheme.buildTheme(),
@@ -166,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         MyTableView(
                             headerData: monthlyHeaderTable,
-                            listOfRowData: dailyFinancesRow),
+                            listOfRowData: monthlyFinanceRow),
                       ],
                     ))
               ],

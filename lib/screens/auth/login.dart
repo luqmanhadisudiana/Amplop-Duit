@@ -96,14 +96,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       MyCourseStatus localmyCourseStatus =
           Provider.of<MyCourseStatus>(context, listen: false);
-      localmyCourseStatus.setNewValue(10, 10, 0, -1);
+      localmyCourseStatus.setNewValue(5, 5, 0, -1);
       localmyCourseStatus.saveSharedPreferences();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Center(
         child: Column(
