@@ -56,7 +56,7 @@ class MainButton extends StatelessWidget {
           width: 1.0,
         ),
       ),
-      child: ElevatedButton(
+      child: TextButton(
         onPressed: isDisabled
             ? null
             : () {

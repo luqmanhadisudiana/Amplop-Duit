@@ -6,7 +6,6 @@ import 'package:amplop_duit/screens/home/home.dart';
 import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
 import 'package:amplop_duit/screens/profile/profile.dart';
 import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
-import 'package:amplop_duit/screens/testpage/testpage.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -158,21 +157,6 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
           unselectedLabelStyle: const TextStyle(fontSize: 10),
           onTap: _onItemTapped,
         ),
-        floatingActionButton: _selectedIndex == 2
-            ? null
-            : FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TestPage(
-                                currentIndex: _selectedIndex,
-                              )));
-                },
-                tooltip: 'Test Page',
-                heroTag: null,
-                child: const Icon(Icons.refresh),
-              ), // Th,
       ),
     );
   }

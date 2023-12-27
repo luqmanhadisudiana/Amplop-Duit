@@ -1,7 +1,9 @@
 import 'package:amplop_duit/component/section/statistic_section.dart';
 import 'package:amplop_duit/component/table/table_view.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
 import 'package:amplop_duit/models/finance.dart';
 import 'package:amplop_duit/screens/smart%20finance/service.dart';
+import 'package:amplop_duit/screens/testpage/testpage.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -111,12 +113,50 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(16),
-                                child: const Icon(Icons.arrow_back),
+                                child: InkWell(
+                                  onTap: () {
+                                    debugPrint("back");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NavigationWrapper(
+                                                  selectedIndex: 0,
+                                                )));
+                                  },
+                                  child: Container(
+                                    width: 25.0,
+                                    height: 25.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      // color: Colors.transparent,
+                                    ),
+                                    child: const Icon(Icons.arrow_back),
+                                  ),
+                                ),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(16),
-                                child: const Icon(Icons.settings),
-                              )
+                                child: InkWell(
+                                  onTap: () {
+                                    debugPrint("back");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const TestPage()));
+                                  },
+                                  child: Container(
+                                    width: 25.0,
+                                    height: 25.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      // color: Colors.transparent,
+                                    ),
+                                    child: const Icon(Icons.settings),
+                                  ),
+                                ),
+                              ),
                             ]),
                       ],
                     )),

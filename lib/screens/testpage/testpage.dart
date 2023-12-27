@@ -283,7 +283,7 @@ class _TestPageState extends State<TestPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => NavigationWrapper(
-                        selectedIndex: widget.currentIndex ?? 0,
+                        selectedIndex: widget.currentIndex ?? 4,
                       )),
             );
           },

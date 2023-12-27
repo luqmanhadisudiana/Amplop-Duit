@@ -73,39 +73,52 @@ var courseList = [
                 "Dari video sebelumnya, berikut apa aspek yang harus diperhatikan dalam mencatat keuangan?",
             answerList: [
               // salah satu harus true karena jawaban
-              Answer(text: "Jawaban 1", status: true),
-              Answer(text: "Jawaban 2", status: false),
-              Answer(text: "Jawaban 3", status: false),
-              Answer(text: "Jawaban 4", status: false),
+              Answer(text: "Tanggal, Deskripsi, Nominal", status: false),
+              Answer(text: "Uang, Keluar, dan Masuk", status: false),
+              Answer(text: "Hanya hasil beli barang saja", status: true),
+              Answer(text: "Tidak perlu dicatat", status: false),
             ]),
-        QuestionAnswer(question: "Ini Pertanyaan 2", answerList: [
+        QuestionAnswer(question: "Apa yang dimaksud deskripsi?", answerList: [
           // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
+          Answer(text: "Penjelasan mata uang yang dikeluarkan", status: true),
+          Answer(
+              text: "Penjelasan berapa uang yang dikeluarkan", status: false),
+          Answer(text: "Penjelasan untuk apa uang dikeluarkan", status: false),
+          Answer(text: "Tidak perlu dicatat", status: false),
         ]),
-        QuestionAnswer(question: "Ini Pertanyaan 3", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 4", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 5", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
+        QuestionAnswer(
+            question:
+                "Apa yang harus dilakukan pada akhir setiap bulan dalam metode Kakeibo?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Menambahkan lebih banyak utang", status: false),
+              Answer(text: "Menyimpan uang yang tersisa", status: true),
+              Answer(text: "Mengabaikan perhitungan", status: false),
+              Answer(text: "Membeli barang-barang mewah", status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Apa yang harus dilakukan sebelum membuat rencana pengeluaran bulanan dalam Kakeibo?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Menjadi boros", status: false),
+              Answer(text: "Mengabaikan pendapatan bulanan", status: false),
+              Answer(
+                  text: "Mengetahui jumlah pengeluaran bulanan", status: true),
+              Answer(text: "Tidak melakukan perencanaan", status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Apa yang menjadi tujuan utama dari metode pencatatan keuangan Kakeibo?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Mencari keuntungan besar", status: false),
+              Answer(
+                  text: "Mencatat pengeluaran harian dengan teliti",
+                  status: true),
+              Answer(text: "Mengumpulkan uang secara efisien", status: false),
+              Answer(text: "Mengabaikan pengeluaran", status: false),
+            ]),
       ]),
   // course level
   Course(
@@ -122,41 +135,74 @@ var courseList = [
           "MCDKOER9b7A", // https://www.youtube.com/watch?v={VideoID}, contoh https://www.youtube.com/watch?v=mq8ZLUBdQHQ
       feedback: 0,
       listQuestionAnswer: [
-        QuestionAnswer(question: "Ini Pertanyaan 1", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 2", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 3", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 4", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
-        QuestionAnswer(question: "Ini Pertanyaan 5", answerList: [
-          // salah satu harus true karena jawaban
-          Answer(text: "Jawaban 1", status: true),
-          Answer(text: "Jawaban 2", status: false),
-          Answer(text: "Jawaban 3", status: false),
-          Answer(text: "Jawaban 4", status: false),
-        ]),
+        QuestionAnswer(
+            question: "Apa tujuan utama dari metode keuangan kakeibo?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Membuat keuangan lebih rumit", status: false),
+              Answer(text: "Meningkatkan kesadaran finansial", status: true),
+              Answer(text: "Mengabaikan anggaran", status: false),
+              Answer(text: "Menyembunyikan pengeluaran", status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Bagaimana kakeibo membantu dalam mengendalikan pengeluaran bulanan?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(text: "Mengabaikan anggaran", status: false),
+              Answer(text: "Merencanakan anggaran bulanan", status: true),
+              Answer(text: "Menyembunyikan sumber pendapatan", status: false),
+              Answer(text: "Tidak memperhitungkan pengeluaran", status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Apa perbedaan utama antara kakeibo dan metode pengelolaan keuangan tradisional?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(
+                  text: "Keduanya memiliki pendekatan yang sama",
+                  status: false),
+              Answer(
+                  text:
+                      "Kakeibo fokus pada penghematan, sedangkan metode tradisional tidak",
+                  status: true),
+              Answer(text: "Metode tradisional lebih rumit", status: false),
+              Answer(
+                  text: "Kakeibo tidak melibatkan perencanaan keuangan",
+                  status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Apa manfaat utama dari kesadaran finansial yang diperoleh melalui kakeibo?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(
+                  text: "Meningkatkan pengeluaran secara impulsif",
+                  status: false),
+              Answer(
+                  text: "Memperoleh kontrol lebih baik atas keuangan pribadi",
+                  status: true),
+              Answer(
+                  text: "Mengabaikan kebutuhan darurat keuangan",
+                  status: false),
+              Answer(
+                  text: "Tidak memperhatikan rencana keuangan jangka panjang",
+                  status: false),
+            ]),
+        QuestionAnswer(
+            question:
+                "Bagaimana kakeibo membantu dalam mencapai tujuan keuangan jangka panjang?",
+            answerList: [
+              // salah satu harus true karena jawaban
+              Answer(
+                  text: "Dengan mengabaikan rencana keuangan", status: false),
+              Answer(text: "Mengandalkan keberuntungan", status: false),
+              Answer(
+                  text:
+                      "Melalui perencanaan dan pengelolaan keuangan yang bijaksana",
+                  status: true),
+              Answer(text: "Tanpa perlu merinci pengeluaran", status: false),
+            ]),
       ]),
   // course level
   Course(
