@@ -108,12 +108,12 @@ List<FinanceRowHelper> getRowDailyFinance(List<DailyFinance> data) {
   return dailyFinancesRow;
 }
 
-int getCurrentIncome() {
-  for (var i = 0; i < listMonthlyFinance.length; i++) {
-    if (DateTime.now().month == listMonthlyFinance[i].datetime.month) {
-      return listMonthlyFinance[i].nominal;
-    }
-  }
+// int getCurrentIncome() {
+//   for (var i = 0; i < listMonthlyFinance.length; i++) {
+//     if (DateTime.now().month == listMonthlyFinance[i].datetime.month) {
+//       return listMonthlyFinance[i].nominal;
+//     }
+//   }
 
-  return 0;
-}
+//   return 0;
+// }

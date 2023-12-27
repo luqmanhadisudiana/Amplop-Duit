@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -172,6 +173,7 @@ class ListMonthlyFinance extends ChangeNotifier {
       final int dateTimeInMilliseconds =
           monthly.datetime.millisecondsSinceEpoch;
       return jsonEncode({
+        'nominal': monthly.nominal,
         'datetime': dateTimeInMilliseconds,
       });
     }).toList();
@@ -203,32 +205,103 @@ class ListMonthlyFinance extends ChangeNotifier {
   }
 }
 
-List<MonthlyFinance> listMonthlyFinance = [
-  MonthlyFinance(
-      datetime: DateTime(DateTime.now().year, DateTime.now().month - 1),
-      nominal: 9000000),
+// List<MonthlyFinance> listMonthlyFinance = [
+//   MonthlyFinance(
+//       datetime: DateTime(DateTime.now().year, DateTime.now().month - 1),
+//       nominal: 9000000),
+// ];
+
+// List<DailyFinance> listFinance = [
+//   DailyFinance(deskripsi: "test 1", datetime: DateTime.now(), nominal: 3000),
+//   DailyFinance(
+//       deskripsi: "test 4",
+//       datetime: DateTime(
+//           DateTime.now().year, DateTime.now().month - 1, DateTime.now().day),
+//       nominal: 3000),
+//   DailyFinance(
+//       deskripsi: "test 5",
+//       datetime: DateTime(DateTime.now().year, DateTime.now().month - 1,
+//           DateTime.now().day - 3),
+//       nominal: 3000),
+//   DailyFinance(
+//       deskripsi: "test 2",
+//       datetime: DateTime(
+//           DateTime.now().year, DateTime.now().month, DateTime.now().day - 2),
+//       nominal: 3000),
+//   DailyFinance(
+//       deskripsi: "test 3",
+//       datetime: DateTime(
+//           DateTime.now().year, DateTime.now().month, DateTime.now().day - 7),
+//       nominal: 3000),
+// ];
+
+class ListFinanceHelper {
+  List<MonthlyFinance> listMonthlyFinance;
+  List<DailyFinance> listFinance;
+
+  ListFinanceHelper(
+      {required this.listFinance, required this.listMonthlyFinance});
+}
+
+List<String> items = [
+  "Piring Keramik",
+  "Lampu Meja",
+  "Topi Denim",
+  "Sandal Jepit",
+  "Gelas Plastik",
+  "Buku Catatan Spiral",
+  "Sapu Serat",
+  "Sepatu Sneakers",
+  "Tas Selempang",
+  "Senter LED",
+  "Payung Lipat",
+  "Jam Dinding",
+  "Sendok Stainless Steel",
+  "Kursi Lipat",
+  "Gantungan Kunci Akrilik",
+  "Mangkok Melamin",
+  "Kipas Angin Meja",
+  "Kaos Cotton",
+  "Sendal Rumah",
+  "Mug Keramik",
+  "Pulpen Gel",
+  "Sikat Toilet Plastik",
+  "Dompet Kulit",
+  "Kamera Disposable",
+  "Tempat Tidur Lipat"
 ];
 
-List<DailyFinance> listFinance = [
-  DailyFinance(deskripsi: "test 1", datetime: DateTime.now(), nominal: 3000),
-  DailyFinance(
-      deskripsi: "test 4",
-      datetime: DateTime(
-          DateTime.now().year, DateTime.now().month - 1, DateTime.now().day),
-      nominal: 3000),
-  DailyFinance(
-      deskripsi: "test 5",
-      datetime: DateTime(DateTime.now().year, DateTime.now().month - 1,
-          DateTime.now().day - 3),
-      nominal: 3000),
-  DailyFinance(
-      deskripsi: "test 2",
-      datetime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 2),
-      nominal: 3000),
-  DailyFinance(
-      deskripsi: "test 3",
-      datetime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 7),
-      nominal: 3000),
-];
+ListFinanceHelper generateList(int N) {
+  Random random = Random();
+  ListFinanceHelper result =
+      ListFinanceHelper(listFinance: [], listMonthlyFinance: []);
+
+  for (var i = 0; i < N; i++) {
+    DateTime randomDate =
+        DateTime.now().subtract(Duration(days: random.nextInt(300)));
+    result.listMonthlyFinance.add(MonthlyFinance(
+      nominal: random.nextInt(100) * 100000,
+      datetime: DateTime(randomDate.year, randomDate.month, 1, 0, 0, 0, 0),
+    ));
+    for (var j = 0; j < 3; j++) {
+      var randomBinary = random.nextDouble();
+      String text = (randomBinary < 0.5) ? 'Jual' : 'Beli';
+      String status = (randomBinary < 0.5) ? 'Uang Keluar' : 'Uang Masuk';
+      int randomIndex = Random().nextInt(items.length);
+      result.listFinance.add(DailyFinance(
+          deskripsi: '$text ${items[randomIndex]}',
+          status: status,
+          datetime: DateTime(
+              randomDate.year,
+              randomDate.month,
+              DateTime.now().subtract(Duration(days: random.nextInt(30))).day,
+              0,
+              0,
+              0,
+              0),
+          nominal: random.nextInt(100) * 1000));
+    }
+  }
+
+  return result;
+}

@@ -4,15 +4,19 @@ class DefaultAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final BuildContext parentContext;
   final Function? action;
+  final TabBar? bottom;
+  final double? height;
 
   const DefaultAppbar(
       {super.key,
       required this.title,
       required this.parentContext,
-      this.action});
+      this.action,
+      this.bottom,
+      this.height = kToolbarHeight});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(height ?? kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class DefaultAppbar extends StatelessWidget implements PreferredSizeWidget {
         style: const TextStyle(
             fontFamily: "Poppins", fontSize: 16, fontWeight: FontWeight.w500),
       ),
+      bottom: bottom,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {

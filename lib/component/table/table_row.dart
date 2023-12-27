@@ -23,11 +23,16 @@ class TableRowData extends StatelessWidget {
       double containerWidth = constraints.maxWidth;
 
       return Container(
-        color: const Color(0xFFEDEDED),
+        padding: EdgeInsets.zero,
+        margin: EdgeInsets.zero,
+        decoration: const BoxDecoration(
+          color: Color(0xFFEDEDED),
+        ),
         child: Column(
           children: [
-            SizedBox(
+            Container(
               height: spaceHeight,
+              color: const Color(0xFFEDEDED),
             ),
             Row(
               mainAxisAlignment: mainAxisAlignment,
@@ -40,12 +45,14 @@ class TableRowData extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(
+            Container(
               height: spaceHeight,
+              color: const Color(0xFFEDEDED),
             ),
             useDivider
                 ? Container(
                     padding: const EdgeInsets.only(top: 8),
+                    color: const Color(0xFFEDEDED),
                     child: const Divider(
                       height: 1,
                       thickness: 1,
@@ -54,7 +61,9 @@ class TableRowData extends StatelessWidget {
                       color: Color(0xFFE0E0E0),
                     ),
                   )
-                : const SizedBox()
+                : Container(
+                    color: const Color(0xFFEDEDED),
+                  )
           ],
         ),
       );
