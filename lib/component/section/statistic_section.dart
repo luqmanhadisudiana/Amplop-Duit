@@ -8,8 +8,7 @@ class StatisticSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime today = DateTime.now();
-    int hariBerlalu =
-        today.weekday - 1; // Menghitung hari berlalu dalam seminggu
+    int hariBerlalu = today.weekday;
     int hariTersisa = 7 - hariBerlalu;
 
     String sHariBerlalu = '$hariBerlalu hari';

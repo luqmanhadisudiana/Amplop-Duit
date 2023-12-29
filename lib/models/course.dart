@@ -11,13 +11,13 @@ class Answer {
 class QuestionAnswer {
   final String question;
   final List<Answer> answerList;
-  bool isDone;
+  // bool isDone;
   int savedAnswer;
 
   QuestionAnswer(
       {required this.question,
       required this.answerList,
-      this.isDone = false,
+      // this.isDone = false,
       this.savedAnswer = -1});
 }
 

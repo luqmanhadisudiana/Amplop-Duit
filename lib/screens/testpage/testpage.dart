@@ -269,6 +269,18 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
+  void resetMyCourse() {
+    setState(() {
+      _myCourseStatus = MyCourseStatus(
+          heart: 5, diamond: 5, selectedCourse: 0, selectedQuiz: -1);
+    });
+    courseIndexController.text = (1).toString();
+    quizIndexController.text = (0).toString();
+    heartController.text = (5).toString();
+    diamondController.text = (5).toString();
+    ligaController.text = (1).toString();
+  }
+
   ListSavedAnswer? mySavedAnswer;
   bool showListSavedAnswer = false;
 
@@ -375,31 +387,40 @@ class _TestPageState extends State<TestPage> {
                     listLabel: listLabel,
                     localCourseStatus: _myCourseStatus,
                   ),
-                  Consumer<MyCourseStatus>(
-                      builder: (context, myCourseStatus, child) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        //Object
-                        setState(() {
-                          _myCourseStatus = MyCourseStatus(
-                              heart: 5,
-                              diamond: 5,
-                              selectedCourse: 0,
-                              selectedQuiz: -1);
-                        });
-                        //Provider
-                        myCourseStatus.setNewValue(5, 5, 0, -1);
-                        myCourseStatus.saveSharedPreferences();
-                        //Controller
-                        courseIndexController.text = (1).toString();
-                        quizIndexController.text = (0).toString();
-                        heartController.text = (5).toString();
-                        diamondController.text = (5).toString();
-                        ligaController.text = (1).toString();
-                      },
-                      child: const Text('Reset'),
-                    );
-                  }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Consumer<MyCourseStatus>(
+                          builder: (context, myCourseStatus, child) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            //Provider
+                            resetMyCourse();
+                            myCourseStatus.setNewValue(5, 5, 0, -1);
+                            myCourseStatus.saveSharedPreferences();
+                          },
+                          child: const Text('Reset My Status Course'),
+                        );
+                      }),
+                      Consumer<MyCourseStatus>(
+                          builder: (context, myCourseStatus, child) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            //Provider
+                            resetMyCourse();
+                            myCourseStatus.setNewValue(
+                                5,
+                                5,
+                                myCourseStatus.getSelectedCourse,
+                                myCourseStatus.getselectedQuiz);
+                            myCourseStatus.saveSharedPreferences();
+                          },
+                          child: const Text('Reset Heart and Diamond'),
+                        );
+                      })
+                    ],
+                  )
                 ],
               ),
               // SavedAnswer

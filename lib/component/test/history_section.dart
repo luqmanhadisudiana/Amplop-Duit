@@ -25,6 +25,11 @@ class HistoryStatusTestSection extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.w600),
           ),
+          ElevatedButton(
+              onPressed: () {
+                data.resetMyObject();
+              },
+              child: const Text("Reset History")),
           const SizedBox(
             height: 20,
           ),

@@ -52,21 +52,22 @@ class _CourseQuizState extends State<CourseQuiz> {
     myCourseStatusProvider =
         Provider.of<MyCourseStatus>(context, listen: false);
     listSavedAnswer = Provider.of<ListSavedAnswer>(context, listen: false);
+    listHistory = Provider.of<HistoryList>(context, listen: false);
+
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
-    bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
+    int currentQuizPointer = myCourseStatusProvider.getselectedQuiz;
     int savedAnswer = listSavedAnswer.getSavedAnswer(courseIdx, quizIdx);
+    String title = "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}";
 
-    debugPrint(quizStatus.toString());
     debugPrint(
-      'course : $courseIdx, quiz : $quizIdx, savedAnswer : $savedAnswer, quizStatus : $quizStatus',
+      'course : $courseIdx, quiz : $quizIdx, savedAnswer : $savedAnswer, isQuizEqualsPointer : ${currentQuizPointer == quizIdx}, isHistoryDuplicate : ${listHistory.isDuplicate(myCourseStatusProvider.attempt, title)}',
     );
 
-    isButtonDisable = quizStatus == true && savedAnswer != -1 ? true : false;
-    // buttonText = quizStatus ? "Kembali" : "Berikutnya";
+    isButtonDisable = savedAnswer != -1 ? true : false;
     currentIndex = savedAnswer;
 
-    if (quizStatus == true && savedAnswer == -1) {
+    if (quizIdx < myCourseStatusProvider.getselectedQuiz && savedAnswer == -1) {
       debugPrint("Kembali");
       buttonText = "Kembali";
     } else {
@@ -89,12 +90,12 @@ class _CourseQuizState extends State<CourseQuiz> {
     bool answerStatus = widget.listAnswer[i].status;
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
-    bool quizStatus = courseProvider.getIsDone(courseIdx, quizIdx);
     int savedAnswer = courseProvider.getSavedAnswer(courseIdx, quizIdx);
     int currentQuizPointer = myCourseStatusProvider.selectedQuiz;
     int indexAnswer = i;
+    String title = "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}";
     debugPrint(
-        "indexAnswer $indexAnswer,\nCourse Index : $courseIdx,\nQuiz Index : $quizIdx,\nPointerQuiz : $currentQuizPointer,\nSelected Index : $selectedIndex,\nQuestion Status: : $answerStatus,\nquizStatus : $quizStatus,\nSaved Value : $savedAnswer\n\n");
+        "indexAnswer $indexAnswer,\nCourse Index : $courseIdx,\nQuiz Index : $quizIdx,\nPointerQuiz : $currentQuizPointer,\nSelected Index : $selectedIndex,\nQuestion Status: : $answerStatus,\nisQuizEqualsPointer : ${currentQuizPointer == quizIdx},\nSaved Value : $savedAnswer\nisHistoryDuplicate : ${listHistory.isDuplicate(myCourseStatusProvider.attempt, title)}");
 
     setState(() {
       selectedIndex = indexAnswer;
@@ -120,25 +121,22 @@ class _CourseQuizState extends State<CourseQuiz> {
       myCourseStatusProvider.nextQuiz();
     }
 
-    if (!quizStatus) {
+    debugPrint(
+        "check history duplicate ${listHistory.isDuplicate(myCourseStatusProvider.attempt, title)}");
+    if (!listHistory.isDuplicate(myCourseStatusProvider.attempt, title)) {
       myCourseStatusProvider.start();
       listHistory.addHistory(History(
           idCourse: courseIdx,
           status: answerStatus,
           attempt: myCourseStatusProvider.attempt,
-          title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
+          title: title,
           question: widget.question,
           jawaban: widget.listAnswer[indexAnswer].text));
       listHistory.saveToSharedPreferences();
-    }
 
-    if (!quizStatus && answerStatus == true) {
       int currentTP = prefs.getInt("totalPoint") ?? 0;
       await prefs.setInt('totalPoint', currentTP + 3);
     }
-
-    debugPrint("setIsDone, ${courseProvider.getIsDone(courseIdx, quizIdx)}");
-    courseProvider.setIsDone(courseIdx, quizIdx);
 
     debugPrint('${myCourseStatusProvider.attempt}');
     myCourseStatusProvider.saveSharedPreferences();

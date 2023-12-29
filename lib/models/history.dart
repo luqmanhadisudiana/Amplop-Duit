@@ -50,6 +50,16 @@ class HistoryList extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isDuplicate(int attempt, String title) {
+    for (var data in listHistory) {
+      if (data.attempt == attempt && data.title == title) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   double getSuccesRate() {
     debugPrint("${listHistory.length}");
     if (listHistory.isEmpty) {
