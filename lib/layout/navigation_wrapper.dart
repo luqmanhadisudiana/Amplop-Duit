@@ -7,6 +7,7 @@ import 'package:amplop_duit/screens/leaderboard/leaderboard.dart';
 import 'package:amplop_duit/screens/profile/profile.dart';
 import 'package:amplop_duit/screens/smart%20finance/smart_finance.dart';
 import 'package:amplop_duit/theme.dart';
+import 'package:amplop_duit/util/expiration_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -57,10 +58,10 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
 
     if (isLogin) {
       // Mengecek dan menghapus data yang sudah kadaluwarsa
-      await checkAndRemoveExpiredData('ExpiredDaily');
-      await checkAndRemoveExpiredData('ExpiredWeekly');
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        checkAndRemoveExpiredData('ExpiredDaily', context);
+        checkAndRemoveExpiredData('ExpiredWeekly', context);
         MyCourseStatus localmyCourseStatus =
             Provider.of<MyCourseStatus>(context, listen: false);
         localmyCourseStatus.loadFromSharedPreferences();
@@ -88,43 +89,6 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
         );
       }
     });
-  }
-
-  Future<void> checkAndRemoveExpiredData(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? expirationDateString = prefs.getString(key);
-    debugPrint("Get Data");
-    if (expirationDateString != null) {
-      debugPrint("tidak null");
-
-      // Pengecekan apakah data sudah kadaluwarsa
-      DateTime expirationDate = DateTime.parse(expirationDateString);
-      if (DateTime.now().isAfter(expirationDate)) {
-        // Data sudah kadaluwarsa, hapus key
-
-        if (key == "ExpiredDaily") {
-          debugPrint("change value heart and diamond");
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            MyCourseStatus localmyCourseStatus =
-                Provider.of<MyCourseStatus>(context, listen: false);
-            localmyCourseStatus.setNewValue(
-                5,
-                5,
-                localmyCourseStatus.getSelectedCourse,
-                localmyCourseStatus.getselectedQuiz);
-            localmyCourseStatus.saveSharedPreferences();
-          });
-        } else {
-          debugPrint("clear...");
-          List<String> keysToRemove;
-          keysToRemove = ['historyList', 'myCourseStatus', 'savedAnswers'];
-          for (String key in keysToRemove) {
-            await prefs.remove(key);
-          }
-        }
-      }
-    }
   }
 
   final List<List<String>> _icons = [

@@ -27,13 +27,36 @@ class _RegisterPageState extends State<RegisterPage> {
     await prefs.setString(key, expirationDate.toIso8601String());
   }
 
+  Future<void> saveDataWithExpirationWeekly(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    DateTime today = DateTime.now();
+    int difference = (DateTime.monday - today.weekday + 7) % 7;
+
+    // Menghitung tanggal kedaluwarsa pada setiap Senin pukul 00:00
+    DateTime expirationDate = today.add(Duration(days: difference));
+    expirationDate = DateTime(
+      expirationDate.year,
+      expirationDate.month,
+      expirationDate.day,
+      0,
+      0,
+      0,
+      0,
+    );
+
+    await prefs.setString(key, expirationDate.toIso8601String());
+  }
+
   Future<void> setLoginStatus() async {
     // Simpan nilai isLogin ke SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', true);
     prefs.getInt('currentLiga') ?? prefs.setInt('currentLiga', 1);
     debugPrint("Set Expired");
-    await saveDataWithExpiration('Expired');
+    debugPrint("Set Expired");
+    await saveDataWithExpiration('ExpiredDaily');
+    await saveDataWithExpirationWeekly('ExpiredWeekly');
 
     //Check Object
     WidgetsBinding.instance.addPostFrameCallback((_) {

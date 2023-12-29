@@ -5,6 +5,7 @@ import 'package:amplop_duit/screens/auth/forgot_password.dart';
 import 'package:amplop_duit/screens/auth/register.dart';
 import 'package:amplop_duit/screens/loading/main_loading.dart';
 import 'package:amplop_duit/theme.dart';
+import 'package:amplop_duit/util/expiration_date.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,38 +85,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  Future<void> saveDataWithExpiration(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Set tanggal kedaluwarsa ke awal hari berikutnya
-    DateTime expirationDate = DateTime.now().add(const Duration(days: 1));
-    expirationDate = DateTime(expirationDate.year, expirationDate.month,
-        expirationDate.day, 0, 0, 0, 0);
-
-    await prefs.setString(key, expirationDate.toIso8601String());
-  }
-
-  Future<void> saveDataWithExpirationWeekly(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    DateTime today = DateTime.now();
-    int difference = (DateTime.monday - today.weekday + 7) % 7;
-
-    // Menghitung tanggal kedaluwarsa pada setiap Senin pukul 00:00
-    DateTime expirationDate = today.add(Duration(days: difference));
-    expirationDate = DateTime(
-      expirationDate.year,
-      expirationDate.month,
-      expirationDate.day,
-      0,
-      0,
-      0,
-      0,
-    );
-
-    await prefs.setString(key, expirationDate.toIso8601String());
   }
 
   Future<void> setLoginStatus() async {
