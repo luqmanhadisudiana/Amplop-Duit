@@ -1,6 +1,9 @@
 import 'package:amplop_duit/component/button/main_button.dart';
+import 'package:amplop_duit/layout/navigation_wrapper.dart';
+import 'package:amplop_duit/models/history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -10,6 +13,14 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
+  @override
+  void initState() {
+    super.initState();
+    HistoryList localHistoryList =
+        Provider.of<HistoryList>(context, listen: false);
+    localHistoryList.loadFromSharedPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
     double maxWidth = MediaQuery.of(context).size.width;
@@ -108,13 +119,24 @@ class _ReportPageState extends State<ReportPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "+15",
-                            style: TextStyle(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "1",
+                                style: TextStyle(
+                                    color: Color(0xFFFF4D6D),
+                                    fontFamily: "Poppins",
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Icon(
+                                Icons.favorite,
+                                weight: 20,
                                 color: Color(0xFFFF4D6D),
-                                fontFamily: "Poppins",
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600),
+                              )
+                            ],
                           ),
                           Text(
                             "Point",
@@ -139,19 +161,22 @@ class _ReportPageState extends State<ReportPage> {
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6.0)),
                           color: Colors.white),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "80%",
-                            style: TextStyle(
-                                color: Color(0xFF8AC58A),
-                                fontFamily: "Poppins",
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(
+                          Consumer<HistoryList>(
+                              builder: (context, data, child) {
+                            return Text(
+                              "${data.getSuccesRate().toString()}%",
+                              style: const TextStyle(
+                                  color: Color(0xFF8AC58A),
+                                  fontFamily: "Poppins",
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600),
+                            );
+                          }),
+                          const Text(
                             "Success",
                             style: TextStyle(
                                 color: Color(0xFF8AC58A),
@@ -172,6 +197,12 @@ class _ReportPageState extends State<ReportPage> {
               width: double.maxFinite,
               action: () {
                 debugPrint("Lanjut");
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NavigationWrapper(
+                              selectedIndex: 0,
+                            )));
               },
             ),
           ],

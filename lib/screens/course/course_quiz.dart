@@ -5,15 +5,19 @@ import 'package:amplop_duit/models/course.dart';
 import 'package:amplop_duit/models/history.dart';
 import 'package:amplop_duit/models/my_course_status.dart';
 import 'package:amplop_duit/provider.dart';
+import 'package:amplop_duit/screens/confirmation_and_report/confirmation_page.dart';
+import 'package:amplop_duit/screens/course/my_course.dart';
 import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CourseQuiz extends StatefulWidget {
   final String question, thumbnailUrl;
   final int quizIndex, courseIndex;
   final List<Answer> listAnswer;
+  final bool finalQuiz;
 
   const CourseQuiz(
       {super.key,
@@ -21,7 +25,8 @@ class CourseQuiz extends StatefulWidget {
       required this.thumbnailUrl,
       required this.listAnswer,
       required this.courseIndex,
-      required this.quizIndex});
+      required this.quizIndex,
+      this.finalQuiz = false});
 
   @override
   State<CourseQuiz> createState() => _CourseQuizState();
@@ -74,9 +79,13 @@ class _CourseQuizState extends State<CourseQuiz> {
     }
   }
 
-  void modalAction(i) {
+  void modalAction(i) async {
     listSavedAnswer = Provider.of<ListSavedAnswer>(context, listen: false);
     listHistory = Provider.of<HistoryList>(context, listen: false);
+    courseProvider = Provider.of<CourseProvider>(context, listen: false);
+    myCourseStatusProvider =
+        Provider.of<MyCourseStatus>(context, listen: false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     bool answerStatus = widget.listAnswer[i].status;
     int courseIdx = widget.courseIndex;
     int quizIdx = widget.quizIndex;
@@ -91,50 +100,65 @@ class _CourseQuizState extends State<CourseQuiz> {
       selectedIndex = indexAnswer;
     });
 
-    showCustomBottomSheet(context, answerStatus, buttonText, () {
-      debugPrint("Modal Clicked");
+    debugPrint("check apakah jawaban benar ${answerStatus == true}");
+    if (answerStatus == true) {
+      courseProvider.updateSavedAnswer(courseIdx, quizIdx, indexAnswer);
+      listSavedAnswer.addSavedAnswer(MySavedAnswer(
+        courseIndex: courseIdx,
+        quizIndex: quizIdx,
+        indexSavedAnswer: indexAnswer,
+      ));
+      listSavedAnswer.saveToSharedPreferences();
+    } else {
+      setState(() {
+        myCourseStatusProvider.decreaseHeart();
+      });
+    }
 
-      debugPrint("setIsDone");
-      courseProvider.setIsDone(courseIdx, quizIdx);
+    debugPrint("check next quiz ${currentQuizPointer == quizIdx}");
+    if (currentQuizPointer == quizIdx) {
+      myCourseStatusProvider.nextQuiz();
+    }
 
-      debugPrint("check apakah jawaban benar ${answerStatus == true}");
-      if (answerStatus == true) {
-        courseProvider.updateSavedAnswer(courseIdx, quizIdx, indexAnswer);
-        listSavedAnswer.addSavedAnswer(MySavedAnswer(
-          courseIndex: courseIdx,
-          quizIndex: quizIdx,
-          indexSavedAnswer: indexAnswer,
-        ));
-        listSavedAnswer.saveToSharedPreferences();
-      } else {
-        setState(() {
-          myCourseStatusProvider.decreaseHeart();
-        });
-      }
+    if (!quizStatus) {
+      myCourseStatusProvider.start();
+      listHistory.addHistory(History(
+          idCourse: courseIdx,
+          status: answerStatus,
+          attempt: myCourseStatusProvider.attempt,
+          title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
+          question: widget.question,
+          jawaban: widget.listAnswer[indexAnswer].text));
+      listHistory.saveToSharedPreferences();
+    }
 
-      debugPrint("check next quiz ${currentQuizPointer == quizIdx}");
-      if (currentQuizPointer == quizIdx) {
-        myCourseStatusProvider.nextQuiz();
-      }
+    if (!quizStatus && answerStatus == true) {
+      int currentTP = prefs.getInt("totalPoint") ?? 0;
+      await prefs.setInt('totalPoint', currentTP + 3);
+    }
 
-      if (!quizStatus) {
-        myCourseStatusProvider.start();
-        listHistory.addHistory(History(
-            idCourse: courseIdx,
-            status: answerStatus,
-            attempt: myCourseStatusProvider.attempt,
-            title: "Level ${courseIdx + 1}, Bagian ${quizIdx + 1}",
-            question: widget.question,
-            jawaban: widget.listAnswer[indexAnswer].text));
-        listHistory.saveToSharedPreferences();
-      }
+    debugPrint("setIsDone, ${courseProvider.getIsDone(courseIdx, quizIdx)}");
+    courseProvider.setIsDone(courseIdx, quizIdx);
 
-      debugPrint('${myCourseStatusProvider.attempt}');
+    debugPrint('${myCourseStatusProvider.attempt}');
+    myCourseStatusProvider.saveSharedPreferences();
 
-      myCourseStatusProvider.saveSharedPreferences();
-
-      Navigator.pop(context);
-      Navigator.pop(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showCustomBottomSheet(context, answerStatus, buttonText, () {
+        debugPrint("Modal Clicked");
+        if (widget.finalQuiz) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ConfirmationPage()));
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const MyCoursePage()),
+              (Route<dynamic> route) => route.isFirst);
+        }
+      });
     });
   }
 
@@ -144,11 +168,16 @@ class _CourseQuizState extends State<CourseQuiz> {
         title: 'Quiz',
         theme: MyAppTheme.buildTheme(),
         home: Scaffold(
-          appBar: CourseAppbar(title: "My Course", parentContext: context),
+          appBar: CourseAppbar(
+            title: "My Course",
+            parentContext: context,
+          ),
           body: ListView(children: [
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: double.infinity,
@@ -206,9 +235,9 @@ class _CourseQuizState extends State<CourseQuiz> {
                           const SizedBox(
                             height: 8,
                           ),
-                          const Text(
-                            "Dari video sebelumnya, berikut apa aspek yang harus diperhatikan dalam mencatat keuangan?",
-                            style: TextStyle(
+                          Text(
+                            widget.question,
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w400),
                           ),
                         ]),

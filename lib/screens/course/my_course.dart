@@ -89,7 +89,8 @@ class _MyCoursePageState extends State<MyCoursePage> {
   }
 
   void navigateToQuiz(
-      question, thumbnailUrl, listAnswer, courseIndex, quizIndex) {
+      question, thumbnailUrl, listAnswer, courseIndex, quizIndex, finalQuiz) {
+    debugPrint("Final quiz $finalQuiz");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -98,9 +99,10 @@ class _MyCoursePageState extends State<MyCoursePage> {
               thumbnailUrl: thumbnailUrl,
               listAnswer: listAnswer,
               courseIndex: courseIndex,
-              quizIndex: quizIndex)),
+              quizIndex: quizIndex,
+              finalQuiz: finalQuiz)),
     ).then((value) => {
-          if (value != null && value == true) {initState()}
+          if (value != null && value == true) {showAlertDialog()}
         });
   }
 
@@ -123,9 +125,10 @@ class _MyCoursePageState extends State<MyCoursePage> {
       home: Scaffold(
           appBar: CourseAppbar(
               title: "My Course",
-              // heartCount: myCourseStatusProvider.heart,
-              // diamondCount: myCourseStatusProvider.diamond,
-              parentContext: context),
+              parentContext: context,
+              action: () {
+                Navigator.pop(context, true);
+              }),
           body: ListView(
             children: [
               InformationLevel(title: headlineTitle, desc: headlineDesc),
@@ -157,64 +160,40 @@ class _MyCoursePageState extends State<MyCoursePage> {
                         );
                       },
                     ),
-                    for (var i = 0; i < 5; i++)
-                      i % 2 == 0
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: i <= selectedQuiz
-                                      ? () {
-                                          if (myCourseStatusProvider.heart ==
-                                              0) {
-                                            showAlertDialog();
-                                          } else {
-                                            navigateToQuiz(
-                                                course.listQuestionAnswer[i]
-                                                    .question,
-                                                thumbailUrl,
-                                                course.listQuestionAnswer[i]
-                                                    .answerList,
-                                                selectedCourse,
-                                                i);
-                                          }
-                                        }
-                                      : null,
-                                  child: StepCourse(
-                                    text: (i + 1).toString(),
-                                    available: i <= selectedQuiz,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: i <= selectedQuiz
-                                      ? () {
-                                          if (myCourseStatusProvider.heart ==
-                                              0) {
-                                            showAlertDialog();
-                                          } else {
-                                            navigateToQuiz(
-                                                course.listQuestionAnswer[i]
-                                                    .question,
-                                                thumbailUrl,
-                                                course.listQuestionAnswer[i]
-                                                    .answerList,
-                                                selectedCourse,
-                                                i);
-                                          }
-                                        }
-                                      : null,
-                                  child: StepCourse(
-                                    text: (i + 1).toString(),
-                                    available: i <= selectedQuiz,
-                                  ),
-                                ),
-                              ],
+                    for (var i = 0; i < course.listQuestionAnswer.length; i++)
+                      Row(
+                        mainAxisAlignment: i % 2 == 0
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: i <= selectedQuiz
+                                ? () {
+                                    if (myCourseStatusProvider.heart == 0) {
+                                      showAlertDialog();
+                                    } else {
+                                      navigateToQuiz(
+                                          course.listQuestionAnswer[i].question,
+                                          thumbailUrl,
+                                          course
+                                              .listQuestionAnswer[i].answerList,
+                                          selectedCourse,
+                                          i,
+                                          course.listQuestionAnswer.length -
+                                                      1 ==
+                                                  i
+                                              ? true
+                                              : false);
+                                    }
+                                  }
+                                : null,
+                            child: StepCourse(
+                              text: (i + 1).toString(),
+                              available: i <= selectedQuiz,
                             ),
+                          ),
+                        ],
+                      ),
                     const SizedBox(
                       height: 30,
                     ),

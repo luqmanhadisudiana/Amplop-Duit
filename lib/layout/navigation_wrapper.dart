@@ -57,7 +57,8 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
 
     if (isLogin) {
       // Mengecek dan menghapus data yang sudah kadaluwarsa
-      await checkAndRemoveExpiredData('Expired');
+      await checkAndRemoveExpiredData('ExpiredDaily');
+      await checkAndRemoveExpiredData('ExpiredWeekly');
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         MyCourseStatus localmyCourseStatus =
@@ -101,14 +102,26 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
       DateTime expirationDate = DateTime.parse(expirationDateString);
       if (DateTime.now().isAfter(expirationDate)) {
         // Data sudah kadaluwarsa, hapus key
-        debugPrint("clear bang");
-        List<String> keysToRemove = [
-          'historyList',
-          'myCourseStatus',
-          'savedAnswers'
-        ];
-        for (String key in keysToRemove) {
-          await prefs.remove(key);
+
+        if (key == "ExpiredDaily") {
+          debugPrint("change value heart and diamond");
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            MyCourseStatus localmyCourseStatus =
+                Provider.of<MyCourseStatus>(context, listen: false);
+            localmyCourseStatus.setNewValue(
+                5,
+                5,
+                localmyCourseStatus.getSelectedCourse,
+                localmyCourseStatus.getselectedQuiz);
+            localmyCourseStatus.saveSharedPreferences();
+          });
+        } else {
+          debugPrint("clear...");
+          List<String> keysToRemove;
+          keysToRemove = ['historyList', 'myCourseStatus', 'savedAnswers'];
+          for (String key in keysToRemove) {
+            await prefs.remove(key);
+          }
         }
       }
     }

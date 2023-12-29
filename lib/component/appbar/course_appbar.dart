@@ -7,14 +7,15 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   // final int heartCount, diamondCount;
   final BuildContext parentContext;
+  final Function? action;
 
-  const CourseAppbar({
-    super.key,
-    required this.title,
-    // required this.heartCount,
-    // required this.diamondCount,
-    required this.parentContext,
-  });
+  const CourseAppbar(
+      {super.key,
+      required this.title,
+      // required this.heartCount,
+      // required this.diamondCount,
+      required this.parentContext,
+      this.action});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -30,7 +31,11 @@ class CourseAppbar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(parentContext);
+              if (action != null) {
+                action!();
+              } else {
+                Navigator.pop(parentContext);
+              }
             },
           ),
           Text(

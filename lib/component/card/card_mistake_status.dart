@@ -50,7 +50,8 @@ class CardMistakeStatus extends StatelessWidget {
                       Consumer<MyCourseStatus>(
                           builder: (context, myCourseStatus, child) {
                         return Text(
-                          myCourseStatus.getselectedQuiz == -1
+                          myCourseStatus.getselectedQuiz < 0 ||
+                                  myCourseStatus.getselectedQuiz > 5
                               ? "Level ${myCourseStatus.getSelectedCourse + 1}"
                               : "Level ${myCourseStatus.getSelectedCourse + 1}\nBagian ${myCourseStatus.getselectedQuiz + 1}",
                           style: const TextStyle(

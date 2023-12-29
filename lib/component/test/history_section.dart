@@ -10,12 +10,21 @@ class HistoryStatusTestSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HistoryList>(builder: (context, data, child) {
+    return SingleChildScrollView(
+        child: Consumer<HistoryList>(builder: (context, data, child) {
       List<double> customWidth = List.generate(6, (index) => 1 / 6);
       EdgeInsets customPadding = const EdgeInsets.all(5);
       return Column(
         children: [
           const Text("Data Provider List History"),
+          Text(
+            "Success Rate : ${data.getSuccesRate().toString()}%",
+            style: const TextStyle(
+                color: Color(0xFF8AC58A),
+                fontFamily: "Poppins",
+                fontSize: 24,
+                fontWeight: FontWeight.w600),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -58,10 +67,10 @@ class HistoryStatusTestSection extends StatelessWidget {
                     text: data.listHistory[i].status.toString()),
                 DefaultRowData(
                     padding: customPadding,
-                    text: data.listHistory[i].title.toString()),
+                    text: data.listHistory[i].attempt.toString()),
                 DefaultRowData(
                     padding: customPadding,
-                    text: data.listHistory[i].attempt.toString()),
+                    text: data.listHistory[i].title.toString()),
                 DefaultRowData(
                     padding: customPadding,
                     text: data.listHistory[i].question.toString()),
@@ -73,6 +82,6 @@ class HistoryStatusTestSection extends StatelessWidget {
             ),
         ],
       );
-    });
+    }));
   }
 }

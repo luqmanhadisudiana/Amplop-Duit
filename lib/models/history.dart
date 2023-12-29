@@ -50,6 +50,19 @@ class HistoryList extends ChangeNotifier {
     notifyListeners();
   }
 
+  double getSuccesRate() {
+    debugPrint("${listHistory.length}");
+    if (listHistory.isEmpty) {
+      return 0;
+    }
+
+    int totalTrueCount = listHistory.where((history) => history.status).length;
+    int totalAttempts = listHistory.length;
+
+    double percentage = (totalTrueCount / totalAttempts) * 100;
+    return percentage;
+  }
+
   Future<void> saveToSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> jsonList =
@@ -67,7 +80,7 @@ class HistoryList extends ChangeNotifier {
               History.fromJson(jsonDecode(json) as Map<String, dynamic>))
           .toList();
       notifyListeners();
-      debugPrint("done...");
+      debugPrint("done... ${listHistory.length}");
     } else {
       // Jika jsonList kosong, inisialisasi listHistory dengan list kosong
       listHistory = [];

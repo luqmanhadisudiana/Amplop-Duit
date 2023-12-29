@@ -21,6 +21,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   List<String> monthlyHeaderTable = ["Bulan", 'Pendapatan', 'Pengeluaran'];
   int liga = 0;
+  late String totalPoint = "0";
   bool isLoading = true;
   final String imagePath =
       "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/profile/hadi.png";
@@ -29,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _getCurrentLiga();
+    _getTotalPoint();
   }
 
   void _getCurrentLiga() async {
@@ -37,6 +39,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       liga = currentLiga;
+    });
+  }
+
+  void _getTotalPoint() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentTotalPoint = prefs.getInt('totalPoint') ?? 0;
+
+    setState(() {
+      totalPoint = currentTotalPoint.toString();
     });
   }
 
@@ -203,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                const StatisticSection(),
+                StatisticSection(totalPoint: totalPoint),
                 Container(
                     padding: const EdgeInsets.all(16),
                     child: Column(

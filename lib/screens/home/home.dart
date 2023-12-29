@@ -9,6 +9,7 @@ import 'package:amplop_duit/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -18,9 +19,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late String totalPoint = "0";
   @override
   void initState() {
     super.initState();
+    _getTotalPoint();
+  }
+
+  void _getTotalPoint() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentTotalPoint = prefs.getInt('totalPoint') ?? 0;
+
+    setState(() {
+      totalPoint = currentTotalPoint.toString();
+    });
   }
 
   @override
@@ -93,10 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 16,
                           ),
                           const SizedBox(width: 8.0),
-                          const Text(
-                            "2805",
+                          Text(
+                            totalPoint,
                             textAlign: TextAlign.start,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400),
@@ -185,7 +197,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const MyCoursePage()),
-                          );
+                          ).then((value) => {
+                                if (value != null && value == true)
+                                  {_getTotalPoint()}
+                              });
                         },
                         child: Container(
                           height: 130,
@@ -287,7 +302,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               // section 3
-              const StatisticSection(),
+              StatisticSection(
+                totalPoint: totalPoint,
+              ),
               Container(
                 padding:
                     const EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),

@@ -2,16 +2,25 @@ import 'package:amplop_duit/component/card/card_state.dart';
 import 'package:flutter/material.dart';
 
 class StatisticSection extends StatelessWidget {
-  const StatisticSection({super.key});
+  final String totalPoint;
+  const StatisticSection({super.key, this.totalPoint = "2805"});
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    int hariBerlalu =
+        today.weekday - 1; // Menghitung hari berlalu dalam seminggu
+    int hariTersisa = 7 - hariBerlalu;
+
+    String sHariBerlalu = '$hariBerlalu hari';
+    String sHariTersisa = '$hariTersisa hari';
+
     return Container(
       padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Statistik',
             style: TextStyle(
                 // backgroundColor: Colors.black12,
@@ -20,7 +29,7 @@ class StatisticSection extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           // decoration: BoxDecoration(color: Colors.blue),
-          SizedBox(
+          const SizedBox(
             height: 15.0,
           ),
           Row(
@@ -28,25 +37,25 @@ class StatisticSection extends StatelessWidget {
             children: [
               CardState(
                   title: 'Runtutan Harian',
-                  value: '5 Hari',
+                  value: sHariBerlalu,
                   imageUrl: 'assets/img/home/Card-State-Day.png'),
-              SizedBox(width: 15),
+              const SizedBox(width: 15),
               CardState(
                   title: 'Total Poin',
-                  value: '2805',
+                  value: totalPoint,
                   imageUrl: 'assets/img/home/Card-State-Total-Point.png'),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardState(
                   title: 'Sisa Waktu',
-                  value: '2 Hari',
+                  value: sHariTersisa,
                   imageUrl: 'assets/img/home/Card-State-Countdown.png'),
-              SizedBox(width: 15),
-              CardState(
+              const SizedBox(width: 15),
+              const CardState(
                   title: 'Posisi Tertinggi',
                   value: '2',
                   imageUrl: 'assets/img/home/Card-State-Position.png'),

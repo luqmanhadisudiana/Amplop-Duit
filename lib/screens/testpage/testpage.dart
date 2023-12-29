@@ -30,6 +30,7 @@ class _TestPageState extends State<TestPage> {
   TextEditingController heartController = TextEditingController();
   TextEditingController diamondController = TextEditingController();
   TextEditingController itemsController = TextEditingController();
+  TextEditingController totalPointController = TextEditingController();
 
   @override
   void initState() {
@@ -41,27 +42,53 @@ class _TestPageState extends State<TestPage> {
     quizIndexController.addListener(() {
       onValueChanged("Quiz");
     });
-    ligaController.addListener(ligaValueChange);
     heartController.addListener(() {
       onValueChanged("Heart");
     });
     diamondController.addListener(() {
       onValueChanged("Diamond");
     });
+    ligaController.addListener(ligaValueChange);
+    totalPointController.addListener(totalPointChange);
 
     _getCurrentLiga();
     _loadMyObject();
     _getCurrentExpired();
+    _getTotalPoint();
   }
 
   DateTime? expirationDate;
+  DateTime? expirationDateWeekly;
+
   void _getCurrentExpired() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? expirationDateString = prefs.getString("Expired");
+    String? expirationDateString = prefs.getString("ExpiredDaily");
+    String? expirationDateStringWeekly = prefs.getString("ExpiredWeekly");
 
     if (expirationDateString != null) {
       expirationDate = DateTime.parse(expirationDateString);
+    }
+
+    if (expirationDateStringWeekly != null) {
+      expirationDateWeekly = DateTime.parse(expirationDateStringWeekly);
+    }
+  }
+
+  void _getTotalPoint() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentTotalPoint = prefs.getInt('totalPoint') ?? 0;
+
+    setState(() {
+      totalPointController.text = currentTotalPoint.toString();
+    });
+  }
+
+  void totalPointChange() async {
+    debugPrint("Change Total Point");
+    if (totalPointController.text != "") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('totalPoint', int.tryParse(totalPointController.text) ?? 0);
     }
   }
 
@@ -72,6 +99,18 @@ class _TestPageState extends State<TestPage> {
     setState(() {
       ligaController.text = currentLiga.toString();
     });
+  }
+
+  void ligaValueChange() async {
+    if (ligaController.text != "") {
+      if ((int.tryParse(ligaController.text) ?? 0) > 0 &&
+          (int.tryParse(ligaController.text) ?? 0) <= 5) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
+      } else {
+        warning("liga");
+      }
+    }
   }
 
   MyCourseStatus? _myCourseStatus;
@@ -104,12 +143,15 @@ class _TestPageState extends State<TestPage> {
     int diamond = int.tryParse(diamondController.text) ?? 0;
 
     int courseLength = courseProvider.getCourseList.length;
+    debugPrint("Length $courseLength");
 
     debugPrint(
         'listening $text, quizIndex : $quizIndex, courseIndex $courseIndex, heart : $heart, diamond $diamond');
 
     if (_myCourseStatus != null && courseIndex != 0) {
-      if (courseIndex < courseLength && courseIndex >= 1) {
+      if (courseIndex <= courseLength && courseIndex >= 1) {
+        debugPrint("set");
+
         setState(() {
           _myCourseStatus!
               .setNewValue(heart, diamond, courseIndex - 1, quizIndex - 1);
@@ -120,8 +162,8 @@ class _TestPageState extends State<TestPage> {
         warning("course");
       }
 
-      int quizLenght =
-          courseProvider.getCourseList[courseIndex].listQuestionAnswer.length;
+      int quizLenght = courseProvider
+          .getCourseList[courseIndex - 1].listQuestionAnswer.length;
 
       if (quizIndex <= quizLenght && quizIndex >= 0) {
         setState(() {
@@ -135,18 +177,6 @@ class _TestPageState extends State<TestPage> {
       }
     }
     localmyCourseStatus.saveSharedPreferences();
-  }
-
-  void ligaValueChange() async {
-    if (ligaController.text != "") {
-      if ((int.tryParse(ligaController.text) ?? 0) > 0 &&
-          (int.tryParse(ligaController.text) ?? 0) <= 5) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt('currentLiga', int.tryParse(ligaController.text) ?? 1);
-      } else {
-        warning("liga");
-      }
-    }
   }
 
   void warning(String text) {
@@ -246,7 +276,7 @@ class _TestPageState extends State<TestPage> {
     var localmySavedAnswer =
         Provider.of<ListSavedAnswer>(context, listen: false);
 
-    debugPrint("Get Data");
+    debugPrint("Get Data ${localmySavedAnswer.listSavedAnswer.length}");
     setState(() {
       mySavedAnswer = localmySavedAnswer;
       showListSavedAnswer = true;
@@ -278,6 +308,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     List<TextEditingController> listController = [
+      totalPointController,
       ligaController,
       courseIndexController,
       quizIndexController,
@@ -285,9 +316,10 @@ class _TestPageState extends State<TestPage> {
       diamondController
     ];
     List<String> listLabel = [
+      "Total Point",
       "Liga Index",
-      "Course Index + 1",
-      "Quiz Index + 1",
+      "Course Index + 1\nMax 5",
+      "Quiz Index + 1 \nMax 5",
       "Heart",
       "Diamond"
     ];
@@ -330,7 +362,11 @@ class _TestPageState extends State<TestPage> {
                     children: [
                       expirationDate != null
                           ? Text(
-                              'expired at : ${DateFormat().format(expirationDate!)}')
+                              'heart & diamond reset at : ${DateFormat().format(expirationDate!)}')
+                          : const Text("Tidak Ada Expired Date"),
+                      expirationDateWeekly != null
+                          ? Text(
+                              'course reset at : ${DateFormat().format(expirationDateWeekly!)}')
                           : const Text("Tidak Ada Expired Date"),
                     ],
                   ),
