@@ -14,10 +14,17 @@ class Leaderboard {
 final faker = Faker.withGenerator(random);
 
 var dummyLeaderboard = [
-  for (var i = 0; i < 20; i++)
+  for (var i = 0; i < 19; i++)
     Leaderboard(
       imageUser: faker.image.image(random: true),
       nameUser: faker.person.name(),
       point: 669 - i,
     ),
 ];
+
+List<Leaderboard> sortLeaderboards(List<Leaderboard> leaderboards,
+    {bool descending = true}) {
+  leaderboards.sort((a, b) =>
+      descending ? b.point.compareTo(a.point) : a.point.compareTo(b.point));
+  return leaderboards;
+}

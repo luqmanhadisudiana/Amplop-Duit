@@ -39,10 +39,6 @@ DateTime parseYearMonth(String yearMonthString) {
   }
 }
 
-// String getMonthFromDate(DateTime dateTime) {
-//   return "${dateTime.month}";
-// }
-
 List<T> sortByKey<T, K extends Comparable<K>>(
     List<T> list, K Function(T) getKey,
     {bool descending = false}) {

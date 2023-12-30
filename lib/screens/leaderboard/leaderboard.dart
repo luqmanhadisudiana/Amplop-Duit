@@ -15,10 +15,16 @@ class LeaderboardPage extends StatefulWidget {
 class _LeaderboardPageState extends State<LeaderboardPage> {
   int liga = 0;
   List<String> listLiga = ["", "Perunggu", "Perak", "Emas", "Berlian", "Rubi"];
+  List<Leaderboard>? listLeaderboard;
   @override
   void initState() {
     super.initState();
+    initialize();
+  }
+
+  void initialize() {
     _getCurrentLiga();
+    _getUserLeaderboard();
   }
 
   void _getCurrentLiga() async {
@@ -30,8 +36,33 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     });
   }
 
+  void _getUserLeaderboard() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentTP = prefs.getInt('totalPoint') ?? 0;
+
+    Leaderboard userLeaderboard = Leaderboard(
+      imageUser:
+          "https://raw.githubusercontent.com/luqmanhadisudiana/Amplop-Duit/main/assets/img/profile/hadi.png",
+      nameUser: "Luqman Hadi",
+      point: currentTP,
+    );
+
+    List<Leaderboard> newList = dummyLeaderboard;
+    newList.add(userLeaderboard);
+    newList = sortLeaderboards(newList, descending: true);
+    debugPrint("${newList.length}");
+    setState(() {
+      listLeaderboard = newList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    int hariBerlalu = today.weekday;
+    int hariTersisa = 7 - hariBerlalu;
+
+    String sHariTersisa = '$hariTersisa hari';
     return MaterialApp(
       title: 'Leaderboard',
       theme: MyAppTheme.buildTheme(),
@@ -127,7 +158,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
                                     "assets/icon/Polygon.svg",
@@ -178,7 +209,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
                                     "assets/icon/Clock.svg",
@@ -189,9 +220,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   const SizedBox(
                                     width: 8,
                                   ),
-                                  const Text(
-                                    "5 Hari",
-                                    style: TextStyle(
+                                  Text(
+                                    sHariTersisa,
+                                    style: const TextStyle(
                                         color: Color(0xFF5338BC),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
@@ -212,17 +243,27 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               child: Container(
                 decoration: const BoxDecoration(
                     border: Border(top: BorderSide(color: Color(0xFFE9E9E9)))),
-                child: ListView.builder(
-                  itemCount: dummyLeaderboard.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                        title: LeaderboardItem(
-                            index: index,
-                            name: dummyLeaderboard[index].nameUser,
-                            imageUrl: dummyLeaderboard[index].imageUser,
-                            point: dummyLeaderboard[index].point));
-                  },
-                ),
+                child: listLeaderboard == null
+                    ? const Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          height: 75, // Sesuaikan dengan tinggi yang diinginkan
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: listLeaderboard!.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: LeaderboardItem(
+                              index: index,
+                              name: listLeaderboard![index].nameUser,
+                              imageUrl: listLeaderboard![index].imageUser,
+                              point: listLeaderboard![index].point,
+                            ),
+                          );
+                        },
+                      ),
               ),
             ),
           ],
