@@ -66,6 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
     debugPrint(
         "getter list, get ${providerListMonthlyFinance.listMonthlyFinance.length} data");
+
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+
     return MaterialApp(
         title: "Smart Finace",
         theme: MyAppTheme.buildTheme(),
@@ -123,7 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(16),
+                                padding: EdgeInsets.only(
+                                    left: 16, top: statusBarHeight + 16),
                                 child: InkWell(
                                   onTap: () {
                                     debugPrint("back");
@@ -147,7 +151,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.all(16),
+                                padding: EdgeInsets.only(
+                                    left: 16, top: statusBarHeight + 16),
                                 child: InkWell(
                                   onTap: () {
                                     debugPrint("back");

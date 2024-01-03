@@ -48,9 +48,16 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
 
     List<Leaderboard> newList = dummyLeaderboard;
-    newList.add(userLeaderboard);
+    bool userLeaderboardExists = newList
+        .any((leaderboard) => leaderboard.nameUser == userLeaderboard.nameUser);
+
+    if (!userLeaderboardExists) {
+      newList.add(userLeaderboard);
+    }
+
     newList = sortLeaderboards(newList, descending: true);
     debugPrint("${newList.length}");
+
     setState(() {
       listLeaderboard = newList;
     });
@@ -58,6 +65,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).padding.top;
     DateTime today = DateTime.now();
     int hariBerlalu = today.weekday;
     int hariTersisa = 7 - hariBerlalu;
@@ -70,8 +78,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         body: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(
-                  left: 14.0, right: 14.0, bottom: 14.0, top: 14 + 30),
+              padding: EdgeInsets.only(
+                  left: 14.0,
+                  right: 14.0,
+                  bottom: 14.0,
+                  top: 14 + statusBarHeight),
               child: Column(
                 children: [
                   Container(

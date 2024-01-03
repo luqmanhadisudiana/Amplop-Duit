@@ -366,63 +366,70 @@ class _TestPageState extends State<TestPage> {
           body: TabBarView(
             children: [
               // Tab 1
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      expirationDate != null
-                          ? Text(
-                              'heart & diamond reset at : ${DateFormat().format(expirationDate!)}')
-                          : const Text("Tidak Ada Expired Date"),
-                      expirationDateWeekly != null
-                          ? Text(
-                              'course reset at : ${DateFormat().format(expirationDateWeekly!)}')
-                          : const Text("Tidak Ada Expired Date"),
-                    ],
-                  ),
-                  CourseStatusTestSection(
-                    listController: listController,
-                    listLabel: listLabel,
-                    localCourseStatus: _myCourseStatus,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Consumer<MyCourseStatus>(
-                          builder: (context, myCourseStatus, child) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            //Provider
-                            resetMyCourse();
-                            myCourseStatus.setNewValue(5, 5, 0, -1);
-                            myCourseStatus.saveSharedPreferences();
-                          },
-                          child: const Text('Reset My Status Course'),
-                        );
-                      }),
-                      Consumer<MyCourseStatus>(
-                          builder: (context, myCourseStatus, child) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            //Provider
-                            resetMyCourse();
-                            myCourseStatus.setNewValue(
-                                5,
-                                5,
-                                myCourseStatus.getSelectedCourse,
-                                myCourseStatus.getselectedQuiz);
-                            myCourseStatus.saveSharedPreferences();
-                          },
-                          child: const Text('Reset Heart and Diamond'),
-                        );
-                      })
-                    ],
-                  )
-                ],
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        expirationDate != null
+                            ? Text(
+                                'heart & diamond reset at : ${DateFormat().format(expirationDate!)}')
+                            : const Text("Tidak Ada Expired Date"),
+                        expirationDateWeekly != null
+                            ? Text(
+                                'course reset at : ${DateFormat().format(expirationDateWeekly!)}')
+                            : const Text("Tidak Ada Expired Date"),
+                      ],
+                    ),
+                    CourseStatusTestSection(
+                      listController: listController,
+                      listLabel: listLabel,
+                      localCourseStatus: _myCourseStatus,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Consumer<MyCourseStatus>(
+                            builder: (context, myCourseStatus, child) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              //Provider
+                              resetMyCourse();
+                              myCourseStatus.setNewValue(5, 5, 0, -1);
+                              myCourseStatus.saveSharedPreferences();
+                            },
+                            child: const Text(
+                              'Reset\nMy Status Course',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }),
+                        Consumer<MyCourseStatus>(
+                            builder: (context, myCourseStatus, child) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              //Provider
+                              resetMyCourse();
+                              myCourseStatus.setNewValue(
+                                  5,
+                                  5,
+                                  myCourseStatus.getSelectedCourse,
+                                  myCourseStatus.getselectedQuiz);
+                              myCourseStatus.saveSharedPreferences();
+                            },
+                            child: const Text('Reset Heart\nand Diamond',
+                                textAlign: TextAlign.center),
+                          );
+                        })
+                      ],
+                    )
+                  ],
+                ),
               ),
+
               // SavedAnswer
               SavedAnswerTestSection(
                   getListFunction: getFunction,

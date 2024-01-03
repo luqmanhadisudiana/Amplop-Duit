@@ -71,13 +71,19 @@ class _SmartFinancePageState extends State<SmartFinancePage> {
     debugPrint(
         "getter list, get ${providerListMonthlyFinance.listMonthlyFinance.length} data");
 
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+
     return MaterialApp(
       title: "Smart Finace",
       theme: MyAppTheme.buildTheme(),
       home: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16,
+                top: statusBarHeight <= 0 ? 5 : statusBarHeight - 20),
             child: Column(children: [
               Center(
                 child: Container(

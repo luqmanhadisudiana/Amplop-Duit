@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).padding.top;
     return MaterialApp(
         title: "Home",
         theme: MyAppTheme.buildTheme(),
@@ -45,8 +46,11 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.only(
-                    top: 50.0, bottom: 25.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(
+                    top: statusBarHeight + 15,
+                    bottom: 25.0,
+                    left: 15.0,
+                    right: 15.0),
                 margin: const EdgeInsets.all(0.0),
                 decoration: const BoxDecoration(color: Color(0xFF725CC8)),
                 child: Column(children: [
