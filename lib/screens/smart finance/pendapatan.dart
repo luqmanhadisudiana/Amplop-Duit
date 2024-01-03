@@ -119,7 +119,6 @@ class _PendapatanPageState extends State<PendapatanPage> {
             child: Column(
               children: [
                 SwitchSection(
-                  // padding: const EdgeInsets.all(5),
                   width: 150,
                   spacerWidth: 40,
                   leftLabel: "Uang Masuk",
