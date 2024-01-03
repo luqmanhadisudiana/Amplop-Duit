@@ -11,7 +11,6 @@ import 'package:amplop_duit/util/formated_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:intl/intl.dart';
 
 class PendapatanPage extends StatefulWidget {
   const PendapatanPage({super.key});
@@ -67,25 +66,20 @@ class _PendapatanPageState extends State<PendapatanPage> {
         lastDate: DateTime.now());
 
     if (pickedDate != null) {
-      debugPrint(pickedDate
-          .toString()); //pickedDate output format => 2021-03-10 00:00:00.000
+      debugPrint(pickedDate.toString());
       String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
-      debugPrint(
-          formattedDate); //formatted date output using intl package =>  2021-03-16
+      debugPrint(formattedDate);
       setState(() {
-        dateInput.text = formattedDate; //set output date to TextField value.
+        dateInput.text = formattedDate;
       });
     }
   }
 
   DateTime? convertToDate(String input) {
     try {
-      // Membuat objek DateFormat dengan format yang sesuai
       final DateFormat format = DateFormat('dd/MM/yyyy');
-      // Parse String menjadi DateTime
       return format.parseStrict(input);
     } catch (e) {
-      // Jika parsing gagal, kembalikan null
       return null;
     }
   }
@@ -125,6 +119,7 @@ class _PendapatanPageState extends State<PendapatanPage> {
             child: Column(
               children: [
                 SwitchSection(
+                  // padding: const EdgeInsets.all(5),
                   width: 150,
                   spacerWidth: 40,
                   leftLabel: "Uang Masuk",

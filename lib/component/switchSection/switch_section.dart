@@ -55,6 +55,7 @@ class SwitchSection extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(6.0)),
           ),
           child: MainButton(
+            padding: padding,
             buttonText: rightLabel,
             bgColor: selected ? Colors.white : const Color(0xFF725CC8),
             textColor: selected ? Colors.black : Colors.white,
