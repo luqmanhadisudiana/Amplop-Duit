@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               Container(
                                 padding: EdgeInsets.only(
-                                    left: 16, top: statusBarHeight + 16),
+                                    right: 16, top: statusBarHeight + 16),
                                 child: InkWell(
                                   onTap: () {
                                     debugPrint("back");
